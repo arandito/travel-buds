@@ -42,7 +42,7 @@ class ViewController: UIViewController {
                 
                 Auth.auth().createUser(withEmail: email, password: password) { authResult, error in
                     if let error = error {
-                        let signUpError = UIAlertController(title: "Sign Up Error", message: "Username Already Taken", preferredStyle: .alert)
+                        let signUpError = UIAlertController(title: "Sign Up Error", message: "Email already in use", preferredStyle: .alert)
                         signUpError.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
                         self.present(signUpError, animated: true, completion: nil)
                     } else {
