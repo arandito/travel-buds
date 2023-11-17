@@ -45,11 +45,13 @@ class ViewController: UIViewController {
                         let signUpError = UIAlertController(title: "Sign Up Error", message: "Username Already Taken", preferredStyle: .alert)
                         signUpError.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
                         self.present(signUpError, animated: true, completion: nil)
-                    }else{
-                        let signUpSuccess = UIAlertController(title: "Sign Up Success", message: "Thank You For Using Travel Buds (:", preferredStyle: .alert)
+                    } else {
+                        let signUpSuccess = UIAlertController(title: "Sign Up Success", message: "Thank You For Using Travel Buds (:",
+                                                               preferredStyle: .alert)
                         signUpSuccess.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
                         self.present(signUpSuccess, animated: true, completion: nil)
                     }
+                }
             }
         }
         
@@ -58,6 +60,7 @@ class ViewController: UIViewController {
         
         self.present(alert, animated: true, completion: nil)
     }
+
     
     @IBAction func logIn(_ sender: UIButton) {
         let alert = UIAlertController(title: "Travel Buds", message: "Please log in here", preferredStyle: .alert)
