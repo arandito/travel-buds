@@ -6,6 +6,10 @@
 //
 
 import UIKit
+<<<<<<< HEAD
+import FirebaseCore
+=======
+>>>>>>> 716dd0535e2badcf7ec6125248d23b4d5e71f14c
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -14,6 +18,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+<<<<<<< HEAD
+        FirebaseApp.configure()
+=======
+>>>>>>> 716dd0535e2badcf7ec6125248d23b4d5e71f14c
         return true
     }
 
