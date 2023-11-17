@@ -6,7 +6,23 @@
 //
 
 import UIKit
-import FirebaseAuth
+import FirebaseStorage
+import Firebase
+
+class FirebaseManager: NSObject {
+    let auth: Auth
+    let storage: Storage
+    let firestore: Firestore
+    
+    static let shared = FirebaseManager()
+    
+    override init(){
+        self.auth = Auth.auth()
+        self.storage = Storage.storage()
+        self.firestore = Firestore.firestore()
+        super.init()
+    }
+}
 
 class ViewController: UIViewController {
 
@@ -37,11 +53,14 @@ class ViewController: UIViewController {
         let cancel = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
         let signUp = UIAlertAction(title: "Sign Up", style: .default) { _ in
             if let textFields = alert.textFields {
+                let firstName = textFields[0].text ?? ""
+                let lastName = textFields[1].text ?? ""
                 let email = textFields[2].text ?? ""
                 let password = textFields[3].text ?? ""
                 
                 Auth.auth().createUser(withEmail: email, password: password) { authResult, error in
                     if let error = error {
+                        print(error)
                         let signUpError = UIAlertController(title: "Sign Up Error", message: "Email already in use", preferredStyle: .alert)
                         signUpError.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
                         self.present(signUpError, animated: true, completion: nil)
@@ -50,6 +69,9 @@ class ViewController: UIViewController {
                                                                preferredStyle: .alert)
                         signUpSuccess.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
                         self.present(signUpSuccess, animated: true, completion: nil)
+                        
+                        /* Store user information in Firestore */
+                        self.storeUserInformation(email: email, firstName: firstName, lastName: lastName)
                     }
                 }
             }
@@ -60,7 +82,7 @@ class ViewController: UIViewController {
         
         self.present(alert, animated: true, completion: nil)
     }
-
+    
     
     @IBAction func logIn(_ sender: UIButton) {
         let alert = UIAlertController(title: "Travel Buds", message: "Please log in here", preferredStyle: .alert)
@@ -94,6 +116,18 @@ class ViewController: UIViewController {
         
         self.present(alert, animated: true, completion: nil)
     }
-
+    
+    func storeUserInformation(email: String, firstName: String, lastName: String) {
+        guard let userId = FirebaseManager.shared.auth.currentUser?.uid else { return }
+        let userData = ["email": email, "firstName": firstName, "lastName": lastName]
+        FirebaseManager.shared.firestore.collection("users")
+            .document(userId).setData(userData) { err in
+                if let err = err {
+                    print(err)
+                    return
+                }
+                print("Success")
+            }
+    }
 }
 
