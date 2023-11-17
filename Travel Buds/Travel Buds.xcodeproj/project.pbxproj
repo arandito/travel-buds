@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-<<<<<<< HEAD
 		030204D02B07132C00A8779B /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 030204CF2B07132C00A8779B /* FirebaseAnalytics */; };
 		030204D22B07132C00A8779B /* FirebaseAnalyticsOnDeviceConversion in Frameworks */ = {isa = PBXBuildFile; productRef = 030204D12B07132C00A8779B /* FirebaseAnalyticsOnDeviceConversion */; };
 		030204D42B07132C00A8779B /* FirebaseAnalyticsSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 030204D32B07132C00A8779B /* FirebaseAnalyticsSwift */; };
@@ -36,8 +35,6 @@
 		030205022B07132C00A8779B /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 030205012B07132C00A8779B /* FirebaseStorage */; };
 		030205042B07132C00A8779B /* FirebaseStorageCombine-Community in Frameworks */ = {isa = PBXBuildFile; productRef = 030205032B07132C00A8779B /* FirebaseStorageCombine-Community */; };
 		030205062B07193400A8779B /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 030205052B07193400A8779B /* GoogleService-Info.plist */; };
-=======
->>>>>>> 716dd0535e2badcf7ec6125248d23b4d5e71f14c
 		03D0D2D72AFC4823006DDFC9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03D0D2D62AFC4823006DDFC9 /* AppDelegate.swift */; };
 		03D0D2D92AFC4823006DDFC9 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03D0D2D82AFC4823006DDFC9 /* SceneDelegate.swift */; };
 		03D0D2DB2AFC4823006DDFC9 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03D0D2DA2AFC4823006DDFC9 /* ViewController.swift */; };
@@ -50,10 +47,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-<<<<<<< HEAD
 		030205052B07193400A8779B /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
-=======
->>>>>>> 716dd0535e2badcf7ec6125248d23b4d5e71f14c
 		03D0D2D32AFC4823006DDFC9 /* Travel Buds.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Travel Buds.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		03D0D2D62AFC4823006DDFC9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		03D0D2D82AFC4823006DDFC9 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -72,7 +66,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-<<<<<<< HEAD
 				030204E22B07132C00A8779B /* FirebaseDatabase in Frameworks */,
 				030204F02B07132C00A8779B /* FirebaseFunctionsCombine-Community in Frameworks */,
 				030204E82B07132C00A8779B /* FirebaseFirestore in Frameworks */,
@@ -100,8 +93,6 @@
 				030204EA2B07132C00A8779B /* FirebaseFirestoreCombine-Community in Frameworks */,
 				030204FA2B07132C00A8779B /* FirebaseMessaging in Frameworks */,
 				030204F62B07132C00A8779B /* FirebaseInstallations in Frameworks */,
-=======
->>>>>>> 716dd0535e2badcf7ec6125248d23b4d5e71f14c
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -132,10 +123,7 @@
 				03D0D2DA2AFC4823006DDFC9 /* ViewController.swift */,
 				03D0D2EC2AFC6D27006DDFC9 /* TableViewController.swift */,
 				03D0D2F02AFC72A1006DDFC9 /* AddTripController.swift */,
-<<<<<<< HEAD
 				030205052B07193400A8779B /* GoogleService-Info.plist */,
-=======
->>>>>>> 716dd0535e2badcf7ec6125248d23b4d5e71f14c
 				03D0D2EE2AFC7092006DDFC9 /* DetailedViewController.swift */,
 				03D0D2DC2AFC4823006DDFC9 /* Main.storyboard */,
 				03D0D2DF2AFC4826006DDFC9 /* Assets.xcassets */,
@@ -161,7 +149,6 @@
 			dependencies = (
 			);
 			name = "Travel Buds";
-<<<<<<< HEAD
 			packageProductDependencies = (
 				030204CF2B07132C00A8779B /* FirebaseAnalytics */,
 				030204D12B07132C00A8779B /* FirebaseAnalyticsOnDeviceConversion */,
@@ -191,8 +178,6 @@
 				030205012B07132C00A8779B /* FirebaseStorage */,
 				030205032B07132C00A8779B /* FirebaseStorageCombine-Community */,
 			);
-=======
->>>>>>> 716dd0535e2badcf7ec6125248d23b4d5e71f14c
 			productName = "Travel Buds";
 			productReference = 03D0D2D32AFC4823006DDFC9 /* Travel Buds.app */;
 			productType = "com.apple.product-type.application";
@@ -221,12 +206,9 @@
 				Base,
 			);
 			mainGroup = 03D0D2CA2AFC4823006DDFC9;
-<<<<<<< HEAD
 			packageReferences = (
 				030204CE2B07132C00A8779B /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 			);
-=======
->>>>>>> 716dd0535e2badcf7ec6125248d23b4d5e71f14c
 			productRefGroup = 03D0D2D42AFC4823006DDFC9 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -242,10 +224,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				03D0D2E32AFC4826006DDFC9 /* LaunchScreen.storyboard in Resources */,
-<<<<<<< HEAD
 				030205062B07193400A8779B /* GoogleService-Info.plist in Resources */,
-=======
->>>>>>> 716dd0535e2badcf7ec6125248d23b4d5e71f14c
 				03D0D2E02AFC4826006DDFC9 /* Assets.xcassets in Resources */,
 				03D0D2DE2AFC4823006DDFC9 /* Main.storyboard in Resources */,
 			);
@@ -427,12 +406,8 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-<<<<<<< HEAD
 				"OTHER_LDFLAGS[arch=*]" = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.travelbuds;
-=======
-				PRODUCT_BUNDLE_IDENTIFIER = "YL4648.Travel-Buds";
->>>>>>> 716dd0535e2badcf7ec6125248d23b4d5e71f14c
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -459,12 +434,8 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-<<<<<<< HEAD
 				"OTHER_LDFLAGS[arch=*]" = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.travelbuds;
-=======
-				PRODUCT_BUNDLE_IDENTIFIER = "YL4648.Travel-Buds";
->>>>>>> 716dd0535e2badcf7ec6125248d23b4d5e71f14c
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -494,7 +465,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-<<<<<<< HEAD
 
 /* Begin XCRemoteSwiftPackageReference section */
 		030204CE2B07132C00A8779B /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
@@ -644,8 +614,6 @@
 			productName = "FirebaseStorageCombine-Community";
 		};
 /* End XCSwiftPackageProductDependency section */
-=======
->>>>>>> 716dd0535e2badcf7ec6125248d23b4d5e71f14c
 	};
 	rootObject = 03D0D2CB2AFC4823006DDFC9 /* Project object */;
 }
