@@ -35,6 +35,8 @@
 		030205022B07132C00A8779B /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 030205012B07132C00A8779B /* FirebaseStorage */; };
 		030205042B07132C00A8779B /* FirebaseStorageCombine-Community in Frameworks */ = {isa = PBXBuildFile; productRef = 030205032B07132C00A8779B /* FirebaseStorageCombine-Community */; };
 		030205062B07193400A8779B /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 030205052B07193400A8779B /* GoogleService-Info.plist */; };
+		0376C6072B086B5A0022BAD1 /* FirebaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0376C6062B086B5A0022BAD1 /* FirebaseManager.swift */; };
+		0376C6092B086BAE0022BAD1 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0376C6082B086BAE0022BAD1 /* User.swift */; };
 		03D0D2D72AFC4823006DDFC9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03D0D2D62AFC4823006DDFC9 /* AppDelegate.swift */; };
 		03D0D2D92AFC4823006DDFC9 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03D0D2D82AFC4823006DDFC9 /* SceneDelegate.swift */; };
 		03D0D2DB2AFC4823006DDFC9 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03D0D2DA2AFC4823006DDFC9 /* ViewController.swift */; };
@@ -103,6 +105,8 @@
 
 /* Begin PBXFileReference section */
 		030205052B07193400A8779B /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		0376C6062B086B5A0022BAD1 /* FirebaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseManager.swift; sourceTree = "<group>"; };
+		0376C6082B086BAE0022BAD1 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		03D0D2D32AFC4823006DDFC9 /* Travel Buds.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Travel Buds.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		03D0D2D62AFC4823006DDFC9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		03D0D2D82AFC4823006DDFC9 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -245,6 +249,8 @@
 				03D0D2E42AFC4826006DDFC9 /* Info.plist */,
 				477789F32AFDA0CD0050DC99 /* chatTableViewController.swift */,
 				47B42C802B0718FB00CFDBA1 /* Extensions.swift */,
+				0376C6062B086B5A0022BAD1 /* FirebaseManager.swift */,
+				0376C6082B086BAE0022BAD1 /* User.swift */,
 			);
 			path = "Travel Buds";
 			sourceTree = "<group>";
@@ -425,10 +431,12 @@
 				03D0D2EF2AFC7092006DDFC9 /* DetailedViewController.swift in Sources */,
 				03D0D2D92AFC4823006DDFC9 /* SceneDelegate.swift in Sources */,
 				47B42C7D2B0712FC00CFDBA1 /* Message.swift in Sources */,
+				0376C6092B086BAE0022BAD1 /* User.swift in Sources */,
 				47B42C7F2B07137600CFDBA1 /* MessageBubble.swift in Sources */,
 				47B42C812B0718FB00CFDBA1 /* Extensions.swift in Sources */,
 				47B42C7A2B07125800CFDBA1 /* ChatContentView.swift in Sources */,
 				47B42C832B07198F00CFDBA1 /* MessageField.swift in Sources */,
+				0376C6072B086B5A0022BAD1 /* FirebaseManager.swift in Sources */,
 				477789F42AFDA0CD0050DC99 /* chatTableViewController.swift in Sources */,
 				03D0D2ED2AFC6D27006DDFC9 /* TableViewController.swift in Sources */,
 				47B42C782B070D6C00CFDBA1 /* TitleRow.swift in Sources */,

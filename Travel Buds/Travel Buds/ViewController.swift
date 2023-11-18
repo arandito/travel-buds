@@ -6,31 +6,29 @@
 //
 
 import UIKit
-import FirebaseStorage
 import Firebase
-
-class FirebaseManager: NSObject {
-    let auth: Auth
-    let storage: Storage
-    let firestore: Firestore
-    
-    static let shared = FirebaseManager()
-    
-    override init(){
-        self.auth = Auth.auth()
-        self.storage = Storage.storage()
-        self.firestore = Firestore.firestore()
-        super.init()
-    }
-}
+import FirebaseAuth
+import FirebaseStorage
 
 class ViewController: UIViewController {
-
+    
+    class FirebaseManager: NSObject {
+        let auth: Auth
+        let storage: Storage
+        let firestore: Firestore
+        
+        static let shared = FirebaseManager()
+        
+        override init(){
+            self.auth = Auth.auth()
+            self.storage = Storage.storage()
+            self.firestore = Firestore.firestore()
+            super.init()
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        let handle = Auth.auth().addStateDidChangeListener { auth, user in
-        //do stuff with user data fetched from firebase
-        }
     }
 
     @IBAction func signUp(_ sender: UIButton) {
@@ -58,7 +56,7 @@ class ViewController: UIViewController {
                 let email = textFields[2].text ?? ""
                 let password = textFields[3].text ?? ""
                 
-                Auth.auth().createUser(withEmail: email, password: password) { authResult, error in
+                FirebaseManager.shared.auth.createUser(withEmail: email, password: password) { authResult, error in
                     if let error = error {
                         print(error)
                         let signUpError = UIAlertController(title: "Sign Up Error", message: "Email already in use", preferredStyle: .alert)
@@ -98,7 +96,7 @@ class ViewController: UIViewController {
         let cancel = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
         let login = UIAlertAction(title: "Login", style: .default) { _ in
             if let textFields = alert.textFields, let email = textFields[0].text, let password = textFields[1].text{
-                    Auth.auth().signIn(withEmail: email, password: password) { [weak self] authResult, error in
+                FirebaseManager.shared.auth.signIn(withEmail: email, password: password) { [weak self] authResult, error in
                         if let error = error {
                             let loginError = UIAlertController(title: "Login Error", message: "Invalid Username Or Password", preferredStyle: .alert)
                             loginError.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
