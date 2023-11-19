@@ -13,7 +13,7 @@ import FirebaseStorage
 class TableViewController: UITableViewController{
     
     var trips: [String] = []
-    let user: User? = nil
+    var user: User? = nil
     
     class FirebaseManager: NSObject {
         let auth: Auth
@@ -31,6 +31,7 @@ class TableViewController: UITableViewController{
     }
     
     override func viewDidLoad(){
+        print("view loaded")
         self.populateData()
         super.viewDidLoad()
     }
@@ -55,12 +56,15 @@ class TableViewController: UITableViewController{
     }
     
     func populateData(){
+        print("data population started")
         let uid = FirebaseManager.shared.auth.currentUser?.uid ?? ""
+        print("uid")
         let userRef = FirebaseManager.shared.firestore.collection("users").document(uid)
         userRef.getDocument { (document, error) in
             if let document = document, document.exists {
-                let userData = document.data(),
-                    user = User(
+                print("document exists")
+                let userData = document.data()
+                    self.user = User(
                         email: userData!["email"] as? String ?? "",
                         userName: userData!["userName"] as? String ?? "",
                         firstName: userData!["firstName"] as? String ?? "",
@@ -77,11 +81,11 @@ class TableViewController: UITableViewController{
                         }
                         )
                     }
+            print(self.user?.email)
+            print(self.user?.userName)
+            print(self.user?.firstName)
+            print(self.user?.lastName)
+            print(self.user?.trips)
         }
-        print(user?.email)
-        print(user?.userName)
-        print(user?.firstName)
-        print(user?.lastName)
-        print(user?.trips)
     }
 }
