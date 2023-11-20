@@ -15,17 +15,15 @@
 		0376C6092B086BAE0022BAD1 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0376C6082B086BAE0022BAD1 /* User.swift */; };
 		03D0D2D72AFC4823006DDFC9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03D0D2D62AFC4823006DDFC9 /* AppDelegate.swift */; };
 		03D0D2D92AFC4823006DDFC9 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03D0D2D82AFC4823006DDFC9 /* SceneDelegate.swift */; };
-		03D0D2DB2AFC4823006DDFC9 /* LogInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03D0D2DA2AFC4823006DDFC9 /* LogInViewController.swift */; };
 		03D0D2DE2AFC4823006DDFC9 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 03D0D2DC2AFC4823006DDFC9 /* Main.storyboard */; };
 		03D0D2E02AFC4826006DDFC9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 03D0D2DF2AFC4826006DDFC9 /* Assets.xcassets */; };
 		03D0D2E32AFC4826006DDFC9 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 03D0D2E12AFC4826006DDFC9 /* LaunchScreen.storyboard */; };
-		03D0D2ED2AFC6D27006DDFC9 /* TableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03D0D2EC2AFC6D27006DDFC9 /* TableViewController.swift */; };
 		03D0D2F12AFC72A1006DDFC9 /* AddTripController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03D0D2F02AFC72A1006DDFC9 /* AddTripController.swift */; };
 		0D35A0082B073AFF0016D483 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 0D35A0072B073AFF0016D483 /* FirebaseStorage */; };
 		0DE4203F2B0AF1FE00421126 /* FirebaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DE4203E2B0AF1FE00421126 /* FirebaseManager.swift */; };
-		477789F22AFD70780050DC99 /* chatDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 477789F12AFD70780050DC99 /* chatDetailViewController.swift */; };
-		477789F42AFDA0CD0050DC99 /* chatTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 477789F32AFDA0CD0050DC99 /* chatTableViewController.swift */; };
-		478AB06D2B0AFD3C0084FD3D /* MainMessagesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 478AB06C2B0AFD3C0084FD3D /* MainMessagesView.swift */; };
+		0DE420432B0B078D00421126 /* TravelBudsChatApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DE420422B0B078D00421126 /* TravelBudsChatApp.swift */; };
+		0DE420482B0BFC4900421126 /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DE420472B0BFC4900421126 /* ImagePicker.swift */; };
+		478AB06D2B0AFD3C0084FD3D /* GroupChatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 478AB06C2B0AFD3C0084FD3D /* GroupChatsView.swift */; };
 		478AB06F2B0AFDA20084FD3D /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 478AB06E2B0AFDA20084FD3D /* LoginView.swift */; };
 		47B42C782B070D6C00CFDBA1 /* TitleRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47B42C772B070D6C00CFDBA1 /* TitleRow.swift */; };
 		47B42C7A2B07125800CFDBA1 /* ChatContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47B42C792B07125800CFDBA1 /* ChatContentView.swift */; };
@@ -41,17 +39,15 @@
 		03D0D2D32AFC4823006DDFC9 /* Travel Buds.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Travel Buds.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		03D0D2D62AFC4823006DDFC9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		03D0D2D82AFC4823006DDFC9 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		03D0D2DA2AFC4823006DDFC9 /* LogInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogInViewController.swift; sourceTree = "<group>"; };
 		03D0D2DD2AFC4823006DDFC9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		03D0D2DF2AFC4826006DDFC9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		03D0D2E22AFC4826006DDFC9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		03D0D2E42AFC4826006DDFC9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		03D0D2EC2AFC6D27006DDFC9 /* TableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewController.swift; sourceTree = "<group>"; };
 		03D0D2F02AFC72A1006DDFC9 /* AddTripController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTripController.swift; sourceTree = "<group>"; };
 		0DE4203E2B0AF1FE00421126 /* FirebaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseManager.swift; sourceTree = "<group>"; };
-		477789F12AFD70780050DC99 /* chatDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = chatDetailViewController.swift; sourceTree = "<group>"; };
-		477789F32AFDA0CD0050DC99 /* chatTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = chatTableViewController.swift; sourceTree = "<group>"; };
-		478AB06C2B0AFD3C0084FD3D /* MainMessagesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMessagesView.swift; sourceTree = "<group>"; };
+		0DE420422B0B078D00421126 /* TravelBudsChatApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelBudsChatApp.swift; sourceTree = "<group>"; };
+		0DE420472B0BFC4900421126 /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
+		478AB06C2B0AFD3C0084FD3D /* GroupChatsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupChatsView.swift; sourceTree = "<group>"; };
 		478AB06E2B0AFDA20084FD3D /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		47B42C772B070D6C00CFDBA1 /* TitleRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleRow.swift; sourceTree = "<group>"; };
 		47B42C792B07125800CFDBA1 /* ChatContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatContentView.swift; sourceTree = "<group>"; };
@@ -104,30 +100,39 @@
 		03D0D2D52AFC4823006DDFC9 /* Travel Buds */ = {
 			isa = PBXGroup;
 			children = (
+				0DE420462B0BF5C900421126 /* Utils */,
 				47B42C7B2B0712E200CFDBA1 /* Chat Models */,
 				47B42C762B070D2B00CFDBA1 /* Chat Components */,
 				03D0D2D62AFC4823006DDFC9 /* AppDelegate.swift */,
-				477789F12AFD70780050DC99 /* chatDetailViewController.swift */,
+				478AB06C2B0AFD3C0084FD3D /* GroupChatsView.swift */,
+				478AB06E2B0AFDA20084FD3D /* LoginView.swift */,
+				0DE420422B0B078D00421126 /* TravelBudsChatApp.swift */,
 				03D0D2D82AFC4823006DDFC9 /* SceneDelegate.swift */,
-				03D0D2DA2AFC4823006DDFC9 /* LogInViewController.swift */,
-				03D0D2EC2AFC6D27006DDFC9 /* TableViewController.swift */,
 				03D0D2F02AFC72A1006DDFC9 /* AddTripController.swift */,
 				030205052B07193400A8779B /* GoogleService-Info.plist */,
 				03D0D2DC2AFC4823006DDFC9 /* Main.storyboard */,
 				03D0D2DF2AFC4826006DDFC9 /* Assets.xcassets */,
 				03D0D2E12AFC4826006DDFC9 /* LaunchScreen.storyboard */,
 				03D0D2E42AFC4826006DDFC9 /* Info.plist */,
-				477789F32AFDA0CD0050DC99 /* chatTableViewController.swift */,
-				47B42C802B0718FB00CFDBA1 /* Extensions.swift */,
 				0376C6082B086BAE0022BAD1 /* User.swift */,
 			);
 			path = "Travel Buds";
+			sourceTree = "<group>";
+		};
+		0DE420462B0BF5C900421126 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				0DE420472B0BFC4900421126 /* ImagePicker.swift */,
+				0DE4203E2B0AF1FE00421126 /* FirebaseManager.swift */,
+			);
+			path = Utils;
 			sourceTree = "<group>";
 		};
 		47B42C762B070D2B00CFDBA1 /* Chat Components */ = {
 			isa = PBXGroup;
 			children = (
 				47B42C772B070D6C00CFDBA1 /* TitleRow.swift */,
+				47B42C802B0718FB00CFDBA1 /* Extensions.swift */,
 				47B42C7E2B07137600CFDBA1 /* MessageBubble.swift */,
 				47B42C822B07198F00CFDBA1 /* MessageField.swift */,
 			);
@@ -139,9 +144,6 @@
 			children = (
 				47B42C792B07125800CFDBA1 /* ChatContentView.swift */,
 				47B42C7C2B0712FC00CFDBA1 /* Message.swift */,
-				0DE4203E2B0AF1FE00421126 /* FirebaseManager.swift */,
-				478AB06C2B0AFD3C0084FD3D /* MainMessagesView.swift */,
-				478AB06E2B0AFDA20084FD3D /* LoginView.swift */,
 			);
 			path = "Chat Models";
 			sourceTree = "<group>";
@@ -228,9 +230,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				03D0D2DB2AFC4823006DDFC9 /* LogInViewController.swift in Sources */,
 				03D0D2D72AFC4823006DDFC9 /* AppDelegate.swift in Sources */,
-				477789F22AFD70780050DC99 /* chatDetailViewController.swift in Sources */,
+				0DE420432B0B078D00421126 /* TravelBudsChatApp.swift in Sources */,
+				0DE420482B0BFC4900421126 /* ImagePicker.swift in Sources */,
 				03D0D2F12AFC72A1006DDFC9 /* AddTripController.swift in Sources */,
 				03D0D2D92AFC4823006DDFC9 /* SceneDelegate.swift in Sources */,
 				47B42C7D2B0712FC00CFDBA1 /* Message.swift in Sources */,
@@ -239,11 +241,9 @@
 				47B42C812B0718FB00CFDBA1 /* Extensions.swift in Sources */,
 				47B42C7A2B07125800CFDBA1 /* ChatContentView.swift in Sources */,
 				47B42C832B07198F00CFDBA1 /* MessageField.swift in Sources */,
-				477789F42AFDA0CD0050DC99 /* chatTableViewController.swift in Sources */,
 				478AB06F2B0AFDA20084FD3D /* LoginView.swift in Sources */,
-				478AB06D2B0AFD3C0084FD3D /* MainMessagesView.swift in Sources */,
+				478AB06D2B0AFD3C0084FD3D /* GroupChatsView.swift in Sources */,
 				0DE4203F2B0AF1FE00421126 /* FirebaseManager.swift in Sources */,
-				03D0D2ED2AFC6D27006DDFC9 /* TableViewController.swift in Sources */,
 				47B42C782B070D6C00CFDBA1 /* TitleRow.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
