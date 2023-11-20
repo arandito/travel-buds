@@ -111,7 +111,7 @@ struct MainMessagesView: View {
         } label: {
             HStack {
                 Spacer()
-                Text("+ New Message")
+                Text("+ Add Trip")
                     .font(.system(size: 16, weight: .bold))
                 Spacer()
             }
