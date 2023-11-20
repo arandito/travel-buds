@@ -10,7 +10,6 @@
 		030204DC2B07132C00A8779B /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 030204DB2B07132C00A8779B /* FirebaseAuth */; };
 		030204E82B07132C00A8779B /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 030204E72B07132C00A8779B /* FirebaseFirestore */; };
 		030204EE2B07132C00A8779B /* FirebaseFunctions in Frameworks */ = {isa = PBXBuildFile; productRef = 030204ED2B07132C00A8779B /* FirebaseFunctions */; };
-		030205022B07132C00A8779B /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 030205012B07132C00A8779B /* FirebaseStorage */; };
 		030205062B07193400A8779B /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 030205052B07193400A8779B /* GoogleService-Info.plist */; };
 		0376C6092B086BAE0022BAD1 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0376C6082B086BAE0022BAD1 /* User.swift */; };
 		03D0D2D72AFC4823006DDFC9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03D0D2D62AFC4823006DDFC9 /* AppDelegate.swift */; };
@@ -22,12 +21,6 @@
 		03D0D2ED2AFC6D27006DDFC9 /* TableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03D0D2EC2AFC6D27006DDFC9 /* TableViewController.swift */; };
 		03D0D2EF2AFC7092006DDFC9 /* DetailedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03D0D2EE2AFC7092006DDFC9 /* DetailedViewController.swift */; };
 		03D0D2F12AFC72A1006DDFC9 /* AddTripController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03D0D2F02AFC72A1006DDFC9 /* AddTripController.swift */; };
-		0D359FBA2B073AD90016D483 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 0D359FB92B073AD90016D483 /* FirebaseAuth */; };
-		0D359FC62B073AD90016D483 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 0D359FC52B073AD90016D483 /* FirebaseFirestore */; };
-		0D359FCC2B073AD90016D483 /* FirebaseFunctions in Frameworks */ = {isa = PBXBuildFile; productRef = 0D359FCB2B073AD90016D483 /* FirebaseFunctions */; };
-		0D359FE22B073AFF0016D483 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 0D359FE12B073AFF0016D483 /* FirebaseAuth */; };
-		0D359FEE2B073AFF0016D483 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 0D359FED2B073AFF0016D483 /* FirebaseFirestore */; };
-		0D359FF42B073AFF0016D483 /* FirebaseFunctions in Frameworks */ = {isa = PBXBuildFile; productRef = 0D359FF32B073AFF0016D483 /* FirebaseFunctions */; };
 		0D35A0082B073AFF0016D483 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 0D35A0072B073AFF0016D483 /* FirebaseStorage */; };
 		477789F22AFD70780050DC99 /* chatDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 477789F12AFD70780050DC99 /* chatDetailViewController.swift */; };
 		477789F42AFDA0CD0050DC99 /* chatTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 477789F32AFDA0CD0050DC99 /* chatTableViewController.swift */; };
@@ -70,15 +63,8 @@
 			files = (
 				030204E82B07132C00A8779B /* FirebaseFirestore in Frameworks */,
 				030204DC2B07132C00A8779B /* FirebaseAuth in Frameworks */,
-				0D359FC62B073AD90016D483 /* FirebaseFirestore in Frameworks */,
 				0D35A0082B073AFF0016D483 /* FirebaseStorage in Frameworks */,
-				0D359FBA2B073AD90016D483 /* FirebaseAuth in Frameworks */,
 				030204EE2B07132C00A8779B /* FirebaseFunctions in Frameworks */,
-				0D359FCC2B073AD90016D483 /* FirebaseFunctions in Frameworks */,
-				030205022B07132C00A8779B /* FirebaseStorage in Frameworks */,
-				0D359FE22B073AFF0016D483 /* FirebaseAuth in Frameworks */,
-				0D359FEE2B073AFF0016D483 /* FirebaseFirestore in Frameworks */,
-				0D359FF42B073AFF0016D483 /* FirebaseFunctions in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -172,13 +158,6 @@
 				030204DB2B07132C00A8779B /* FirebaseAuth */,
 				030204E72B07132C00A8779B /* FirebaseFirestore */,
 				030204ED2B07132C00A8779B /* FirebaseFunctions */,
-				030205012B07132C00A8779B /* FirebaseStorage */,
-				0D359FB92B073AD90016D483 /* FirebaseAuth */,
-				0D359FC52B073AD90016D483 /* FirebaseFirestore */,
-				0D359FCB2B073AD90016D483 /* FirebaseFunctions */,
-				0D359FE12B073AFF0016D483 /* FirebaseAuth */,
-				0D359FED2B073AFF0016D483 /* FirebaseFirestore */,
-				0D359FF32B073AFF0016D483 /* FirebaseFunctions */,
 				0D35A0072B073AFF0016D483 /* FirebaseStorage */,
 			);
 			productName = "Travel Buds";
@@ -503,35 +482,6 @@
 		030204ED2B07132C00A8779B /* FirebaseFunctions */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 030204CE2B07132C00A8779B /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
-			productName = FirebaseFunctions;
-		};
-		030205012B07132C00A8779B /* FirebaseStorage */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 030204CE2B07132C00A8779B /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
-			productName = FirebaseStorage;
-		};
-		0D359FB92B073AD90016D483 /* FirebaseAuth */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = FirebaseAuth;
-		};
-		0D359FC52B073AD90016D483 /* FirebaseFirestore */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = FirebaseFirestore;
-		};
-		0D359FCB2B073AD90016D483 /* FirebaseFunctions */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = FirebaseFunctions;
-		};
-		0D359FE12B073AFF0016D483 /* FirebaseAuth */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = FirebaseAuth;
-		};
-		0D359FED2B073AFF0016D483 /* FirebaseFirestore */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = FirebaseFirestore;
-		};
-		0D359FF32B073AFF0016D483 /* FirebaseFunctions */ = {
-			isa = XCSwiftPackageProductDependency;
 			productName = FirebaseFunctions;
 		};
 		0D35A0072B073AFF0016D483 /* FirebaseStorage */ = {

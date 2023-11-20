@@ -4,11 +4,28 @@
 //
 //  Created by Yongkang Lin on 11/8/23.
 //
-
+import Firebase
+import FirebaseAuth
+import FirebaseStorage
 import Foundation
 import UIKit
 
 class AddTripController: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate{
+    
+    class FirebaseManager: NSObject {
+        let auth: Auth
+        let storage: Storage
+        let firestore: Firestore
+        
+        static let shared = FirebaseManager()
+        
+        override init(){
+            self.auth = Auth.auth()
+            self.storage = Storage.storage()
+            self.firestore = Firestore.firestore()
+            super.init()
+        }
+    }
     
     @IBOutlet weak var location: UIPickerView!
     @IBOutlet weak var interest: UIPickerView!
@@ -50,14 +67,20 @@ class AddTripController: UIViewController, UIPickerViewDataSource, UIPickerViewD
     }
     
     @IBAction func addTrip(_ sender: UIButton){
-        let selectedLocation = locationOption[location.selectedRow(inComponent: 0)]
-        let selectedInterest = interestOption[interest.selectedRow(inComponent: 0)]
-        let selectedArrivalDate = arrival.date
-        let selectedDepartureDate = departure.date
-        print("Selected Location: \(selectedLocation)")
-        print("Selected Interest: \(selectedInterest)")
-        print("Selected Arrival Date: \(selectedArrivalDate)")
-        print("Selected Departure Date: \(selectedDepartureDate)")
+        guard let userId = FirebaseManager.shared.auth.currentUser?.uid else { return }
+        let tripData: [String: Any] = [
+            "userId": userId,
+            "interest": interestOption[interest.selectedRow(inComponent: 0)],
+            "arrival": arrival.date,
+            "departure": departure.date
+        ]
+        FirebaseManager.shared.firestore.collection("pending")
+            .document(locationOption[location.selectedRow(inComponent: 0)]).setData(tripData) { err in
+                if let err = err {
+                    print(err)
+                    return
+                }
+                print("Success")
+            }
     }
-    
 }

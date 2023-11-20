@@ -58,7 +58,7 @@ class TableViewController: UITableViewController{
     func populateData(){
         print("data population started")
         let uid = FirebaseManager.shared.auth.currentUser?.uid ?? ""
-        print("uid")
+        print(uid)
         let userRef = FirebaseManager.shared.firestore.collection("users").document(uid)
         userRef.getDocument { (document, error) in
             if let document = document, document.exists {
@@ -71,8 +71,8 @@ class TableViewController: UITableViewController{
                         lastName: userData!["lastName"] as? String ?? "",
                         trips: (userData!["trips"] as? [[String: Any]] ?? []).compactMap { tripData in
                             return Trip(
-                                tripID: tripData["tripID"] as? String ?? "",
-                                chatID: tripData["chatID"] as? String,
+                                tripID: tripData["tripId"] as? String ?? "",
+                                chatID: tripData["chatId"] as? String,
                                 location: tripData["location"] as? String ?? "",
                                 interest: tripData["interest"] as? String ?? "",
                                 arrival: tripData["arrival"] as? Date ?? Date(),
