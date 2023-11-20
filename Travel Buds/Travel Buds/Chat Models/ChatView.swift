@@ -20,7 +20,7 @@ struct ChatView: View {
                     HStack {
                         Spacer()
                         HStack {
-                            Text("MEASSAGE")
+                            Text("MESSAGE")
                                 .foregroundColor(.white)
                         }
                         .padding()

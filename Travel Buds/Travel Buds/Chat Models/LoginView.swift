@@ -44,6 +44,7 @@ struct LoginView: View {
                     }
                     .padding(12)
                     .background(Color.white)
+                    .cornerRadius(8)
                     
                     Button {
                         handleAction()
@@ -55,7 +56,9 @@ struct LoginView: View {
                                 .padding(.vertical, 10)
                                 .font(.system(size: 14, weight: .semibold))
                             Spacer()
-                        }.background(Color.purple)
+                        }
+                        .background(Color.purple)
+                        .cornerRadius(8)
                     }
                     
                 }.padding()
