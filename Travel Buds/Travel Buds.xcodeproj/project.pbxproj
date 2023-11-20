@@ -129,6 +129,7 @@
 		47B42C762B070D2B00CFDBA1 /* Chat Components */ = {
 			isa = PBXGroup;
 			children = (
+				0DE4203E2B0AF1FE00421126 /* FirebaseManager.swift */,
 				47B42C772B070D6C00CFDBA1 /* TitleRow.swift */,
 				47B42C7E2B07137600CFDBA1 /* MessageBubble.swift */,
 				47B42C822B07198F00CFDBA1 /* MessageField.swift */,
@@ -141,7 +142,6 @@
 			children = (
 				47B42C792B07125800CFDBA1 /* ChatContentView.swift */,
 				47B42C7C2B0712FC00CFDBA1 /* Message.swift */,
-				0DE4203E2B0AF1FE00421126 /* FirebaseManager.swift */,
 				478AB06C2B0AFD3C0084FD3D /* MainMessagesView.swift */,
 				478AB06E2B0AFDA20084FD3D /* LoginView.swift */,
 				478AB0702B0B29710084FD3D /* ChatView.swift */,
