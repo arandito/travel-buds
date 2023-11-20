@@ -15,21 +15,6 @@ class TableViewController: UITableViewController{
     var trips: [String] = []
     var user: User? = nil
     
-    class FirebaseManager: NSObject {
-        let auth: Auth
-        let storage: Storage
-        let firestore: Firestore
-        
-        static let shared = FirebaseManager()
-        
-        override init(){
-            self.auth = Auth.auth()
-            self.storage = Storage.storage()
-            self.firestore = Firestore.firestore()
-            super.init()
-        }
-    }
-    
     override func viewDidLoad(){
         print("view loaded")
         self.populateData()
@@ -48,7 +33,7 @@ class TableViewController: UITableViewController{
         if segue.identifier == "detailedChat" {
             if let indexPath = tableView.indexPathForSelectedRow {
                 let selected = trips[indexPath.row]
-                if let detailedViewController = segue.destination as? DetailedViewController {
+                if let TableViewController = segue.destination as? TableViewController {
                     print("")
                 }
             }
