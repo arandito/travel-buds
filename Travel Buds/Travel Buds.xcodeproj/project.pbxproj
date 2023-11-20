@@ -11,6 +11,7 @@
 		030204E82B07132C00A8779B /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 030204E72B07132C00A8779B /* FirebaseFirestore */; };
 		030204EE2B07132C00A8779B /* FirebaseFunctions in Frameworks */ = {isa = PBXBuildFile; productRef = 030204ED2B07132C00A8779B /* FirebaseFunctions */; };
 		030205062B07193400A8779B /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 030205052B07193400A8779B /* GoogleService-Info.plist */; };
+		031901652B0AE03A00E5013A /* FirebaseDatabase in Frameworks */ = {isa = PBXBuildFile; productRef = 031901642B0AE03A00E5013A /* FirebaseDatabase */; };
 		0376C6092B086BAE0022BAD1 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0376C6082B086BAE0022BAD1 /* User.swift */; };
 		03D0D2D72AFC4823006DDFC9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03D0D2D62AFC4823006DDFC9 /* AppDelegate.swift */; };
 		03D0D2D92AFC4823006DDFC9 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03D0D2D82AFC4823006DDFC9 /* SceneDelegate.swift */; };
@@ -19,7 +20,6 @@
 		03D0D2E02AFC4826006DDFC9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 03D0D2DF2AFC4826006DDFC9 /* Assets.xcassets */; };
 		03D0D2E32AFC4826006DDFC9 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 03D0D2E12AFC4826006DDFC9 /* LaunchScreen.storyboard */; };
 		03D0D2ED2AFC6D27006DDFC9 /* TableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03D0D2EC2AFC6D27006DDFC9 /* TableViewController.swift */; };
-		03D0D2EF2AFC7092006DDFC9 /* DetailedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03D0D2EE2AFC7092006DDFC9 /* DetailedViewController.swift */; };
 		03D0D2F12AFC72A1006DDFC9 /* AddTripController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03D0D2F02AFC72A1006DDFC9 /* AddTripController.swift */; };
 		0D35A0082B073AFF0016D483 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 0D35A0072B073AFF0016D483 /* FirebaseStorage */; };
 		477789F22AFD70780050DC99 /* chatDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 477789F12AFD70780050DC99 /* chatDetailViewController.swift */; };
@@ -44,7 +44,6 @@
 		03D0D2E22AFC4826006DDFC9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		03D0D2E42AFC4826006DDFC9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		03D0D2EC2AFC6D27006DDFC9 /* TableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewController.swift; sourceTree = "<group>"; };
-		03D0D2EE2AFC7092006DDFC9 /* DetailedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailedViewController.swift; sourceTree = "<group>"; };
 		03D0D2F02AFC72A1006DDFC9 /* AddTripController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTripController.swift; sourceTree = "<group>"; };
 		477789F12AFD70780050DC99 /* chatDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = chatDetailViewController.swift; sourceTree = "<group>"; };
 		477789F32AFDA0CD0050DC99 /* chatTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = chatTableViewController.swift; sourceTree = "<group>"; };
@@ -61,6 +60,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				031901652B0AE03A00E5013A /* FirebaseDatabase in Frameworks */,
 				030204E82B07132C00A8779B /* FirebaseFirestore in Frameworks */,
 				030204DC2B07132C00A8779B /* FirebaseAuth in Frameworks */,
 				0D35A0082B073AFF0016D483 /* FirebaseStorage in Frameworks */,
@@ -108,7 +108,6 @@
 				03D0D2EC2AFC6D27006DDFC9 /* TableViewController.swift */,
 				03D0D2F02AFC72A1006DDFC9 /* AddTripController.swift */,
 				030205052B07193400A8779B /* GoogleService-Info.plist */,
-				03D0D2EE2AFC7092006DDFC9 /* DetailedViewController.swift */,
 				03D0D2DC2AFC4823006DDFC9 /* Main.storyboard */,
 				03D0D2DF2AFC4826006DDFC9 /* Assets.xcassets */,
 				03D0D2E12AFC4826006DDFC9 /* LaunchScreen.storyboard */,
@@ -159,6 +158,7 @@
 				030204E72B07132C00A8779B /* FirebaseFirestore */,
 				030204ED2B07132C00A8779B /* FirebaseFunctions */,
 				0D35A0072B073AFF0016D483 /* FirebaseStorage */,
+				031901642B0AE03A00E5013A /* FirebaseDatabase */,
 			);
 			productName = "Travel Buds";
 			productReference = 03D0D2D32AFC4823006DDFC9 /* Travel Buds.app */;
@@ -223,7 +223,6 @@
 				03D0D2D72AFC4823006DDFC9 /* AppDelegate.swift in Sources */,
 				477789F22AFD70780050DC99 /* chatDetailViewController.swift in Sources */,
 				03D0D2F12AFC72A1006DDFC9 /* AddTripController.swift in Sources */,
-				03D0D2EF2AFC7092006DDFC9 /* DetailedViewController.swift in Sources */,
 				03D0D2D92AFC4823006DDFC9 /* SceneDelegate.swift in Sources */,
 				47B42C7D2B0712FC00CFDBA1 /* Message.swift in Sources */,
 				0376C6092B086BAE0022BAD1 /* User.swift in Sources */,
@@ -483,6 +482,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 030204CE2B07132C00A8779B /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseFunctions;
+		};
+		031901642B0AE03A00E5013A /* FirebaseDatabase */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 030204CE2B07132C00A8779B /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseDatabase;
 		};
 		0D35A0072B073AFF0016D483 /* FirebaseStorage */ = {
 			isa = XCSwiftPackageProductDependency;
