@@ -40,13 +40,15 @@ struct MainMessagesView: View {
             }
             
             Spacer()
+            /*
             Button {
                 shouldShowLogOutOptions.toggle()
             } label: {
                 Image(systemName: "gear")
                     .font(.system(size: 24, weight: .bold))
-                    .foregroundColor(Color(.label))
+                    .foregroundColor(Color(.purple))
             }
+            */
         }
         .padding()
         .actionSheet(isPresented: $shouldShowLogOutOptions) {
@@ -66,9 +68,11 @@ struct MainMessagesView: View {
                 customNavBar
                 messagesView
             }
+            /*
             .overlay(
                 newMessageButton, alignment: .bottom)
             .navigationBarHidden(true)
+            */
         }
     }
     
@@ -105,6 +109,7 @@ struct MainMessagesView: View {
         }
     }
     
+    /*
     private var newMessageButton: some View {
         Button {
             
@@ -123,6 +128,7 @@ struct MainMessagesView: View {
                 .shadow(radius: 15)
         }
     }
+     */
     
 }
 
