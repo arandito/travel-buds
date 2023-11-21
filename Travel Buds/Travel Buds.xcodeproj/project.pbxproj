@@ -15,11 +15,11 @@
 		0376C6092B086BAE0022BAD1 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0376C6082B086BAE0022BAD1 /* User.swift */; };
 		03D0D2D72AFC4823006DDFC9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03D0D2D62AFC4823006DDFC9 /* AppDelegate.swift */; };
 		03D0D2D92AFC4823006DDFC9 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03D0D2D82AFC4823006DDFC9 /* SceneDelegate.swift */; };
-		03D0D2DE2AFC4823006DDFC9 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 03D0D2DC2AFC4823006DDFC9 /* Main.storyboard */; };
 		03D0D2E02AFC4826006DDFC9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 03D0D2DF2AFC4826006DDFC9 /* Assets.xcassets */; };
 		03D0D2E32AFC4826006DDFC9 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 03D0D2E12AFC4826006DDFC9 /* LaunchScreen.storyboard */; };
 		03D0D2F12AFC72A1006DDFC9 /* AddTripController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03D0D2F02AFC72A1006DDFC9 /* AddTripController.swift */; };
 		0D35A0082B073AFF0016D483 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 0D35A0072B073AFF0016D483 /* FirebaseStorage */; };
+		0D50D85D2B0C7425001591C9 /* SDWebImageSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 0D50D85C2B0C7425001591C9 /* SDWebImageSwiftUI */; };
 		0DE4203F2B0AF1FE00421126 /* FirebaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DE4203E2B0AF1FE00421126 /* FirebaseManager.swift */; };
 		0DE420502B0C2D9C00421126 /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DE4204F2B0C2D9C00421126 /* ImagePicker.swift */; };
 		0DE420522B0C2DD800421126 /* TravelBudsChatApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DE420512B0C2DD800421126 /* TravelBudsChatApp.swift */; };
@@ -41,7 +41,6 @@
 		03D0D2D32AFC4823006DDFC9 /* Travel Buds.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Travel Buds.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		03D0D2D62AFC4823006DDFC9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		03D0D2D82AFC4823006DDFC9 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		03D0D2DD2AFC4823006DDFC9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		03D0D2DF2AFC4826006DDFC9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		03D0D2E22AFC4826006DDFC9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		03D0D2E42AFC4826006DDFC9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -66,6 +65,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0D50D85D2B0C7425001591C9 /* SDWebImageSwiftUI in Frameworks */,
 				031901652B0AE03A00E5013A /* FirebaseDatabase in Frameworks */,
 				030204E82B07132C00A8779B /* FirebaseFirestore in Frameworks */,
 				030204DC2B07132C00A8779B /* FirebaseAuth in Frameworks */,
@@ -114,7 +114,6 @@
 				03D0D2D82AFC4823006DDFC9 /* SceneDelegate.swift */,
 				03D0D2F02AFC72A1006DDFC9 /* AddTripController.swift */,
 				030205052B07193400A8779B /* GoogleService-Info.plist */,
-				03D0D2DC2AFC4823006DDFC9 /* Main.storyboard */,
 				03D0D2DF2AFC4826006DDFC9 /* Assets.xcassets */,
 				03D0D2E12AFC4826006DDFC9 /* LaunchScreen.storyboard */,
 				03D0D2E42AFC4826006DDFC9 /* Info.plist */,
@@ -176,6 +175,7 @@
 				030204ED2B07132C00A8779B /* FirebaseFunctions */,
 				0D35A0072B073AFF0016D483 /* FirebaseStorage */,
 				031901642B0AE03A00E5013A /* FirebaseDatabase */,
+				0D50D85C2B0C7425001591C9 /* SDWebImageSwiftUI */,
 			);
 			productName = "Travel Buds";
 			productReference = 03D0D2D32AFC4823006DDFC9 /* Travel Buds.app */;
@@ -207,6 +207,7 @@
 			mainGroup = 03D0D2CA2AFC4823006DDFC9;
 			packageReferences = (
 				030204CE2B07132C00A8779B /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				0D50D85B2B0C7425001591C9 /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */,
 			);
 			productRefGroup = 03D0D2D42AFC4823006DDFC9 /* Products */;
 			projectDirPath = "";
@@ -225,7 +226,6 @@
 				03D0D2E32AFC4826006DDFC9 /* LaunchScreen.storyboard in Resources */,
 				030205062B07193400A8779B /* GoogleService-Info.plist in Resources */,
 				03D0D2E02AFC4826006DDFC9 /* Assets.xcassets in Resources */,
-				03D0D2DE2AFC4823006DDFC9 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -259,14 +259,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		03D0D2DC2AFC4823006DDFC9 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				03D0D2DD2AFC4823006DDFC9 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		03D0D2E12AFC4826006DDFC9 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -408,7 +400,7 @@
 				INFOPLIST_FILE = "Travel Buds/Info.plist";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UIMainStoryboardFile = "";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -436,7 +428,7 @@
 				INFOPLIST_FILE = "Travel Buds/Info.plist";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UIMainStoryboardFile = "";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -485,6 +477,14 @@
 				minimumVersion = 10.18.0;
 			};
 		};
+		0D50D85B2B0C7425001591C9 /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SDWebImage/SDWebImageSwiftUI";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.2.4;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -511,6 +511,11 @@
 		0D35A0072B073AFF0016D483 /* FirebaseStorage */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = FirebaseStorage;
+		};
+		0D50D85C2B0C7425001591C9 /* SDWebImageSwiftUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 0D50D85B2B0C7425001591C9 /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */;
+			productName = SDWebImageSwiftUI;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
