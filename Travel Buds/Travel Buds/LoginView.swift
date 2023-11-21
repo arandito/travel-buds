@@ -9,26 +9,26 @@ import SwiftUI
 
 struct LoginView: View {
     
-    @State var isLoginMode = true
-    @State var isLogged = false
-    @State var firstName = ""
-    @State var lastName = ""
-    @State var userName = ""
-    @State var logInEmail = ""
-    @State var logInPassword = ""
-    @State var signUpEmail = ""
-    @State var signUpPassword = ""
+    let isLoginCompleted: () -> ()
     
-    @State var showImageSelector = false
-    @State var image: UIImage?
+    @State private var isLoginMode = true
+    @State private var firstName = ""
+    @State private var lastName = ""
+    @State private var userName = ""
+    @State private var logInEmail = ""
+    @State private var logInPassword = ""
+    @State private var signUpEmail = ""
+    @State private var signUpPassword = ""
+    
+    @State private var showImageSelector = false
+    @State private var image: UIImage?
     
     var body: some View {
         NavigationView {
             ScrollView {
-                
                 VStack(spacing: 16) {
                     Picker(selection: $isLoginMode, label: Text("Picker")) {
-                        Text("Login").tag(true)
+                        Text("Log in").tag(true)
                         Text("Create Account").tag(false)
                     }.pickerStyle(SegmentedPickerStyle())
                         .padding()
@@ -67,11 +67,13 @@ struct LoginView: View {
                                 .keyboardType(.emailAddress)
                                 .autocapitalization(.none)
                             SecureField("Password", text: $signUpPassword)
+                                .autocapitalization(.none)
                         } else {
                             TextField("Email", text: $logInEmail)
                                 .keyboardType(.emailAddress)
                                 .autocapitalization(.none)
                             SecureField("Password", text: $logInPassword)
+                                .autocapitalization(.none)
                         }
                     }
                     .padding(12)
@@ -82,7 +84,7 @@ struct LoginView: View {
                     } label: {
                         HStack {
                             Spacer()
-                            Text(isLoginMode ? "Login" : "Create Account")
+                            Text(isLoginMode ? "Log in" : "Create Account")
                                 .foregroundColor(.white)
                                 .padding(.vertical, 10)
                                 .font(.system(size: 14, weight: .semibold))
@@ -93,7 +95,7 @@ struct LoginView: View {
                 
                 
             }
-            .navigationTitle(isLoginMode ? "Login" : "Create Account")
+            .navigationTitle(isLoginMode ? "Log in" : "Create Account")
             .background(Color(.init(white: 0, alpha: 0.05)).ignoresSafeArea())
         }
         .navigationViewStyle(StackNavigationViewStyle())
@@ -112,7 +114,7 @@ struct LoginView: View {
                     loginError.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
                     //self.present(loginError, animated: true, completion: nil) // Present the login error alert
                 } else {
-                    isLogged = true
+                    self.isLoginCompleted()
                 }
             }
         } else {
@@ -131,7 +133,6 @@ struct LoginView: View {
                     
                     /* Store user information and image in Firestore */
                     self.storeUserData(email: signUpEmail, firstName: firstName, lastName: lastName, userName: userName)
-                    isLogged = true
                 }
             }
         }
@@ -181,6 +182,7 @@ struct LoginView: View {
                         print(error.localizedDescription)
                         return
                     }
+                    self.isLoginCompleted()
                     print("Success")
                 }
         }
@@ -190,9 +192,10 @@ struct LoginView: View {
 
 struct LoginView_Previews: PreviewProvider {
     static var previews: some View {
-        LoginView()
+        LoginView(isLoginCompleted: {
+            
+        })
             .preferredColorScheme(.light)
-        
-        LoginView()
+
     }
 }

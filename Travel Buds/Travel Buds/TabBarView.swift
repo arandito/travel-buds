@@ -18,7 +18,6 @@ struct TabBarView: View {
                     .font(.system(size: 30, weight: .bold))
             }
 
-            
             NavigationView {
                 Text("Activities")
                     .navigationTitle("Activities")
@@ -37,8 +36,6 @@ struct TabBarView: View {
                     .font(.system(size: 30, weight: .bold))
             }
            
-
-            
             NavigationView {
                 Text("Profile")
                     .navigationTitle("Profile")
@@ -63,6 +60,6 @@ struct TabBarView: View {
 
 #Preview {
     TabBarView()
-        .preferredColorScheme(.dark)
+        .preferredColorScheme(.light)
 }
 
