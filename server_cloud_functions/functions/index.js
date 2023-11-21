@@ -17,21 +17,40 @@ exports.helloWorld = onRequest((req, res) => {
 });
 
 exports.makeGroup = onRequest(async (req, res) => {
-  if (request.auth != True) {
-    throw new HttpsError("failed-precondition", "You must be authenticated" +
-      "to call this function.")
+  if (req.auth != true) {
+    throw new Error("You must be authenticated to call this function.");
   }
-  const myuid = req.auth.uid;
-  const mydest = await getFirestore()
-    .collection("pending")
-    .where(myuid, "==", "userId")
-    .get(); 
+
+  const mydest = req.body.destination;
+  const mytimeblock = req.body.timeblock;
+  const myinterest = req.body.interest;
   // Insert logic so no overlapping also time logic
-  const eligible = await getFirestore()
-    .collection("pending")
-    .where(myuid, "!=", "userId")
-    .where()
-  
-  return
-  
-})
+  const matches = await getFirestore()
+      .collection("pending")
+      .doc(mytimeblock)
+      .collection("destinations")
+      .doc(mydest)
+      .where(myinterest, "==", "interest")
+      .orderBy("req_timestamp")
+      .limit(4)
+      .get();
+
+  if (matches.empty) {
+    logger.log("No eligible matches.");
+    return "";
+  }
+
+  const mymembers = [];
+  matches.forEach((doc) => {
+    mymembers.push(doc);
+  });
+
+  const group = await getFirestore().collection("groups").add({
+    timeblock: mytimeblock,
+    destination: mydest,
+    interest: myinterest,
+    members: mymembers,
+  });
+
+  return group;
+});
