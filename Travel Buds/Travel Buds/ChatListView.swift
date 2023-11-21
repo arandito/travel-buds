@@ -93,15 +93,13 @@ struct ChatListView: View {
             }
             
             Spacer()
-            /*
             Button {
                 shouldShowLogOutOptions.toggle()
             } label: {
                 Image(systemName: "gear")
                     .font(.system(size: 24, weight: .bold))
-                    .foregroundColor(Color(.purple))
+                    .foregroundColor(Color(.label))
             }
-            */
         }
         .padding()
         .actionSheet(isPresented: $shouldShowLogOutOptions) {
@@ -114,24 +112,6 @@ struct ChatListView: View {
         }
     }
     
-<<<<<<< HEAD:Travel Buds/Travel Buds/Chat Models/MainMessagesView.swift
-    var body: some View {
-        NavigationView {
-            
-            VStack {
-                customNavBar
-                messagesView
-            }
-            /*
-            .overlay(
-                newMessageButton, alignment: .bottom)
-            .navigationBarHidden(true)
-            */
-        }
-    }
-    
-=======
->>>>>>> aa55c3cedb98b8d9e15a530af197f09207e344f0:Travel Buds/Travel Buds/ChatListView.swift
     private var messagesView: some View {
         ScrollView {
             ForEach(0..<10, id: \.self) { num in
@@ -165,7 +145,6 @@ struct ChatListView: View {
         }
     }
     
-    /*
     private var newMessageButton: some View {
         Button {
             
@@ -184,7 +163,6 @@ struct ChatListView: View {
                 .shadow(radius: 15)
         }
     }
-     */
     
 }
 
