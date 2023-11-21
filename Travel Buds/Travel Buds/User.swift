@@ -7,11 +7,14 @@
 import Foundation
 
 struct User {
+    let uid: String
     let email: String
     let userName: String
     let firstName: String
     let lastName: String
+    let profileImageUrl: String
     let trips: [Trip]
+
 }
 
 struct Trip{

@@ -52,20 +52,36 @@ class AddTripController: UIViewController, UIPickerViewDataSource, UIPickerViewD
     }
     
     @IBAction func addTrip(_ sender: UIButton){
-        guard let userId = FirebaseManager.shared.auth.currentUser?.uid else { return }
-        let tripData: [String: Any] = [
+        let userId = FirebaseManager.shared.auth.currentUser?.uid ?? ""
+        let location = locationOption[location.selectedRow(inComponent: 0)]
+        let interest = interestOption[interest.selectedRow(inComponent: 0)]
+        let arrival = arrival.date
+        let departure = departure.date
+        var tripData: [String: Any] = [
             "userId": userId,
-            "interest": interestOption[interest.selectedRow(inComponent: 0)],
-            "arrival": arrival.date,
-            "departure": departure.date
+            "interest": interest,
+            "arrival": arrival,
+            "departure": departure
         ]
         FirebaseManager.shared.firestore.collection("pending")
-            .document(locationOption[location.selectedRow(inComponent: 0)]).setData(tripData) { err in
+            .document(location).setData(tripData) { err in
                 if let err = err {
                     print(err)
                     return
                 }
                 print("Success")
             }
+        let ref = FirebaseManager.shared.firestore.collection("users").document(userId)
+        tripData = [
+            "interest": interest,
+            "arrival": arrival,
+            "departure": departure,
+            "chatId": "",
+            "tripId": "maybe we dont need this and can just use array index",
+            "location": location
+        ]
+        ref.updateData([
+            "trips": FieldValue.arrayUnion([tripData])
+        ])
     }
 }

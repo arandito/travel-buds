@@ -1,5 +1,5 @@
 //
-//  MainMessagesView.swift
+//  ChatListView.swift
 //  test
 //
 //  Created by Yuya Taniguchi on 11/19/23.
@@ -14,9 +14,62 @@
 
 import SwiftUI
 
-struct MainMessagesView: View {
+class ChatListViewModel: ObservableObject {
+    
+    @Published var user: User?
+    
+    init() {
+        getCurrentUser()
+    }
+    
+    func getCurrentUser() {
+        guard let uid = FirebaseManager.shared.auth.currentUser?.uid else {
+            print("User not logged in.")
+            return
+        }
+        
+        FirebaseManager.shared.firestore.collection("users").document(uid).getDocument { snapshot, error in
+            if let error = error {
+                print(error.localizedDescription)
+                return
+            }
+            
+            guard let data = snapshot?.data() else {
+                print("No data found.")
+                return
+            }
+            
+            let userName = data["userName"] as? String ?? ""
+            let firstName = data["firstName"] as? String ?? ""
+            let lastName = data["lastName"] as? String ?? ""
+            let uid = data["uid"] as? String ?? ""
+            let email = data["email"] as? String ?? ""
+            let profileImageUrl = data["profileImageUrl"] as? String ?? ""
+            
+            self.user = User(uid:uid, email: email, userName: userName, firstName: firstName, lastName: lastName, profileImageUrl: profileImageUrl, trips: [])
+        
+        }
+    }
+}
+
+struct ChatListView: View {
     
     @State var shouldShowLogOutOptions = false
+    @ObservedObject private var viewModel = ChatListViewModel()
+    
+    var body: some View {
+        NavigationView {
+            
+            VStack {
+                customNavBar
+                messagesView
+            }
+            .overlay(
+                newMessageButton, alignment: .bottom)
+            .navigationBarHidden(true)
+            
+        }
+    }
     
     private var customNavBar: some View {
         HStack(spacing: 16) {
@@ -61,6 +114,7 @@ struct MainMessagesView: View {
         }
     }
     
+<<<<<<< HEAD:Travel Buds/Travel Buds/Chat Models/MainMessagesView.swift
     var body: some View {
         NavigationView {
             
@@ -76,6 +130,8 @@ struct MainMessagesView: View {
         }
     }
     
+=======
+>>>>>>> aa55c3cedb98b8d9e15a530af197f09207e344f0:Travel Buds/Travel Buds/ChatListView.swift
     private var messagesView: some View {
         ScrollView {
             ForEach(0..<10, id: \.self) { num in
@@ -116,7 +172,7 @@ struct MainMessagesView: View {
         } label: {
             HStack {
                 Spacer()
-                Text("+ Add Trip")
+                Text("+ New Message")
                     .font(.system(size: 16, weight: .bold))
                 Spacer()
             }
@@ -133,13 +189,11 @@ struct MainMessagesView: View {
 }
 
 
-struct MainMessagesView_Previews: PreviewProvider {
+struct GroupChatsView_Previews: PreviewProvider {
     static var previews: some View {
-        MainMessagesView()
+        ChatListView()
             .preferredColorScheme(.dark)
         
-        MainMessagesView()
+        ChatListView()
     }
 }
-
-
