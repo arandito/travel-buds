@@ -8,6 +8,9 @@ const {onRequest} = require("firebase-functions/v2/https");
 const {initializeApp} = require("firebase-admin/app");
 const {getFirestore} = require("firebase-admin/firestore");
 
+// To set up scheduled Cloud Functions.
+//const {onSchedule} = require{"firebase-functions/v2/scheduler"};
+
 initializeApp();
 setGlobalOptions({maxInstances: 10, region: "us-east1"});
 
@@ -25,24 +28,29 @@ exports.makeGroup = onRequest(async (req, res) => {
   const mytimeblock = req.body.timeblock;
   const myinterest = req.body.interest;
   // Insert logic so no overlapping also time logic
-  const matches = await getFirestore()
+  const pendingSnapshot = await getFirestore()
       .collection("pending")
-      .doc(mytimeblock)
-      .collection("destinations")
-      .doc(mydest)
-      .where(myinterest, "==", "interest")
-      .orderBy("req_timestamp")
-      .limit(4)
+      //.where(myinterest, "==", "interest")
+      .orderBy("startDate")
+      //.limit(5)
       .get();
 
-  if (matches.empty) {
-    logger.log("No eligible matches.");
-    return "";
-  }
+  const currGroup = [];
+  const fullyExplored = new Set();
+  matchesSnapshot.forEach((currTripDoc) => {
+    if (fullyExplored.has(currTripDoc)) {
+      return;
+    }
+    currGroup.push(currTripDoc)
+    fullyExplored.add(currTripDoc);
+    groupDest = currTripDoc.get("destination");
+    groupStart = currTripDoc.get("startDate");
+    
+    matchesSnapshot.forEach((otherTripDoc) => {
+      if (!fullyExplored.has(otherTripDoc)) {
 
-  const mymembers = [];
-  matches.forEach((doc) => {
-    mymembers.push(doc);
+      }
+    });
   });
 
   const group = await getFirestore().collection("groups").add({
