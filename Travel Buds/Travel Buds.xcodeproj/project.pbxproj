@@ -12,6 +12,7 @@
 		030204EE2B07132C00A8779B /* FirebaseFunctions in Frameworks */ = {isa = PBXBuildFile; productRef = 030204ED2B07132C00A8779B /* FirebaseFunctions */; };
 		030205062B07193400A8779B /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 030205052B07193400A8779B /* GoogleService-Info.plist */; };
 		031901652B0AE03A00E5013A /* FirebaseDatabase in Frameworks */ = {isa = PBXBuildFile; productRef = 031901642B0AE03A00E5013A /* FirebaseDatabase */; };
+		032C49492B19630C008E68AA /* AddTripView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 032C49482B19630C008E68AA /* AddTripView.swift */; };
 		0376C6092B086BAE0022BAD1 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0376C6082B086BAE0022BAD1 /* User.swift */; };
 		03D0D2D72AFC4823006DDFC9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03D0D2D62AFC4823006DDFC9 /* AppDelegate.swift */; };
 		03D0D2D92AFC4823006DDFC9 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03D0D2D82AFC4823006DDFC9 /* SceneDelegate.swift */; };
@@ -37,6 +38,7 @@
 
 /* Begin PBXFileReference section */
 		030205052B07193400A8779B /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		032C49482B19630C008E68AA /* AddTripView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTripView.swift; sourceTree = "<group>"; };
 		0376C6082B086BAE0022BAD1 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		03D0D2D32AFC4823006DDFC9 /* Travel Buds.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Travel Buds.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		03D0D2D62AFC4823006DDFC9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -113,6 +115,7 @@
 				478AB06C2B0AFD3C0084FD3D /* ChatListView.swift */,
 				03D0D2D82AFC4823006DDFC9 /* SceneDelegate.swift */,
 				03D0D2F02AFC72A1006DDFC9 /* AddTripController.swift */,
+				032C49482B19630C008E68AA /* AddTripView.swift */,
 				030205052B07193400A8779B /* GoogleService-Info.plist */,
 				03D0D2DF2AFC4826006DDFC9 /* Assets.xcassets */,
 				03D0D2E12AFC4826006DDFC9 /* LaunchScreen.storyboard */,
@@ -247,6 +250,7 @@
 				47B42C812B0718FB00CFDBA1 /* Extensions.swift in Sources */,
 				47B42C7A2B07125800CFDBA1 /* ChatContentView.swift in Sources */,
 				47B42C832B07198F00CFDBA1 /* MessageField.swift in Sources */,
+				032C49492B19630C008E68AA /* AddTripView.swift in Sources */,
 				478AB06F2B0AFDA20084FD3D /* LoginView.swift in Sources */,
 				478AB06D2B0AFD3C0084FD3D /* ChatListView.swift in Sources */,
 				0DE420502B0C2D9C00421126 /* ImagePicker.swift in Sources */,
