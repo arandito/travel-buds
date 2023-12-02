@@ -9,7 +9,7 @@ const {initializeApp} = require("firebase-admin/app");
 const {getFirestore} = require("firebase-admin/firestore");
 
 // To set up scheduled Cloud Functions.
-//const {onSchedule} = require{"firebase-functions/v2/scheduler"};
+// const {onSchedule} = require{"firebase-functions/v2/scheduler"};
 
 initializeApp();
 setGlobalOptions({maxInstances: 10, region: "us-east1"});
@@ -19,46 +19,51 @@ exports.helloWorld = onRequest((req, res) => {
   res.send("Hello from Firebase!");
 });
 
+// Add functionality where user can not make multiple
+// of same trip. This is easy if they are in a group for trip already.
+// Might need to track pending as well?
 exports.makeGroup = onRequest(async (req, res) => {
-  if (req.auth != true) {
-    throw new Error("You must be authenticated to call this function.");
-  }
+  // if (req.auth != true) {
+  //   res.status(401).send("Unauthorized:" +
+  //       "Client failed to authenticate with the server.");
+  //   return ""
+  // }
 
-  const mydest = req.body.destination;
-  const mytimeblock = req.body.timeblock;
-  const myinterest = req.body.interest;
+  const myUserId = req.body.uid;
+  const myWeekStartDate = req.body.weekStartDate;
+  const myWeekEndDate = req.body.weekEndDate;
+  const myDest = req.body.destination;
+  const myInterest = req.body.interest;
   // Insert logic so no overlapping also time logic
-  const pendingSnapshot = await getFirestore()
+  const tripsSnapshot = await getFirestore()
       .collection("pending")
-      //.where(myinterest, "==", "interest")
-      .orderBy("startDate")
-      //.limit(5)
+      .where(myWeekStartDate, "==", "weekStartDate")
+      .where(myDest, "==", "destination")
+      .where(myInterest, "==", "interest")
+      .where(myUserId, "!=", "userId")
+      .limit(4)
       .get();
 
-  const currGroup = [];
-  const fullyExplored = new Set();
-  matchesSnapshot.forEach((currTripDoc) => {
-    if (fullyExplored.has(currTripDoc)) {
-      return;
-    }
-    currGroup.push(currTripDoc)
-    fullyExplored.add(currTripDoc);
-    groupDest = currTripDoc.get("destination");
-    groupStart = currTripDoc.get("startDate");
-    
-    matchesSnapshot.forEach((otherTripDoc) => {
-      if (!fullyExplored.has(otherTripDoc)) {
+  if (tripsSnapshot.size != 4) {
+    res.status(500).send("Placeholder error.");
+    return;
+  }
 
-      }
-    });
+  const myMembers = [];
+  tripsSnapshot.forEach((tripDoc) => {
+    myMembers.push(tripDoc.get("userId"));
+    tripDoc.ref.delete();
+    logger.log("deleted trip: ${tripDoc.id}");
   });
 
-  const group = await getFirestore().collection("groups").add({
-    timeblock: mytimeblock,
-    destination: mydest,
-    interest: myinterest,
-    members: mymembers,
+  const groupDoc = await getFirestore().collection("groups").add({
+    weekStartDate: myWeekStartDate,
+    weekEndDate: myWeekEndDate,
+    destination: myDest,
+    interest: myInterest,
+    members: myMembers,
   });
 
-  return group;
+  res.status(201).send("Group created with id: ${groupDoc.id}");
+  return;
 });
