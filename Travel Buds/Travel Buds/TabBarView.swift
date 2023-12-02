@@ -27,19 +27,13 @@ struct TabBarView: View {
                     .font(.system(size: 30, weight: .bold))
             }
             
-            NavigationView {
-                Text("Add Trip")
-                    .navigationTitle("Add Trip")
-            }
+            AddTripView()
             .tabItem {
                 Image(systemName: "plus.app.fill")
                     .font(.system(size: 30, weight: .bold))
             }
            
-            NavigationView {
-                Text("Profile")
-                    .navigationTitle("Profile")
-            }
+            ProfileView()
             .tabItem {
                 Image(systemName: "person.fill")
                     .font(.system(size: 30, weight: .bold))

@@ -12,7 +12,7 @@ struct User {
     let userName: String
     let firstName: String
     let lastName: String
-    let profileImageUrl: String
+    var profileImageUrl: String
     let trips: [Trip]
 
 }
