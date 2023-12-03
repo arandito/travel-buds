@@ -39,10 +39,7 @@ struct TabBarView: View {
                     .font(.system(size: 30, weight: .bold))
             }
             
-            NavigationView {
-                Text("Settings")
-                    .navigationTitle("Settings")
-            }
+            ChatContentView()
             .tabItem {
                 Image(systemName: "gear")
                     .font(.system(size: 30, weight: .bold))
