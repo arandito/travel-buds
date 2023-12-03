@@ -10,8 +10,9 @@ import MapKit
 import SDWebImageSwiftUI
 
 struct AddTripView: View {
-    @State private var selectedDestination = ""
-    @State private var selectedInterest = ""
+    //destination and interest needs to be presetted to first value as UIPicker is presetted to first value
+    @State private var selectedDestination = "New York"
+    @State private var selectedInterest = "Night Life"
     @State private var weekStartDate = Date()
     @State private var weekEndDate = Date()
     

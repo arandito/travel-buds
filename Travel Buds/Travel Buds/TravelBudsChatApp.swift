@@ -11,9 +11,9 @@ import Firebase
 @main
 struct TravelBudsChatApp: App {
     init() {
-        FirebaseApp.configure() // Call this to configure Firebase
+        FirebaseApp.configure()
     }
-    
+
     var body: some Scene {
         WindowGroup {
             TabBarView()
