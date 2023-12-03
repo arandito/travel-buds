@@ -60,7 +60,7 @@ class UserStore {
             
             var trips: [Trip] = []
 
-            guard let tripsData = data["trips"] as? [[String: Any]] {
+            if let tripsData = data["trips"] as? [[String: Any]] {
                 trips = tripsData.map { tripData in
                     let destination = tripData["destination"] as? String ?? ""
                     let interest = tripData["interest"] as? String ?? ""
