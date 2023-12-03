@@ -15,6 +15,8 @@ struct ProfileView: View {
 
     @ObservedObject private var viewModel = ChatListViewModel()
     
+    
+    
     var body: some View {
         NavigationView{
             VStack {
@@ -26,15 +28,14 @@ struct ProfileView: View {
                     .clipShape(Circle())
                     .overlay(Circle().stroke(Color.white, lineWidth: 4))
                     .shadow(radius: 5)
-                
-                //edit button for picture
-                Button {
-                    updateProfilePicture()
-                    showImageSelector.toggle()
-                } label: {
-                    Text("Edit")
-                }
-                
+                    .gesture(
+                        LongPressGesture(minimumDuration: 0.5)
+                            .onEnded { _ in
+                                showImageSelector.toggle()
+                            }
+                    )
+                    .onChange(of: self.image){ newImage in updateProfilePicture()}
+                                
                 // User Name
                 Text("\(viewModel.user?.firstName ?? "") \(viewModel.user?.lastName ?? "")")
                     .font(.title)
