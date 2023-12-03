@@ -174,6 +174,7 @@ struct LoginView: View {
                     return
                 } else {
                     self.storeUserData(email: signUpEmail, firstName: firstName, lastName: lastName, userName: userName)
+                    UserStore.shared.getCurrentUser()
                 }
             }
         }

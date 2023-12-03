@@ -96,7 +96,6 @@ struct ProfileView: View {
         }
 }
 
-//Struct to allow for extra user data to be displayed
 struct ProfileInfoRow: View {
     var title: String
     var value: String

@@ -60,13 +60,13 @@ class UserStore {
             
             var trips: [Trip] = []
 
-            if let tripsData = data["trips"] as? [[String: Any]] {
+            guard let tripsData = data["trips"] as? [[String: Any]] {
                 trips = tripsData.map { tripData in
                     let destination = tripData["destination"] as? String ?? ""
                     let interest = tripData["interest"] as? String ?? ""
                     let chatId = tripData["chatId"] as? String ?? ""
-                    let weekStartDate = tripData["weekStartDate"] as? String ?? ""
-                    let weekEndDate = tripData["weekEndDate"] as? String ?? ""
+                    let weekStartDate = tripData["weekStartDate"] as? Date ?? Date()
+                    let weekEndDate = tripData["weekEndDate"] as? Date ?? Date()
 
                     return Trip(chatID: destination, destination: interest, interest: chatId, weekStartDate: weekStartDate, weekEndDate: weekEndDate)
                 }
