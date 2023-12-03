@@ -22,7 +22,13 @@ struct LoginView: View {
     
     @State private var showImageSelector = false
     @State private var image: UIImage?
-    
+    @Environment(\.colorScheme) var colorScheme
+    @State private var errorMessage: String?
+
+   var textFieldBackgroundColor: Color {
+       return colorScheme == .dark ? Color(.init(white: 0.17, alpha: 1.0)) : Color.white
+   }
+
     var body: some View {
         NavigationView {
             ScrollView {
@@ -58,34 +64,32 @@ struct LoginView: View {
                         if !isLoginMode {
                             TextField("First Name", text: $firstName)
                                 .disableAutocorrection(true)
-                                .foregroundColor(.white)
                             TextField("Last Name", text: $lastName)
                                 .disableAutocorrection(true)
-                                .foregroundColor(.white)
                             TextField("Username", text: $userName)
                                 .disableAutocorrection(true)
                                 .autocapitalization(.none)
-                                .foregroundColor(.white)
+                                .foregroundStyle(Color.primary)
                             TextField("Email", text: $signUpEmail)
                                 .keyboardType(.emailAddress)
                                 .autocapitalization(.none)
-                                .foregroundColor(.white)
+                                .foregroundStyle(Color.primary)
                             SecureField("Password", text: $signUpPassword)
                                 .autocapitalization(.none)
-                                .foregroundColor(.white)
+                                .foregroundStyle(Color.primary)
                         } else {
                             TextField("Email", text: $logInEmail)
                                 .keyboardType(.emailAddress)
                                 .autocapitalization(.none)
-                                .foregroundColor(.white)
+                                .textFieldStyle(DefaultTextFieldStyle())
                             SecureField("Password", text: $logInPassword)
                                 .autocapitalization(.none)
-                                .foregroundColor(.white)
                         }
                     }
                     .padding(12)
-                    .background(Color.black)
-                    
+                    .background(textFieldBackgroundColor)
+                    .cornerRadius(8)
+                
                     Button {
                         handleAction()
                     } label: {
@@ -93,17 +97,36 @@ struct LoginView: View {
                             Spacer()
                             Text(isLoginMode ? "Log in" : "Create Account")
                                 .foregroundColor(.white)
-                                .padding(.vertical, 10)
-                                .font(.system(size: 14, weight: .semibold))
+                                .padding(.vertical, 15)
+                                .font(.system(size: 20, weight: .semibold))
                             Spacer()
-                        }.background(Color.purple)
+                        }
+                        .background(Color.purple)
+                        .cornerRadius(8)
                     }
                 }.padding()
                 
+                if let errorMessage = errorMessage {
+                    Text(errorMessage)
+                        .foregroundColor(.red)
+                        .padding(.top, 8)
+                }
                 
             }
             .navigationTitle(isLoginMode ? "Log in" : "Create Account")
             .background(Color(.init(white: 0, alpha: 0.05)).ignoresSafeArea())
+            .onChange(of: isLoginMode) { newIsLoginMode, _ in
+                errorMessage = nil
+            }
+            .navigationBarItems(
+                trailing:
+                    HStack {
+                        Image("travelbudslogo")
+                            .resizable()
+                            .frame(width: 70, height: 70)
+                            .padding(.top, 80)
+                    }
+            )
         }
         .navigationViewStyle(StackNavigationViewStyle())
         .fullScreenCover(isPresented: $showImageSelector, onDismiss: nil){
@@ -112,33 +135,42 @@ struct LoginView: View {
     }
     
     private func handleAction() {
+        errorMessage = nil
         if isLoginMode {
             print("Should log in to Firebase with existing credentials.")
             FirebaseManager.shared.auth.signIn(withEmail: logInEmail, password: logInPassword) { authResult, error in
                 if let error = error {
+                    errorMessage = "Invalid username or password."
                     print(error.localizedDescription)
-                    let loginError = UIAlertController(title: "Login Error", message: "Invalid Username Or Password", preferredStyle: .alert)
-                    loginError.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-                    //self.present(loginError, animated: true, completion: nil) // Present the login error alert
+                    return
                 } else {
                     self.isLoginCompleted()
                 }
             }
         } else {
             print("Register a new account.")
+            if firstName == "" {
+                errorMessage = "Please include your first name."
+                return
+            } else if lastName == "" {
+                errorMessage = "Please include your last name."
+                return
+            } else if userName == "" {
+                errorMessage = "Please choose a username."
+                return
+            } else if signUpEmail == "" {
+                errorMessage = "Please include your email."
+                return
+            } else if signUpPassword == "" {
+                errorMessage = "Please create a password."
+                return
+            }
             FirebaseManager.shared.auth.createUser(withEmail: signUpEmail, password: signUpPassword) { authResult, error in
                 if let error = error {
+                    errorMessage = "Email already in use."
                     print(error.localizedDescription)
-                    let signUpError = UIAlertController(title: "Sign Up Error", message: "Email already in use", preferredStyle: .alert)
-                    signUpError.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-                   // self.present(signUpError, animated: true, completion: nil) // Present the sign-up error alert
+                    return
                 } else {
-                    let signUpSuccess = UIAlertController(title: "Sign Up Success", message: "Thank You For Using Travel Buds (:",
-                                                           preferredStyle: .alert)
-                    signUpSuccess.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-                    //self.present(signUpSuccess, animated: true, completion: nil)
-                    
-                    /* Store user information and image in Firestore */
                     self.storeUserData(email: signUpEmail, firstName: firstName, lastName: lastName, userName: userName)
                 }
             }
