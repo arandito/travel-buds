@@ -94,8 +94,6 @@ struct ChatListView: View {
                 .cancel()
             ])
         }
-        .onAppear {
-        }
         .fullScreenCover(isPresented: $viewModel.isLoggedOut, onDismiss: nil) {
             LoginView(isLoginCompleted: {
                 self.viewModel.isLoggedOut = false
