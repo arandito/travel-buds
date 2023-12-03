@@ -15,13 +15,31 @@
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="IMG_7624" translatesAutoresizingMaskIntoConstraints="NO" id="W8v-cd-5XR">
-                                <rect key="frame" x="68" y="250" width="256" height="256"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <imageView opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="IMG_7624" highlighted="YES" translatesAutoresizingMaskIntoConstraints="NO" id="W8v-cd-5XR">
+                                <rect key="frame" x="68" y="247" width="256" height="256"/>
+                                <color key="backgroundColor" red="0.75041896100000005" green="0.51254659889999998" blue="0.97259050609999997" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                             </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Travel Buds" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4rZ-2d-tBI">
+                                <rect key="frame" x="71" y="541" width="251" height="44"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="44" id="VZg-Ho-mUb"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="Futura-Bold" family="Futura" pointSize="36"/>
+                                <color key="textColor" red="0.36080751263161021" green="0.1785576364637865" blue="0.48116514854824421" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="W8v-cd-5XR" firstAttribute="centerX" secondItem="4rZ-2d-tBI" secondAttribute="centerX" id="65z-2S-avI"/>
+                            <constraint firstItem="W8v-cd-5XR" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="188" id="7RN-Ig-gW2"/>
+                            <constraint firstItem="W8v-cd-5XR" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="Gma-d9-be7"/>
+                            <constraint firstItem="4rZ-2d-tBI" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="71" id="cBD-Li-jPO"/>
+                            <constraint firstItem="4rZ-2d-tBI" firstAttribute="top" secondItem="W8v-cd-5XR" secondAttribute="bottom" constant="38" id="eKU-XW-Hb1"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="4rZ-2d-tBI" secondAttribute="bottom" constant="233" id="fTK-6k-60O"/>
+                            <constraint firstItem="W8v-cd-5XR" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="68" id="tfa-KA-FL8"/>
+                        </constraints>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iYj-Kq-Ea1" userLabel="First Responder" sceneMemberID="firstResponder"/>

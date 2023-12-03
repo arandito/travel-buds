@@ -57,7 +57,8 @@ class ChatListViewModel: ObservableObject {
     
     func handleSignOut() {
         try? FirebaseManager.shared.auth.signOut()
-        isLoggedOut.toggle()
+        self.isLoggedOut.toggle()
+        self.user = nil
     }
 }
 
@@ -65,6 +66,7 @@ struct ChatListView: View {
     
     @State var shouldShowLogOutOptions = false
     @ObservedObject private var viewModel = ChatListViewModel()
+    @State private var isProfileImageLoaded = false
     
     var body: some View {
         NavigationView {
@@ -86,7 +88,6 @@ struct ChatListView: View {
                     .frame(width:50, height:50)
                     .clipped()
                     .cornerRadius(44)
-                
                 VStack(alignment: .leading, spacing: 4) {
                     Text("\(viewModel.user?.firstName ?? "") \(viewModel.user?.lastName ?? "")")
                         .font(.system(size: 24, weight: .bold))

@@ -62,7 +62,6 @@ struct ProfileView: View {
     }
     
     func updateProfilePicture(){
-        
         guard let uid = FirebaseManager.shared.auth.currentUser?.uid
         else{
             print("Unable to fetch UID")
