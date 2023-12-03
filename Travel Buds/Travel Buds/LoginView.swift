@@ -24,6 +24,7 @@ struct LoginView: View {
     @State private var image: UIImage?
     @Environment(\.colorScheme) var colorScheme
     @State private var errorMessage: String?
+    @State private var userStore = UserStore.shared
 
    var textFieldBackgroundColor: Color {
        return colorScheme == .dark ? Color(.init(white: 0.17, alpha: 1.0)) : Color.white
@@ -144,6 +145,7 @@ struct LoginView: View {
                     print(error.localizedDescription)
                     return
                 } else {
+                    UserStore.shared.getCurrentUser()
                     self.isLoginCompleted()
                 }
             }
@@ -172,6 +174,7 @@ struct LoginView: View {
                     return
                 } else {
                     self.storeUserData(email: signUpEmail, firstName: firstName, lastName: lastName, userName: userName)
+                    UserStore.shared.getCurrentUser()
                 }
             }
         }
