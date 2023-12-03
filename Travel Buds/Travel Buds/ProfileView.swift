@@ -42,7 +42,8 @@ struct ProfileView: View {
                 Divider()
                 
                 //Additional Info
-                VStack{
+                VStack(spacing: 20){
+                    
                     ProfileInfoRow(title: "Email", value: viewModel.user?.email ?? "")
                         .padding(.bottom, 2)
                     Divider()
