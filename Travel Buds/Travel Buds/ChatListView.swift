@@ -17,12 +17,41 @@ import SDWebImageSwiftUI
 
 class ChatListViewModel: ObservableObject {
     
-    let user = UserStore.shared.user
+    @Published var user: User?
     @Published var isLoggedOut = false
     
     init() {
         DispatchQueue.main.async{
             self.isLoggedOut = FirebaseManager.shared.auth.currentUser?.uid == nil
+        }
+        getCurrentUser()
+    }
+    
+    func getCurrentUser() {
+        guard let uid = FirebaseManager.shared.auth.currentUser?.uid else {
+            print("User not logged in.")
+            return
+        }
+        
+        FirebaseManager.shared.firestore.collection("users").document(uid).getDocument { snapshot, error in
+            if let error = error {
+                print(error.localizedDescription)
+                return
+            }
+            
+            guard let data = snapshot?.data() else {
+                print("No data found.")
+                return
+            }
+            
+            let userName = data["userName"] as? String ?? ""
+            let firstName = data["firstName"] as? String ?? ""
+            let lastName = data["lastName"] as? String ?? ""
+            let uid = data["uid"] as? String ?? ""
+            let email = data["email"] as? String ?? ""
+            let profileImageUrl = data["profileImageUrl"] as? String ?? ""
+            
+            self.user = User(uid:uid, email: email, userName: userName, firstName: firstName, lastName: lastName, profileImageUrl: profileImageUrl, trips: [])
         }
     }
     
@@ -95,10 +124,12 @@ struct ChatListView: View {
             ])
         }
         .onAppear {
+            viewModel.getCurrentUser()
         }
         .fullScreenCover(isPresented: $viewModel.isLoggedOut, onDismiss: nil) {
             LoginView(isLoginCompleted: {
                 self.viewModel.isLoggedOut = false
+                self.viewModel.getCurrentUser()
             })
         }
     }

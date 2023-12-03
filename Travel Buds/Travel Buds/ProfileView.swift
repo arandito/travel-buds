@@ -7,14 +7,13 @@
 
 import SwiftUI
 import SDWebImageSwiftUI
-import Combine
 
 struct ProfileView: View {
     
     @State private var showImageSelector = false
     @State private var image: UIImage?
-    @State private var countries: [String]?
-    @State private var userStore = UserStore.shared
+
+    @ObservedObject private var viewModel = ChatListViewModel()
     
     
     
@@ -22,7 +21,7 @@ struct ProfileView: View {
         NavigationView{
             VStack {
                 // User Image
-                WebImage(url: URL (string: userStore.user!.profileImageUrl))
+                WebImage(url: URL (string:viewModel.user?.profileImageUrl ?? ""))
                     .resizable()
                     .aspectRatio(contentMode: .fill)
                     .frame(width: 120, height: 120)
@@ -38,7 +37,7 @@ struct ProfileView: View {
                     .onChange(of: self.image){ newImage in updateProfilePicture()}
                                 
                 // User Name
-                Text("\(userStore.user?.firstName ?? "") \(userStore.user?.lastName ?? "")")
+                Text("\(viewModel.user?.firstName ?? "") \(viewModel.user?.lastName ?? "")")
                     .font(.title)
                 
                 Divider()
@@ -46,17 +45,17 @@ struct ProfileView: View {
                 //Additional Info
                 VStack(spacing: 20){
                     
-                    ProfileInfoRow(title: "Email", value: userStore.user?.email ?? "")
+                    ProfileInfoRow(title: "Email", value: viewModel.user?.email ?? "")
                         .padding(.bottom, 2)
                     Divider()
-                    ProfileInfoRow(title: "Username", value: userStore.user?.userName ?? "")
+                    ProfileInfoRow(title: "Username", value: viewModel.user?.userName ?? "")
                 }
-                Divider()
-                Text("Past countries")
-                    .font(.title)
-                
+                Spacer()
             }.navigationTitle("Profile")
                 .padding()
+        }
+        .onAppear() {
+            viewModel.getCurrentUser()
         }
         .fullScreenCover(isPresented: $showImageSelector, onDismiss: nil){
             ImagePicker(image: $image)
@@ -88,7 +87,7 @@ struct ProfileView: View {
                 guard let url = url else {
                     return
                 }
-                self.userStore.user?.profileImageUrl = url.absoluteString
+                viewModel.user?.profileImageUrl = url.absoluteString
                 FirebaseManager.shared.firestore
                     .collection("users")
                     .document(uid).updateData(["profileImageUrl" : url.absoluteString])
@@ -115,3 +114,11 @@ struct ProfileInfoRow: View {
     }
 }
 
+
+struct ProfileView_Previews: PreviewProvider {
+        static var previews: some View {
+            NavigationView {
+                ProfileView()
+            }
+        }
+}
