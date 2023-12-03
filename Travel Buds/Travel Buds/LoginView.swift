@@ -58,26 +58,33 @@ struct LoginView: View {
                         if !isLoginMode {
                             TextField("First Name", text: $firstName)
                                 .disableAutocorrection(true)
+                                .foregroundColor(.white)
                             TextField("Last Name", text: $lastName)
                                 .disableAutocorrection(true)
+                                .foregroundColor(.white)
                             TextField("Username", text: $userName)
                                 .disableAutocorrection(true)
                                 .autocapitalization(.none)
+                                .foregroundColor(.white)
                             TextField("Email", text: $signUpEmail)
                                 .keyboardType(.emailAddress)
                                 .autocapitalization(.none)
+                                .foregroundColor(.white)
                             SecureField("Password", text: $signUpPassword)
                                 .autocapitalization(.none)
+                                .foregroundColor(.white)
                         } else {
                             TextField("Email", text: $logInEmail)
                                 .keyboardType(.emailAddress)
                                 .autocapitalization(.none)
+                                .foregroundColor(.white)
                             SecureField("Password", text: $logInPassword)
                                 .autocapitalization(.none)
+                                .foregroundColor(.white)
                         }
                     }
                     .padding(12)
-                    .background(Color.white)
+                    .background(Color.black)
                     
                     Button {
                         handleAction()
