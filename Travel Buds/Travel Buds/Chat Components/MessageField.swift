@@ -30,6 +30,9 @@ struct MessageField: View {
         .background(Color("Gray"))
         .cornerRadius(50)
         .padding()
+        .onTapGesture {
+            UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+        }
     }
 }
 
