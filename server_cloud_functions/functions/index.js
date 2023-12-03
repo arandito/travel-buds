@@ -35,7 +35,7 @@ onRequest({timeoutSeconds: 3, cors: true}, async (req, res) => {
 
   jsonParser(req, res, (err) => {
     if (err) {
-      return res.status(500).send(err.message);
+      return res.status(400).send(err.message);
     }
   });
 
@@ -58,7 +58,7 @@ onRequest({timeoutSeconds: 3, cors: true}, async (req, res) => {
   // Insert body type check
   const tripsSnapshot = await getFirestore()
       .collection("pending")
-      .where(myWeekStartDate, "==", "weekStartDate")
+      .where("weekStartDate", "==", myWeekStartDate)
       .where("destination", "==", myDest)
       .where("interest", "==", myInterest)
       .limit(4)
@@ -72,7 +72,10 @@ onRequest({timeoutSeconds: 3, cors: true}, async (req, res) => {
       interest: myInterest,
       userId: myUserId,
     });
-    return res.status(201).send(`Created pending trip: ${myTripDoc.id}`);
+    return res.status(201).json({
+      group_id: "",
+      pending_id: `${myTripDoc.id}`,
+    });
   }
 
   const myMembers = [];
@@ -92,5 +95,8 @@ onRequest({timeoutSeconds: 3, cors: true}, async (req, res) => {
     members: myMembers,
   });
 
-  return res.status(201).send(`Group created with id: ${myGroupDoc.id}`);
+  return res.status(201).json({
+    group_id: `${myGroupDoc.id}`,
+    pending_id: "",
+  });
 });
