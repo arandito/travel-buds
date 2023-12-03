@@ -12,32 +12,31 @@ struct ProfileView: View {
     
     @State private var showImageSelector = false
     @State private var image: UIImage?
-
-    @ObservedObject private var viewModel = ChatListViewModel()
-    
-    
+    @State private var countries: [String]?
+    @State private var userStore = UserStore.shared
     
     var body: some View {
         NavigationView{
             VStack {
                 // User Image
-                WebImage(url: URL (string:viewModel.user?.profileImageUrl ?? ""))
+                WebImage(url: URL (string: userStore.user!.profileImageUrl))
                     .resizable()
                     .aspectRatio(contentMode: .fill)
                     .frame(width: 120, height: 120)
                     .clipShape(Circle())
                     .overlay(Circle().stroke(Color.white, lineWidth: 4))
                     .shadow(radius: 5)
-                    .gesture(
-                        LongPressGesture(minimumDuration: 0.5)
-                            .onEnded { _ in
-                                showImageSelector.toggle()
-                            }
-                    )
-                    .onChange(of: self.image){ newImage in updateProfilePicture()}
-                                
+                
+                //edit button for picture
+                Button {
+                    updateProfilePicture()
+                    showImageSelector.toggle()
+                } label: {
+                    Text("Edit")
+                }
+                
                 // User Name
-                Text("\(viewModel.user?.firstName ?? "") \(viewModel.user?.lastName ?? "")")
+                Text("\(userStore.user?.firstName ?? "") \(userStore.user?.lastName ?? "")")
                     .font(.title)
                 
                 Divider()
@@ -45,17 +44,17 @@ struct ProfileView: View {
                 //Additional Info
                 VStack(spacing: 20){
                     
-                    ProfileInfoRow(title: "Email", value: viewModel.user?.email ?? "")
+                    ProfileInfoRow(title: "Email", value: userStore.user?.email ?? "")
                         .padding(.bottom, 2)
                     Divider()
-                    ProfileInfoRow(title: "Username", value: viewModel.user?.userName ?? "")
+                    ProfileInfoRow(title: "Username", value: userStore.user?.userName ?? "")
                 }
-                Spacer()
+                Divider()
+                Text("Past countries")
+                    .font(.title)
+                
             }.navigationTitle("Profile")
                 .padding()
-        }
-        .onAppear() {
-            viewModel.getCurrentUser()
         }
         .fullScreenCover(isPresented: $showImageSelector, onDismiss: nil){
             ImagePicker(image: $image)
@@ -63,6 +62,7 @@ struct ProfileView: View {
     }
     
     func updateProfilePicture(){
+        
         guard let uid = FirebaseManager.shared.auth.currentUser?.uid
         else{
             print("Unable to fetch UID")
@@ -87,7 +87,7 @@ struct ProfileView: View {
                 guard let url = url else {
                     return
                 }
-                viewModel.user?.profileImageUrl = url.absoluteString
+                self.userStore.user?.profileImageUrl = url.absoluteString
                 FirebaseManager.shared.firestore
                     .collection("users")
                     .document(uid).updateData(["profileImageUrl" : url.absoluteString])
@@ -114,11 +114,3 @@ struct ProfileInfoRow: View {
     }
 }
 
-
-struct ProfileView_Previews: PreviewProvider {
-        static var previews: some View {
-            NavigationView {
-                ProfileView()
-            }
-        }
-}
