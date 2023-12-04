@@ -24,6 +24,7 @@
 		0DE4203F2B0AF1FE00421126 /* FirebaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DE4203E2B0AF1FE00421126 /* FirebaseManager.swift */; };
 		0DE420502B0C2D9C00421126 /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DE4204F2B0C2D9C00421126 /* ImagePicker.swift */; };
 		0DE420522B0C2DD800421126 /* TravelBudsChatApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DE420512B0C2DD800421126 /* TravelBudsChatApp.swift */; };
+		0DFD9A6C2B1D7AA5003F6F59 /* UserViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DFD9A6B2B1D7AA5003F6F59 /* UserViewModel.swift */; };
 		478AB06D2B0AFD3C0084FD3D /* ChatListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 478AB06C2B0AFD3C0084FD3D /* ChatListView.swift */; };
 		478AB06F2B0AFDA20084FD3D /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 478AB06E2B0AFDA20084FD3D /* LoginView.swift */; };
 		478AB0712B0B29710084FD3D /* ChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 478AB0702B0B29710084FD3D /* ChatView.swift */; };
@@ -51,6 +52,7 @@
 		0DE4203E2B0AF1FE00421126 /* FirebaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseManager.swift; sourceTree = "<group>"; };
 		0DE4204F2B0C2D9C00421126 /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
 		0DE420512B0C2DD800421126 /* TravelBudsChatApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelBudsChatApp.swift; sourceTree = "<group>"; };
+		0DFD9A6B2B1D7AA5003F6F59 /* UserViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserViewModel.swift; sourceTree = "<group>"; };
 		478AB06C2B0AFD3C0084FD3D /* ChatListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatListView.swift; sourceTree = "<group>"; };
 		478AB06E2B0AFDA20084FD3D /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		478AB0702B0B29710084FD3D /* ChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatView.swift; sourceTree = "<group>"; };
@@ -118,6 +120,7 @@
 				F51FE6162B1BC942001B04B6 /* ProfileView.swift */,
 				032C49482B19630C008E68AA /* AddTripView.swift */,
 				0376C6082B086BAE0022BAD1 /* User.swift */,
+				0DFD9A6B2B1D7AA5003F6F59 /* UserViewModel.swift */,
 				03D0D2D62AFC4823006DDFC9 /* AppDelegate.swift */,
 				03D0D2D82AFC4823006DDFC9 /* SceneDelegate.swift */,
 				030205052B07193400A8779B /* GoogleService-Info.plist */,
@@ -255,6 +258,7 @@
 				47B42C832B07198F00CFDBA1 /* MessageField.swift in Sources */,
 				032C49492B19630C008E68AA /* AddTripView.swift in Sources */,
 				478AB06F2B0AFDA20084FD3D /* LoginView.swift in Sources */,
+				0DFD9A6C2B1D7AA5003F6F59 /* UserViewModel.swift in Sources */,
 				478AB06D2B0AFD3C0084FD3D /* ChatListView.swift in Sources */,
 				0DE420502B0C2D9C00421126 /* ImagePicker.swift in Sources */,
 				033E187C2B1C2A7F00FDCFBB /* Translate.swift in Sources */,

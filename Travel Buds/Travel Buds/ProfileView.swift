@@ -14,7 +14,7 @@ struct ProfileView: View {
     @State private var showImageSelector = false
     @State private var image: UIImage?
     @State var flagUrls = Set<String>()
-    @ObservedObject private var viewModel = ChatListViewModel()
+    @ObservedObject private var viewModel = UserViewModel()
     
     var body: some View {
         NavigationView{
@@ -48,7 +48,6 @@ struct ProfileView: View {
                     ProfileInfoRow(title: "Username", value: viewModel.user?.userName ?? "")
                     Divider()
                 }
-                Divider()
                 Text("You've been to:")
                     .font(.title)
                 ScrollView {
