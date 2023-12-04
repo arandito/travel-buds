@@ -4,9 +4,10 @@ const {setGlobalOptions} = require("firebase-functions/v2/options");
 const {onRequest} = require("firebase-functions/v2/https");
 // const {onDocumentWritten} = require("firebase-functions/v2/firestore");
 
-// The Firebase Admin SDK to access Firestore.
+// The Firebase Admin SDK to access Firestore. Also for document field
+// array operations and batch writes.
 const {initializeApp} = require("firebase-admin/app");
-const {getFirestore} = require("firebase-admin/firestore");
+const {getFirestore, FieldValue} = require("firebase-admin/firestore");
 
 // Request body-parser.
 const jsonParser = require("body-parser").json();
@@ -16,6 +17,7 @@ const jsonParser = require("body-parser").json();
 
 initializeApp();
 setGlobalOptions({maxInstances: 10, region: "us-east1"});
+const db = getFirestore();
 
 exports.helloWorld = onRequest({timeoutSeconds: 1, cors: true}, (req, res) => {
   logger.info("Hello logs!", {structuredData: true});
@@ -26,7 +28,7 @@ exports.helloWorld = onRequest({timeoutSeconds: 1, cors: true}, (req, res) => {
 // of same trip. This is easy if they are in a group for trip already.
 // Might need to track pending as well?
 exports.makeGroup =
-onRequest({timeoutSeconds: 3, cors: true}, async (req, res) => {
+onRequest({timeoutSeconds: 5, cors: true}, async (req, res) => {
   // if (req.auth != true) {
   //   res.status(401).send("Unauthorized:" +
   //       "Client failed to authenticate with the server.");
@@ -35,19 +37,19 @@ onRequest({timeoutSeconds: 3, cors: true}, async (req, res) => {
 
   jsonParser(req, res, (err) => {
     if (err) {
-      return res.status(500).send(err.message);
+      return res.status(400).send(err.message);
     }
   });
 
   // Catches error if incorrectly formatted request.
-  let myUserId;
+  let myuid;
   let myWeekStartDate;
   let myWeekEndDate;
   let myDest;
   let myInterest;
 
   try {
-    myUserId = req.body.uid;
+    myuid = req.body.uid;
     myWeekStartDate = req.body.weekStartDate;
     myWeekEndDate = req.body.weekEndDate;
     myDest = req.body.destination;
@@ -56,41 +58,97 @@ onRequest({timeoutSeconds: 3, cors: true}, async (req, res) => {
     return res.status(400).send(error);
   }
   // Insert body type check
-  const tripsSnapshot = await getFirestore()
+
+  const batch = db.batch();
+
+  // Insert no conflicting + duplicate trips from same user check.
+  const pendingsSnapshot = await db
       .collection("pending")
-      .where(myWeekStartDate, "==", "weekStartDate")
+      .where("weekStartDate", "==", myWeekStartDate)
       .where("destination", "==", myDest)
       .where("interest", "==", myInterest)
       .limit(4)
       .get();
 
-  if (tripsSnapshot.size != 4) {
-    const myTripDoc = await getFirestore().collection("pending").add({
+  // If not enough matches to form a group, add pending info to
+  // appropriate tables in datastore.
+  if (pendingsSnapshot.size != 4) {
+    // To pending collection.
+    const myPendingDoc = db.collection("pending").doc();
+
+    batch.set(myPendingDoc, {
       weekStartDate: myWeekStartDate,
       weekEndDate: myWeekEndDate,
       destination: myDest,
       interest: myInterest,
-      userId: myUserId,
+      uid: myuid,
     });
-    return res.status(201).send(`Created pending trip: ${myTripDoc.id}`);
+
+    // To myUser's pending_requests field array.
+    const myUserDoc = db.collection("users").doc(myuid);
+    batch.update(myUserDoc, {
+      pendingRequests: FieldValue.arrayUnion(myPendingDoc.id),
+    });
+
+    try {
+      await batch.commit();
+    } catch (error) {
+      logger.error("Error, no changes to Firestore were made.");
+      return res.status(500).send(error);
+    }
+
+    return res.status(201).json({
+      group_id: "",
+      pending_id: `${myPendingDoc.id}`,
+    });
   }
 
-  const myMembers = [];
+  // Delete pending requests wherever it exists in datastore.
+  // Add myGroup to each users groups array.
+  // Build members array.
+  const myMemberIds = [];
+  const myGroupDoc = db.collection("groups").doc();
 
-  myMembers.push(myUserId);
-  tripsSnapshot.forEach((tripDoc) => {
-    myMembers.push(tripDoc.get("userId"));
-    tripDoc.ref.delete();
-    logger.log(`Deleted pending trip: ${tripDoc.id}`);
+  // Handle myUser.
+  myMemberIds.push(myuid);
+  const myUserDoc = db.collection("users").doc(myuid);
+  batch.update(myUserDoc, {
+    groups: FieldValue.arrayUnion(myGroupDoc.id),
   });
 
-  const myGroupDoc = await getFirestore().collection("groups").add({
+  // Handle rest of users.
+  pendingsSnapshot.forEach((pendingDoc) => {
+    const uid = pendingDoc.get("uid");
+
+    myMemberIds.push(uid);
+    batch.delete(pendingDoc.ref);
+
+    const userDoc = db.collection("users").doc(uid);
+    batch.update(userDoc, {
+      pendingRequests: FieldValue.arrayRemove(pendingDoc.id),
+      groups: FieldValue.arrayUnion(myGroupDoc.id),
+    });
+
+    logger.log(`Attempting to delete pending request: ${pendingDoc.id}`);
+  });
+
+  batch.set(myGroupDoc, {
     weekStartDate: myWeekStartDate,
     weekEndDate: myWeekEndDate,
     destination: myDest,
     interest: myInterest,
-    members: myMembers,
+    members: myMemberIds,
   });
 
-  return res.status(201).send(`Group created with id: ${myGroupDoc.id}`);
+  try {
+    await batch.commit();
+  } catch (error) {
+    logger.log("Error, no changes to Firestore were made.");
+    return res.status(500).send(error);
+  }
+
+  return res.status(201).json({
+    group_id: `${myGroupDoc.id}`,
+    pending_id: "",
+  });
 });

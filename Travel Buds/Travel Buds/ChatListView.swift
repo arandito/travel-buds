@@ -51,8 +51,23 @@ class ChatListViewModel: ObservableObject {
             let email = data["email"] as? String ?? ""
             let profileImageUrl = data["profileImageUrl"] as? String ?? ""
             let groups = data["groups"] as? [String] ?? []
-            
-            self.user = User(uid:uid, email: email, userName: userName, firstName: firstName, lastName: lastName, profileImageUrl: profileImageUrl, groups: groups)
+
+
+            var trips: [Trip] = []
+
+            if let tripsData = data["trips"] as? [[String: Any]] {
+                trips = tripsData.map { tripData in
+                    let destination = tripData["destination"] as? String ?? ""
+                    let interest = tripData["interest"] as? String ?? ""
+                    let chatId = tripData["chatId"] as? String ?? ""
+                    let weekStartDate = tripData["weekStartDate"] as? Date ?? Date()
+                    let weekEndDate = tripData["weekEndDate"] as? Date ?? Date()
+
+                    return Trip(chatID: chatId, destination: destination, interest: interest, weekStartDate: weekStartDate, weekEndDate: weekEndDate)
+                }
+            }
+
+            self.user = User(uid: uid, email: email, userName: userName, firstName: firstName, lastName: lastName, profileImageUrl: profileImageUrl, groups: groups, trips: trips)
         }
     }
     

@@ -20,6 +20,14 @@ struct AddTripView: View {
     
     let destinationOptions = ["New York", "Barcelona", "Budapest", "Rome", "Paris"]
     let interestOptions = ["Night Life", "Museums", "Food", "Nature", "Shopping"]
+    
+    struct addTripRequestBody: Codable {
+        let uid, destination, interest, weekStartDate, weekEndDate : String
+    }
+    
+    struct tripReturnBody: Codable {
+        let group_id, pending_id : String
+    }
 
     var body: some View {
         NavigationView{
@@ -110,12 +118,6 @@ struct AddTripView: View {
 
         return nextMonday
     }
-
-    var formattedSelectedDate: String {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateStyle = .long
-        return dateFormatter.string(from: weekStartDate)
-    }
     
     func addTrip() {
         let userId = FirebaseManager.shared.auth.currentUser?.uid ?? ""
@@ -131,15 +133,8 @@ struct AddTripView: View {
             "weekEndDate": weekEndDate ?? "",
             "destination": destination
         ]
-
-        FirebaseManager.shared.firestore.collection("pending")
-            .document().setData(tripData) { err in
-                if let err = err {
-                    print(err)
-                    return
-                }
-                print("Success")
-            }
+        
+        performPostRequest(uid: userId, destination: destination, interest: interest, weekStartDate: weekStartDate, weekEndDate: weekEndDate!)
 
         let ref = FirebaseManager.shared.firestore.collection("users").document(userId)
         tripData = [
@@ -153,6 +148,51 @@ struct AddTripView: View {
         ref.updateData([
             "trips": FieldValue.arrayUnion([tripData])
         ])
+    }
+    
+    func performPostRequest(uid : String, destination : String , interest : String, weekStartDate : Date, weekEndDate : Date) {
+        let url = URL(string: "https://makegroup-tiamo6beta-ue.a.run.app")!
+
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "MM-dd-yyyy"
+
+        let startDateString = dateFormatter.string(from: weekStartDate)
+        let endDateString = dateFormatter.string(from: weekEndDate)
+
+        let requestBody = addTripRequestBody(uid: uid, destination: destination, interest: interest, weekStartDate: startDateString, weekEndDate: endDateString)
+        let jsonEncoder = JSONEncoder()
+
+        do {
+            let jsonData = try jsonEncoder.encode(requestBody)
+            request.httpBody = jsonData
+        } catch {
+            print("Error encoding request body: \(error)")
+            return
+        }
+
+        // Perform the request
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+                if let error = error {
+                    print("Error: \(error)")
+                    return
+                }
+
+                // Handle the response data
+                if let data = data {
+                    do {
+                        let responseData = try JSONDecoder().decode(tripReturnBody.self, from: data)
+                        // Process the response data as needed
+                        print(responseData)
+                    } catch {
+                        print("Error decoding response data: \(error)")
+                    }
+                }
+            }
+        task.resume()
     }
 }
 
