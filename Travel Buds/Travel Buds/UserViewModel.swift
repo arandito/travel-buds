@@ -60,6 +60,7 @@ class UserViewModel: ObservableObject {
             }
 
             self.user = User(uid: uid, email: email, userName: userName, firstName: firstName, lastName: lastName, profileImageUrl: profileImageUrl, groups: groups, trips: trips)
+            self.loadFlags()
         }
     }
     
@@ -67,5 +68,32 @@ class UserViewModel: ObservableObject {
         try? FirebaseManager.shared.auth.signOut()
         self.isLoggedOut.toggle()
         self.user = nil
+    }
+    
+    func loadFlags() {
+        let countries = Set(user?.trips.compactMap { $0.destination } ?? [])
+        for city in countries where city != "" {
+            getFlag(city: city) { flagUrl in
+                if let flagUrl = flagUrl {
+                    self.user?.flags.insert(flagUrl)
+                }
+            }
+        }
+    }
+    
+    func getFlag(city: String, completion: @escaping (String?) -> Void) {
+        FirebaseManager.shared.firestore.collection("Flags").document(city).getDocument { snapshot, error in
+            if let error = error {
+                print("Error fetching flag URL for \(city): \(error.localizedDescription)")
+                completion(nil)
+                return
+            }
+
+            if let data = snapshot?.data(), let flagUrl = data["URL"] as? String {
+                completion(flagUrl)
+            } else {
+                completion(nil)
+            }
+        }
     }
 }

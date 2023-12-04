@@ -15,6 +15,7 @@ struct User {
     var profileImageUrl: String
     var groups: [String]
     var trips: [Trip]
+    var flags = Set<String>()
 }
 
 struct PendingRequest{

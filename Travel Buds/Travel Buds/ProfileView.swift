@@ -13,7 +13,6 @@ struct ProfileView: View {
     
     @State private var showImageSelector = false
     @State private var image: UIImage?
-    @State var flagUrls = Set<String>()
     @ObservedObject private var viewModel = UserViewModel()
     
     var body: some View {
@@ -52,7 +51,7 @@ struct ProfileView: View {
                     .font(.title)
                 ScrollView {
                     LazyHGrid(rows: [GridItem()]) {
-                        ForEach(Array(flagUrls), id: \.self) { flagUrl in
+                        ForEach(Array(viewModel.user!.flags), id: \.self) { flagUrl in
                             WebImage(url: URL(string: flagUrl))
                                 .resizable()
                                 .aspectRatio(contentMode: .fill)
@@ -66,12 +65,9 @@ struct ProfileView: View {
                     }
                 Spacer()
             }
-            .opacity(viewModel.user != nil ? 1.0 : 0.0)
             .animation(.easeInOut)
             .onAppear(){
-                flagUrls.removeAll();
                 viewModel.getCurrentUser()
-                loadFlags()
             }
             .navigationTitle("Profile")
                 .padding()
@@ -113,34 +109,6 @@ struct ProfileView: View {
                 }
             }
         }
-    
-    func loadFlags() {
-        let countries = Set(viewModel.user?.trips.compactMap { $0.destination } ?? [])
-        for city in countries where city != "" {
-            getFlag(city: city) { flagUrl in
-                if let flagUrl = flagUrl {
-                    flagUrls.insert(flagUrl)
-                }
-            }
-        }
-        flagUrls.removeAll()
-    }
-    
-    func getFlag(city: String, completion: @escaping (String?) -> Void) {
-        FirebaseManager.shared.firestore.collection("Flags").document(city).getDocument { snapshot, error in
-            if let error = error {
-                print("Error fetching flag URL for \(city): \(error.localizedDescription)")
-                completion(nil)
-                return
-            }
-
-            if let data = snapshot?.data(), let flagUrl = data["URL"] as? String {
-                completion(flagUrl)
-            } else {
-                completion(nil)
-            }
-        }
-    }
     
 }
 
