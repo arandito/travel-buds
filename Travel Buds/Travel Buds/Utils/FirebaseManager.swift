@@ -27,6 +27,7 @@ class FirebaseManager: NSObject {
         super.init()
     }
     
+    /*
     func sendMessage(id: String, text: String) {
         let messageData: [String: Any] = [
             "id": id,
@@ -54,4 +55,5 @@ class FirebaseManager: NSObject {
             completion(messages)
         })
     }
+    */
 }

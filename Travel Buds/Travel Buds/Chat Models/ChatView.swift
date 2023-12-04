@@ -2,80 +2,74 @@
 //  ChatView.swift
 //  Travel Buds
 //
-//  Created by Yuya Taniguchi on 11/20/23.
+//  Created by Yuya Taniguchi on 12/3/23.
 //
 
 import SwiftUI
+import Firebase
+
 
 struct ChatView: View {
     
-    @State var chatText = ""
+    @ObservedObject var cvm: ChatViewModel
     
     var body: some View {
-        
-        VStack {
-            ScrollView {
-                ForEach(0..<10) { num in
-                    
-                    HStack {
-                        Spacer()
-                        HStack {
-                            Text("MEASSAGE")
-                                .foregroundColor(.white)
-                        }
-                        .padding()
-                        .background(Color.purple)
-                        .cornerRadius(8)
-                    }
-                    .padding(.horizontal)
-                    .padding(.top, 8)
-                    
-                }
-                
-                HStack { Spacer() }
-                
+        NavigationView {
+            VStack {
+                MessagesView(cvm: cvm)
             }
-            .background(Color(.black))
-            
-            HStack {
-                Image(systemName: "photo.on.rectangle")
-                    .font(.system(size: 24))
-                    .foregroundColor(Color(.darkGray))
-                TextField("Enter text here", text: $chatText)
-                    .padding(8)
-                    .background(
-                        RoundedRectangle(cornerRadius: 8)
-                            .stroke(Color(.darkGray), lineWidth: 1)
-                    )
-                Button {
-                    print("Message sent :)")
-                } label: {
-                    Image(systemName: "paperplane.fill")
-                        .foregroundColor(.white)
-                }
-                .padding(.horizontal)
-                .padding(.vertical, 8)
-                .background(Color.purple)
-                .cornerRadius(8)
-            }
-            .padding(.horizontal)
-            .padding(.vertical, 8)
-           
-        }
-        
-       
-        .navigationTitle("My Chat")
+            .navigationTitle(cvm.groupId ?? "")
             .navigationBarTitleDisplayMode(.inline)
+        }
     }
     
-}
-
-struct ChatView_Previews: PreviewProvider {
-    static var previews: some View {
-        NavigationView {
-            ChatView()
-                .preferredColorScheme(.dark)
+    
+    struct MessagesView: View {
+        @ObservedObject var cvm: ChatViewModel
+        
+        var body: some View {
+            
+            ScrollView {
+                ScrollViewReader { scrollViewProxy in
+                    VStack {
+                        ForEach(cvm.chatMessages) { message in
+                            ChatMessageView(cvm: cvm, message: message)
+                        }
+                        HStack { Spacer() }
+                            .id("Empty")
+                    }
+                    .onAppear {
+                        DispatchQueue.main.async {
+                            withAnimation(.easeOut(duration: 0.5)) {
+                                scrollViewProxy.scrollTo("Empty", anchor: .bottom)
+                            }
+                        }
+                    }
+                    .onReceive(cvm.$count) { _ in
+                        withAnimation(.easeOut(duration: 0.5)) {
+                            scrollViewProxy.scrollTo("Empty", anchor: .bottom)
+                        }
+                    }
+                }
+            }
+            .background(Color(.init(white: 0.95, alpha: 1)))
+            .safeAreaInset(edge: .bottom) {
+                ChatBarView(cvm: cvm)
+                    .background(Color(.systemBackground))
+            }
         }
     }
 }
+
+#if DEBUG
+struct ChatView_Previews: PreviewProvider {
+    static var previews: some View {
+        let groupId = "Group2"
+        let cvm = ChatViewModel(groupId: groupId)
+        ChatView(cvm: cvm)
+    }
+}
+#endif
+
+
 

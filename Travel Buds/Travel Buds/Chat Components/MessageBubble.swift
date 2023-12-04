@@ -43,12 +43,12 @@ struct MessageBubble: View {
     @State private var translationInfo: TranslationInfo?
 
     var body: some View {
-        VStack(alignment: message.received ? .leading : .trailing) {
+        VStack(alignment: message.senderId == FirebaseManager.shared.auth.currentUser?.uid ? .leading : .trailing) {
             HStack {
                 Text(message.text)
                     .padding(10)
                     .foregroundColor(.white)
-                    .background(message.received ? Color.gray : Color.purple)
+                    .background(message.senderId == FirebaseManager.shared.auth.currentUser?.uid ? Color.gray : Color.purple)
                     .cornerRadius(15)
                     .shadow(radius: 2, x: 0, y: 2)
                     .gesture(
@@ -58,7 +58,7 @@ struct MessageBubble: View {
                             }
                     )
             }
-            .frame(maxWidth: 300, alignment: message.received ? .leading : .trailing)
+            .frame(maxWidth: 300, alignment: message.senderId == FirebaseManager.shared.auth.currentUser?.uid ? .leading : .trailing)
             .onTapGesture {
                 showTime.toggle()
             }
@@ -67,11 +67,11 @@ struct MessageBubble: View {
                 Text("\(message.timestamp.formatted(.dateTime.hour().minute()))")
                     .font(.caption2)
                     .foregroundColor(.gray)
-                    .padding(message.received ? .leading : .trailing, 25)
+                    .padding(message.senderId == FirebaseManager.shared.auth.currentUser?.uid ? .leading : .trailing, 25)
             }
         }
-        .frame(maxWidth: .infinity, alignment: message.received ? .leading : .trailing)
-        .padding(message.received ? .leading : .trailing)
+        .frame(maxWidth: .infinity, alignment: message.senderId == FirebaseManager.shared.auth.currentUser?.uid ? .leading : .trailing)
+        .padding(message.senderId == FirebaseManager.shared.auth.currentUser?.uid ? .leading : .trailing)
         .padding(.horizontal, 10)
         .alert(isPresented: $showAlert) {
             Alert(
@@ -124,6 +124,9 @@ struct MessageBubble: View {
 
 struct MessageBubble_Previews: PreviewProvider {
     static var previews: some View {
-        MessageBubble(message: Message(id: "12345", text: "Hewwo! My name is Beny :)", received: false, timestamp: Date()))
+        let docId = "12345"
+        let data = ["senderId": "12345", "text": "Hewwo! My name is Beny :)", "timestamp": Date()] as [String : Any]
+        let message = Message(documentId: docId, data: data)
+        MessageBubble(message: message)
     }
 }
