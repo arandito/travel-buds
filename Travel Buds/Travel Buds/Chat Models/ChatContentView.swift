@@ -16,6 +16,7 @@ struct ChatContentView: View {
             VStack {
                 TitleRow()
                 
+                /*
                 ScrollView {
                     ForEach(messageArraySent, id: \.self) { text in
                         MessageBubble(message: Message(id: "12345", text: text, received: false, timestamp: Date()))
@@ -28,6 +29,7 @@ struct ChatContentView: View {
                 .padding(.top, 10)
                 .background(.white)
                 .cornerRadius(30, corners: [.topLeft, .topRight])
+                */
             }
             .background(Color("Purple"))
             
