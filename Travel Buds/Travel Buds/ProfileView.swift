@@ -13,7 +13,7 @@ struct ProfileView: View {
     @State private var showImageSelector = false
     @State private var image: UIImage?
 
-    @ObservedObject private var viewModel = UserViewModel()
+    @ObservedObject private var viewModel = ChatListViewModel()
     
     var body: some View {
         NavigationView{
@@ -38,15 +38,14 @@ struct ProfileView: View {
                 Text("\(viewModel.user?.firstName ?? "") \(viewModel.user?.lastName ?? "")")
                     .font(.title)
                 
-                Divider()
                 
                 //Additional Info
                 VStack(spacing: 20){
-                    
+                    Divider()
                     ProfileInfoRow(title: "Email", value: viewModel.user?.email ?? "")
-                        .padding(.bottom, 2)
                     Divider()
                     ProfileInfoRow(title: "Username", value: viewModel.user?.userName ?? "")
+                    Divider()
                 }
                 Spacer()
             }.navigationTitle("Profile")

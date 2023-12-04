@@ -15,10 +15,10 @@
 import SwiftUI
 import SDWebImageSwiftUI
 
-class UserViewModel: ObservableObject {
+class ChatListViewModel: ObservableObject {
     
     @Published var user: User?
-    @Published var isLoggedOut = false
+    @Published var isLoggedOut = true
     
     init() {
         DispatchQueue.main.async{
@@ -66,7 +66,7 @@ class UserViewModel: ObservableObject {
 struct ChatListView: View {
     
     @State var shouldShowLogOutOptions = false
-    @ObservedObject private var viewModel = UserViewModel()
+    @ObservedObject private var viewModel = ChatListViewModel()
     @State private var isProfileImageLoaded = false
     
     var body: some View {
@@ -131,7 +131,7 @@ struct ChatListView: View {
                 self.viewModel.getCurrentUser()
             })
         }
-        .background(Color.purple)
+        .background(viewModel.isLoggedOut ? Color.white : Color.purple)
     }
     
     private var messagesView: some View {
