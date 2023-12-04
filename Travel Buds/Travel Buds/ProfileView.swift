@@ -51,7 +51,7 @@ struct ProfileView: View {
                     .font(.title)
                 ScrollView {
                     LazyHGrid(rows: [GridItem()]) {
-                        ForEach(Array(viewModel.user!.flags), id: \.self) { flagUrl in
+                        ForEach(Array(viewModel.user?.flags ?? Set()), id: \.self) { flagUrl in
                             WebImage(url: URL(string: flagUrl))
                                 .resizable()
                                 .aspectRatio(contentMode: .fill)
