@@ -13,16 +13,22 @@ struct User {
     let firstName: String
     let lastName: String
     var profileImageUrl: String
-    let trips: [Trip]
-
+    //var pendingRequests: [String]
+    var groups: [String]
+    //var pastTrips: [PastTrip]
 }
 
-struct Trip{
-    let tripID: String
-    let chatID: String?
+struct PendingRequest{
+    let uid: String
+    let destination: String
+    let interest: String
+    let weekStartDate: String
+    let weekEndDate: String
+}
+
+struct PastTrip {
     let location: String
     let interest: String
-    let arrival: Date
-    let departure: Date
+    let weekStartDate: String
+    let weekEndDate: String
 }
-

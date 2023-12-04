@@ -13,9 +13,7 @@ struct ProfileView: View {
     @State private var showImageSelector = false
     @State private var image: UIImage?
 
-    @ObservedObject private var viewModel = ChatListViewModel()
-    
-    
+    @ObservedObject private var viewModel = UserViewModel()
     
     var body: some View {
         NavigationView{

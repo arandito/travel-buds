@@ -15,7 +15,7 @@
 import SwiftUI
 import SDWebImageSwiftUI
 
-class ChatListViewModel: ObservableObject {
+class UserViewModel: ObservableObject {
     
     @Published var user: User?
     @Published var isLoggedOut = false
@@ -50,8 +50,9 @@ class ChatListViewModel: ObservableObject {
             let uid = data["uid"] as? String ?? ""
             let email = data["email"] as? String ?? ""
             let profileImageUrl = data["profileImageUrl"] as? String ?? ""
+            let groups = data["groups"] as? [String] ?? []
             
-            self.user = User(uid:uid, email: email, userName: userName, firstName: firstName, lastName: lastName, profileImageUrl: profileImageUrl, trips: [])
+            self.user = User(uid:uid, email: email, userName: userName, firstName: firstName, lastName: lastName, profileImageUrl: profileImageUrl, groups: groups)
         }
     }
     
@@ -65,7 +66,7 @@ class ChatListViewModel: ObservableObject {
 struct ChatListView: View {
     
     @State var shouldShowLogOutOptions = false
-    @ObservedObject private var viewModel = ChatListViewModel()
+    @ObservedObject private var viewModel = UserViewModel()
     @State private var isProfileImageLoaded = false
     
     var body: some View {
@@ -91,30 +92,28 @@ struct ChatListView: View {
                 VStack(alignment: .leading, spacing: 4) {
                     Text("\(viewModel.user?.firstName ?? "") \(viewModel.user?.lastName ?? "")")
                         .font(.system(size: 24, weight: .bold))
-                    
+                        .foregroundColor(Color.white)
                     HStack {
                         Circle()
                             .foregroundColor(.green)
                             .frame(width: 14, height: 14)
+                            .padding(.trailing, -5)
                         Text("online")
-                            .font(.system(size: 12))
-                            .foregroundColor(Color(.lightGray))
+                            .font(.system(size: 15))
+                            .foregroundColor(Color.white)
                     }
-                    
                 }
-                
                 Spacer()
                 Button {
                     shouldShowLogOutOptions.toggle()
                 } label: {
                     Image(systemName: "lock")
                         .font(.system(size: 24, weight: .bold))
-                        .foregroundColor(Color(.label))
+                        .foregroundColor(Color.white)
                 }
             }
         }
         .padding()
-        .padding(.bottom, -16)
         .actionSheet(isPresented: $shouldShowLogOutOptions) {
             .init(title: Text("Settings"), buttons: [
                 .destructive(Text("Sign Out"), action: {
@@ -132,6 +131,7 @@ struct ChatListView: View {
                 self.viewModel.getCurrentUser()
             })
         }
+        .background(Color.purple)
     }
     
     private var messagesView: some View {
@@ -149,7 +149,6 @@ struct ChatListView: View {
                                     .overlay(RoundedRectangle(cornerRadius: 44)
                                         .stroke(Color(.label), lineWidth: 1)
                                     )
-                                
                                 VStack(alignment: .leading) {
                                     Text("Username")
                                         .font(.system(size: 16, weight: .bold))
@@ -168,9 +167,9 @@ struct ChatListView: View {
                         .padding(.horizontal)
                         .padding(.top, num == 0 ? 16 : 0)
                         
-                    }.padding(.bottom, 50)
+                    }
                     
-                }
+                }.padding(.top, -8)
             )
         }
     }
