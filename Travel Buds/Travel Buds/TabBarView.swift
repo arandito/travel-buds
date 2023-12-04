@@ -39,14 +39,6 @@ struct TabBarView: View {
                     .font(.system(size: 30, weight: .bold))
             }
             
-            NavigationView {
-                Text("Settings")
-                    .navigationTitle("Settings")
-            }
-            .tabItem {
-                Image(systemName: "gear")
-                    .font(.system(size: 30, weight: .bold))
-            }
         }
         .accentColor(.purple)
     }
