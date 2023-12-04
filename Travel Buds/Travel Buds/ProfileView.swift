@@ -6,16 +6,15 @@
 //
 
 import SwiftUI
+import Combine
 import SDWebImageSwiftUI
 
 struct ProfileView: View {
     
     @State private var showImageSelector = false
     @State private var image: UIImage?
-
+    @State var flagUrls = Set<String>()
     @ObservedObject private var viewModel = ChatListViewModel()
-    
-    
     
     var body: some View {
         NavigationView{
@@ -50,12 +49,34 @@ struct ProfileView: View {
                     Divider()
                     ProfileInfoRow(title: "Username", value: viewModel.user?.userName ?? "")
                 }
+                Divider()
+                Text("You've been to:")
+                    .font(.title)
+                ScrollView {
+                    LazyHGrid(rows: [GridItem()]) {
+                        ForEach(Array(flagUrls), id: \.self) { flagUrl in
+                            WebImage(url: URL(string: flagUrl))
+                                .resizable()
+                                .aspectRatio(contentMode: .fill)
+                                .frame(width: 50, height: 50)
+                                .clipShape(Circle())
+                                .overlay(Circle().stroke(Color.white, lineWidth: 2))
+                                .shadow(radius: 3)
+                        }
+                    }
+                    .padding()
+                    }
                 Spacer()
-            }.navigationTitle("Profile")
+            }
+            .opacity(viewModel.user != nil ? 1.0 : 0.0)
+            .animation(.easeInOut)
+            .onAppear(){
+                flagUrls.removeAll();
+                viewModel.getCurrentUser()
+                loadFlags()
+            }
+            .navigationTitle("Profile")
                 .padding()
-        }
-        .onAppear() {
-            viewModel.getCurrentUser()
         }
         .fullScreenCover(isPresented: $showImageSelector, onDismiss: nil){
             ImagePicker(image: $image)
@@ -94,6 +115,35 @@ struct ProfileView: View {
                 }
             }
         }
+    
+    func loadFlags() {
+        let countries = Set(viewModel.user?.trips.compactMap { $0.destination } ?? [])
+        for city in countries where city != "" {
+            getFlag(city: city) { flagUrl in
+                if let flagUrl = flagUrl {
+                    flagUrls.insert(flagUrl)
+                }
+            }
+        }
+        flagUrls.removeAll()
+    }
+    
+    func getFlag(city: String, completion: @escaping (String?) -> Void) {
+        FirebaseManager.shared.firestore.collection("Flags").document(city).getDocument { snapshot, error in
+            if let error = error {
+                print("Error fetching flag URL for \(city): \(error.localizedDescription)")
+                completion(nil)
+                return
+            }
+
+            if let data = snapshot?.data(), let flagUrl = data["URL"] as? String {
+                completion(flagUrl)
+            } else {
+                completion(nil)
+            }
+        }
+    }
+    
 }
 
 //Struct to allow for extra user data to be displayed
@@ -114,11 +164,3 @@ struct ProfileInfoRow: View {
     }
 }
 
-
-struct ProfileView_Previews: PreviewProvider {
-        static var previews: some View {
-            NavigationView {
-                ProfileView()
-            }
-        }
-}

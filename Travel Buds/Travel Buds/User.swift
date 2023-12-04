@@ -18,11 +18,9 @@ struct User {
 }
 
 struct Trip{
-    let tripID: String
     let chatID: String?
-    let location: String
+    let destination: String
     let interest: String
-    let arrival: Date
-    let departure: Date
+    let weekStartDate: Date
+    let weekEndDate: Date
 }
-
