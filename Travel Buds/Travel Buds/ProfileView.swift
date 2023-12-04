@@ -65,7 +65,6 @@ struct ProfileView: View {
                     }
                 Spacer()
             }
-            .animation(.easeInOut)
             .onAppear(){
                 viewModel.getCurrentUser()
             }
