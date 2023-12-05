@@ -201,7 +201,7 @@ struct AddTripView: View {
                 .pickerStyle(MenuPickerStyle())
                 .padding()
             }
-            .background(Color.blue.opacity(0.2))
+            .background(Color.purple.opacity(0.2))
             .cornerRadius(10)
             .padding(5)
         }
@@ -227,7 +227,7 @@ struct AddTripView: View {
                     }
                     .padding()
             }
-            .background(Color.blue.opacity(0.2))
+            .background(Color.purple.opacity(0.2))
             .cornerRadius(10)
             .padding(5)
         }
