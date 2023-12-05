@@ -91,7 +91,7 @@ struct AddTripView: View {
                             .frame(maxWidth: .infinity, alignment: .center)
                             .cornerRadius(100)
                             NavigationLink(
-                                destination: tripConfirmedView(destination: selectedDestination),
+                                destination: tripConfirmedView(destination: selectedDestination, interest: selectedInterest),
                                 isActive: $showTripConfirmed,
                                 label: { EmptyView() }
                                 )
@@ -223,6 +223,8 @@ struct AddTripView: View {
     
     struct tripConfirmedView: View{
         var destination = String()
+        var interest = String()
+        @State private var imageURL: String?
         
         var body: some View{
             VStack{
@@ -231,14 +233,42 @@ struct AddTripView: View {
                     .bold()
                     .multilineTextAlignment(.center)
                 
-                Image("travelbudslogo")
-                    .resizable()
-                    .scaledToFit()
+                if let imageURL = imageURL {
+                    WebImage(url: URL(string: imageURL))
+                        .resizable()
+                        .scaledToFit()
+                } else {
+                    Image("travelbudslogo")
+                        .resizable()
+                        .scaledToFit()
+                }
+            }
+            .onAppear {
+                getImage(destination: destination, interest: interest) { url in
+                    if let url = url {
+                        imageURL = url
+                    }
+                }
             }
         }
-    }
-    
-}
+        func getImage(destination: String, interest: String, completion: @escaping (String?) -> Void) {
+            FirebaseManager.shared.firestore.collection("tripImages").document(destination + "_" + interest).getDocument { snapshot, error in
+                if let error = error {
+                    print("Error fetching city image URL for \(destination): \(error.localizedDescription)")
+                    completion(nil)
+                    return
+                }
+                
+                if let data = snapshot?.data(), let Url = data["URL"] as? String {
+                    completion(Url)
+                } else {
+                    completion(nil)
+                }
+            }
+            }
+            }
+        }
+
 
 struct AddTripPreview: PreviewProvider {
     static var previews: some View {
