@@ -7,7 +7,7 @@ const {onDocumentCreated} = require("firebase-functions/v2/firestore");
 // The Firebase Admin SDK to access Firestore. Also for document field
 // array operations and batch writes.
 const {initializeApp} = require("firebase-admin/app");
-const {getFirestore, FieldValue, Timestamp} =
+const {getFirestore, FieldValue, Timestamp, FieldPath} =
     require("firebase-admin/firestore");
 
 // Request body-parser.
@@ -59,6 +59,42 @@ onRequest({cors: true}, async (req, res) => {
     return res.status(400).send(error);
   }
   // Insert body type check
+
+  const myUserSnapshot = await db.collection("users").doc(myuid).get();
+  const fields = myUserSnapshot.data();
+  const pendingRequests = fields.pendingRequests;
+  const groups = fields.groups;
+
+  if (pendingRequests.length != 0) {
+    const pendingRequestsSnapshot = await db
+        .collection("pending")
+        .where(FieldPath.documentId(), "in", pendingRequests)
+        .get();
+
+    pendingRequestsSnapshot.forEach((pendingDoc) => {
+      const pendingData = pendingDoc.data();
+      if (pendingData.weekStartDate == myWeekStartDate &&
+      pendingData.destination == myDest) {
+        return res.status(400).send("Cannot create group that conflicts " +
+        "with pending trip dest and date.");
+      }
+    });
+  }
+  if (groups.length != 0) {
+    const groupsSnapshot = await db
+        .collection("groups")
+        .where(FieldPath.documentId(), "in", groups)
+        .get();
+
+    groupsSnapshot.forEach((groupDoc) => {
+      const groupData = groupDoc.data();
+      if (groupData.weekStartDate == myWeekStartDate &&
+      groupData.destination == myDest) {
+        return res.status(400).send("Cannot create group that conflicts " +
+        "with existing group dest and date.");
+      }
+    });
+  }
 
   const batch = db.batch();
 
