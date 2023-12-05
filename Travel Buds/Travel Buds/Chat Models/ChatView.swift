@@ -16,10 +16,15 @@ struct ChatView: View {
     @ObservedObject var uvm: UserViewModel
     
     var body: some View {
-        //NavigationView {
-        VStack(spacing: 0) {
-            TitleRow()
-            MessagesView()
+        NavigationView {
+            VStack(spacing: 0) {
+                TitleRow()
+                MessagesView()
+            }
+            .environmentObject(cvm)
+            .onTapGesture {
+                UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+            }
         }
         .environmentObject(cvm)
         .environmentObject(uvm)

@@ -217,6 +217,16 @@ onDocumentCreated("groups/{groupId}", async (event) => {
       "the group chat at any time. The Travel Buddies team hopes you " +
       "have fun in " + destination + " with " + interest + "!" +
       "\n- The Travel Buddies Team";
+  const formattedStartDate = new Date(weekStartDate)
+      .toLocaleDateString("en-US", {
+        month: "numeric",
+        day: "numeric",
+      });
+  const title = `${destination} ${formattedStartDate}`;
+  const cityImageSnapshot = await db.collection("cityImages")
+      .doc(destination).get();
+  const imageUrl = cityImageSnapshot.data().URL;
+
 
   const batch = db.batch();
   const timestamp = Timestamp.now();
@@ -232,6 +242,8 @@ onDocumentCreated("groups/{groupId}", async (event) => {
       senderId: "travelBuddies",
       text: text,
       timestamp: timestamp,
+      title: title,
+      url: imageUrl,
     });
   });
 
