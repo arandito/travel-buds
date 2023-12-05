@@ -15,7 +15,8 @@ struct AddTripView: View {
     @State private var weekStartDate = Date()
     @State private var weekEndDate = Date()
     
-    @State private var showAlert = false
+    @State private var showBadRequest = false
+    @State private var showTripConfirmed = false
     
     let destinationOptions = ["New York", "Barcelona", "Budapest", "Rome", "Paris"]
     let interestOptions = ["Night Life", "Museums", "Food", "Nature", "Shopping"]
@@ -30,46 +31,14 @@ struct AddTripView: View {
 
     var body: some View {
         NavigationView{
-            VStack(spacing: 50) {
-                HStack{
-                    Text("Choose a destination")
-                        .font(.headline)
-                    Spacer()
-                    Picker("Location", selection: $selectedDestination) {
-                        ForEach(destinationOptions, id: \.self) {
-                            Text($0)
-                        }
-                    }
-                    .pickerStyle(MenuPickerStyle())
-                }
+            VStack(spacing: 20) {
+                CardView(selectedOption: $selectedDestination, options: destinationOptions, optionTitle: "Select a Destination")
+                    .frame(maxWidth: .infinity)
                 
-                Divider()
+                CardView(selectedOption: $selectedInterest, options: interestOptions, optionTitle: "Select an Interest")
+                    .frame(maxWidth: .infinity)
                 
-                HStack{
-                    Text("Choose an interest")
-                        .font(.headline)
-                    Spacer()
-                    Picker("Interest", selection: $selectedInterest) {
-                        ForEach(interestOptions, id: \.self) {
-                            Text($0)
-                        }
-                    }
-                    .pickerStyle(MenuPickerStyle())
-                }
-                
-                Divider()
-
-                
-                HStack{
-                    Text("Select the Week")
-                        .bold()
-                    Spacer()
-                    DatePicker("Select a Monday", selection: $weekStartDate, in: Date()..., displayedComponents: .date)
-                        .labelsHidden()
-                        .onChange(of: weekStartDate) { newDate in
-                            weekStartDate = findNextMonday(from: newDate); weekEndDate = addWeek(to: weekStartDate)!
-                        }
-                }
+                dateCardView(startDate: $weekStartDate, endDate: $weekEndDate)
                 
                 Divider()
                 HStack{
@@ -82,16 +51,24 @@ struct AddTripView: View {
                 }
                 Button("Add Trip") {
                     addTrip()
-                    showAlert.toggle()
                 }
-                .alert(isPresented: $showAlert) {
-                    Alert(
-                        title: Text("Trip Confirmed!"),
-                        message: Text("Please sit tight while we match you with your groups"),
-                        dismissButton: .default(Text("OK"))
-                    )
-                }
-                .padding()
+                
+                NavigationLink(
+                    destination: tripConfirmedView(destination: selectedDestination),
+                    isActive: $showTripConfirmed,
+                    label: { EmptyView() }
+                )
+                .hidden()
+            }
+            .alert(isPresented: $showBadRequest) {
+                        Alert(
+                            title: Text("That Didn't Seem Right..."),
+                            message: Text("You may have entered overlapping dates. Please try again!"),
+                            dismissButton: .default(Text("OK")) {
+                                // Handle the OK button tap if needed
+                                // You can put additional logic here
+                            }
+                        )
             }
             .navigationTitle("Add Trip")
         }
@@ -124,32 +101,20 @@ struct AddTripView: View {
         let interest = selectedInterest
         let weekStartDate = weekStartDate
         let weekEndDate = addWeek(to: weekStartDate)
-
-        var tripData: [String: Any] = [
-            "userId": userId,
-            "interest": interest,
-            "weekStartDate": weekStartDate,
-            "weekEndDate": weekEndDate ?? "",
-            "destination": destination
-        ]
         
         performPostRequest(uid: userId, destination: destination, interest: interest, weekStartDate: weekStartDate, weekEndDate: weekEndDate!)
-
-        let ref = FirebaseManager.shared.firestore.collection("users").document(userId)
-        tripData = [
-            "interest": interest,
-            "weekStartDate": weekStartDate,
-            "chatId": "",
-            "destination": destination,
-            "weekEndDate": weekEndDate ?? ""
-        ]
-
-        ref.updateData([
-            "trips": FieldValue.arrayUnion([tripData])
-        ])
     }
     
     func performPostRequest(uid : String, destination : String , interest : String, weekStartDate : Date, weekEndDate : Date) {
+        
+        var tripData: [String: Any] = [
+            "userId": uid,
+            "interest": interest,
+            "weekStartDate": weekStartDate,
+            "weekEndDate": weekEndDate,
+            "destination": destination
+        ]
+        
         let url = URL(string: "https://makegroup-tiamo6beta-ue.a.run.app")!
 
         var request = URLRequest(url: url)
@@ -179,20 +144,112 @@ struct AddTripView: View {
                     print("Error: \(error)")
                     return
                 }
-
                 // Handle the response data
                 if let data = data {
                     do {
+                        print(data)
                         let responseData = try JSONDecoder().decode(tripReturnBody.self, from: data)
                         // Process the response data as needed
+                        showTripConfirmed.toggle()
+                        
+                        let ref = FirebaseManager.shared.firestore.collection("users").document(uid)
+                        tripData = [
+                            "interest": interest,
+                            "weekStartDate": weekStartDate,
+                            "chatId": "",
+                            "destination": destination,
+                            "weekEndDate": weekEndDate 
+                        ]
+
+                        ref.updateData([
+                            "trips": FieldValue.arrayUnion([tripData])
+                        ])
+                        
                         print(responseData)
+                        
+                        //add trip to trips
                     } catch {
+                        DispatchQueue.main.async {
+                            showBadRequest.toggle()
+                        }
                         print("Error decoding response data: \(error)")
                     }
                 }
             }
         task.resume()
     }
+    
+    //this is where i'll handle UI stuff
+    struct CardView: View {
+        @Binding var selectedOption: String
+        var options : [String] = []
+        var optionTitle: String
+        
+        var body: some View {
+            HStack(spacing: 40) {
+                Text(optionTitle)
+                    .font(.title2)
+                    .bold()
+                    .frame(alignment: .leading)
+                    .padding()
+                
+                Picker(optionTitle, selection: $selectedOption) {
+                    ForEach(options, id: \.self) {
+                        Text($0)
+                    }
+                }
+                .pickerStyle(MenuPickerStyle())
+                .padding()
+            }
+            .background(Color.blue.opacity(0.2))
+            .cornerRadius(10)
+            .padding(5)
+        }
+    }
+    
+    struct dateCardView: View {
+        @Binding var startDate: Date
+        @Binding var endDate: Date
+        
+        var body: some View{
+            HStack(spacing: 40){
+                Text("Select the Week")
+                    .font(.title2)
+                    .bold()
+                    .padding()
+                
+                Spacer()
+                
+                DatePicker("Select a Monday", selection: $startDate, in: Date()..., displayedComponents: .date)
+                    .labelsHidden()
+                    .onChange(of: startDate) { newDate in
+                        startDate = AddTripView().findNextMonday(from: newDate); endDate = AddTripView().addWeek(to: startDate)!
+                    }
+                    .padding()
+            }
+            .background(Color.blue.opacity(0.2))
+            .cornerRadius(10)
+            .padding(5)
+        }
+    }
+    
+    struct tripConfirmedView: View{
+        var destination = String()
+        
+        var body: some View{
+            VStack{
+                Text("Your Trip to \(destination) Has Been Confirmed!")
+                    .font(/*@START_MENU_TOKEN@*/.title/*@END_MENU_TOKEN@*/)
+                    .bold()
+                    .multilineTextAlignment(.center)
+                
+                Image("travelbudslogo")
+                    .resizable()
+                    .scaledToFit()
+            }
+        }
+    }
+    
 }
 
 
