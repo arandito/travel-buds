@@ -234,6 +234,7 @@ struct AddTripView: View {
     }
     
     struct tripConfirmedView: View{
+        @State private var imageURL: String?
         var destination = String()
         
         var body: some View{
@@ -242,15 +243,43 @@ struct AddTripView: View {
                     .font(/*@START_MENU_TOKEN@*/.title/*@END_MENU_TOKEN@*/)
                     .bold()
                     .multilineTextAlignment(.center)
+                if let imageURL = imageURL {
+                    WebImage(url: URL(string: imageURL))
+                        .resizable()
+                        .scaledToFit()
+                } else {
+                    Image("travelbudslogo")
+                        .resizable()
+                        .scaledToFit()
+                }
+            }
+            .onAppear {
+                getImage(destination: destination) { url in
+                    if let url = url {
+                        imageURL = url
+                    }
+                }
+            }
+        }
+        func getImage(destination: String, completion: @escaping (String?) -> Void) {
+            FirebaseManager.shared.firestore.collection("cityImages").document(destination).getDocument { snapshot, error in
+                if let error = error {
+                    print("Error fetching city image URL for \(destination): \(error.localizedDescription)")
+                    completion(nil)
+                    return
+                }
                 
-                Image("travelbudslogo")
-                    .resizable()
-                    .scaledToFit()
+                if let data = snapshot?.data(), let Url = data["URL"] as? String {
+                    completion(Url)
+                } else {
+                    completion(nil)
+                }
             }
         }
     }
-    
 }
+
+
 
 
 
