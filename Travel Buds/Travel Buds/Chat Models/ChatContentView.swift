@@ -5,8 +5,9 @@
 //  Created by Yuya Taniguchi on 11/16/23.
 //
 
-import SwiftUI
+
 /*
+import SwiftUI
 struct ChatContentView: View {
     var messageArraySent = ["We have decided to create an app targeted towards connecting travelers on their journeys!"]
     var messageArrayReceived = ["Cool bro.", "Very cool bro."]
