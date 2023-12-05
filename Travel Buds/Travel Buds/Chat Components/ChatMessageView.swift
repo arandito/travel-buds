@@ -64,11 +64,10 @@ struct ChatMessageView: View {
                 .cornerRadius(15)
                 .shadow(radius: 2, x: 0, y: 2)
                 
-                
-            
-                
                 Spacer()
             }
         }
     }
 }
+
+

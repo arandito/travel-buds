@@ -18,10 +18,7 @@ struct TabBarView: View {
                     .font(.system(size: 30, weight: .bold))
             }
 
-            NavigationView {
-                Text("Activities")
-                    .navigationTitle("Activities")
-            }
+            ActivitiesView()
             .tabItem {
                 Image(systemName: "star.fill")
                     .font(.system(size: 30, weight: .bold))

@@ -20,24 +20,17 @@ struct TitleRow: View {
                     .font(.title).bold()
             }
             .frame(maxWidth: .infinity, alignment: .center)
-            
-            /*
-            Image(systemName: "phone.fill")
-                .foregroundColor(.gray)
-                .padding(10)
-                .background(.white)
-                .cornerRadius(50)
-            */
-        }
         .padding()
         .background(Color.purple)
     }
         
 }
-
-
+    
+/*
 struct TitleRow_Previews: PreviewProvider {
     static var previews: some View {
+        // ChatView(cvm: cvm)
         return TitleRow()
     }
 }
+*/

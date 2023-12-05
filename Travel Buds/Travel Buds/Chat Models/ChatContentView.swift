@@ -8,7 +8,7 @@
 
 /*
 import SwiftUI
-
+/*
 struct ChatContentView: View {
     var messageArraySent = ["We have decided to create an app targeted towards connecting travelers on their journeys!"]
     var messageArrayReceived = ["Cool bro.", "Very cool bro."]
@@ -16,9 +16,9 @@ struct ChatContentView: View {
     var body: some View {
         VStack {
             VStack {
-                TitleRow()
+                TitleRow(cvm : cvm)
                 
-                /*
+                
                 ScrollView {
                     ForEach(messageArraySent, id: \.self) { text in
                         MessageBubble(message: Message(id: "12345", text: text, received: false, timestamp: Date()))
@@ -31,12 +31,13 @@ struct ChatContentView: View {
                 .padding(.top, 10)
                 .background(.white)
                 .cornerRadius(30, corners: [.topLeft, .topRight])
-                */
+                
             }
             .background(Color("Purple"))
             
             MessageField()
         }
     }
+     
 }
 */

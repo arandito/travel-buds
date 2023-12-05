@@ -49,6 +49,7 @@ class ChatViewModel: ObservableObject {
     @Published var errorMessage = ""
     @Published var chatMessages = [Message]()
     @Published var userImageURLs = [String: String]()
+<<<<<<< HEAD
     @Published var count = 0
     @Published var recentMessages = [RecentMessage]()
     var listener: ListenerRegistration?
@@ -56,9 +57,13 @@ class ChatViewModel: ObservableObject {
     
     // let user: User?
     var groupId: String?
+=======
+    // @Published var count = 0
+
+    let groupId: String?
+>>>>>>> a4eb3d487d806c9a11af1c9f39c82a2974d05e00
     
     init(groupId: String?) {
-        // self.user = user
         self.groupId = groupId
         fetchMessages()
     }
@@ -90,7 +95,6 @@ class ChatViewModel: ObservableObject {
                     if change.type == .added {
                         let data = change.document.data()
                         self.chatMessages.append(.init(documentId: change.document.documentID, data: data))
-                        
                     }
                 })
             }
@@ -135,6 +139,10 @@ class ChatViewModel: ObservableObject {
             self.count += 1
         }
         self.chatText = ""
+<<<<<<< HEAD
+=======
+        // self.count += 1
+>>>>>>> a4eb3d487d806c9a11af1c9f39c82a2974d05e00
         
     }
     

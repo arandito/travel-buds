@@ -1,15 +1,10 @@
-//
-//  ChatBarView.swift
-//  Travel Buds
-//
-//  Created by Yuya Taniguchi on 12/3/23.
-//
-
 import SwiftUI
+import Combine
 
 struct ChatBarView: View {
     
     @EnvironmentObject private var cvm: ChatViewModel
+    @State private var keyboardHeight: CGFloat = 0
     
     var body: some View {
         HStack {
@@ -35,29 +30,50 @@ struct ChatBarView: View {
         .background(Color("Gray"))
         .cornerRadius(50)
         .padding()
+
     }
 }
-
+/*
 struct ChatBarView_Previews: PreviewProvider {
     static var previews: some View {
+        let cvm = ChatViewModel(groupId: "Group2")
+        ChatView(cvm: cvm)
         return ChatBarView()
     }
 }
+*/
 
 struct CustomTextField: View {
-    var placeholder: Text
+    var placeholder = Text("Enter here...")
     @Binding var text: String
     var editingChanged: (Bool) -> () = {_ in}
     var commit: () -> () = {}
     
     var body: some View {
         ZStack(alignment: .leading) {
-            if text.isEmpty {
-                placeholder
-                    .opacity(0.5)
-            }
             
-            TextField("", text: $text, onEditingChanged: editingChanged, onCommit: commit)
+            TextEditor(text: $text)
+                .padding(4)
+                .frame(maxHeight: 50)
+                .onTapGesture {
+                    if text.isEmpty {
+                        text = ""
+                    }
+                }
+            
+            if text.isEmpty {
+                Text("Enter here...")
+                    .foregroundColor(Color.gray)
+
+            }
+
+        }
+        .onReceive(Just(text)) { _ in
+            if text.isEmpty {
+                text = ""
+            }
         }
     }
 }
+
+
