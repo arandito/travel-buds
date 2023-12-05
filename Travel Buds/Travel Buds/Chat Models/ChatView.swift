@@ -20,6 +20,9 @@ struct ChatView: View {
                 MessagesView()
             }
             .environmentObject(cvm)
+            .onTapGesture {
+                UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+            }
         }
     }
     
