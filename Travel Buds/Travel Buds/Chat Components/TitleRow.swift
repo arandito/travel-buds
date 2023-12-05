@@ -8,40 +8,36 @@
 import SwiftUI
 
 struct TitleRow: View {
-    var imageUrl = URL(string: "https://images.unsplash.com/photo-1567532939604-b6b5b0db2604?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8")
-    var name = "Bennen"
+    
+    @EnvironmentObject private var cvm: ChatViewModel
+    
     var body: some View {
+        
+        let name = cvm.groupId ?? "Default Group ID"
         HStack(spacing: 20) {
-            AsyncImage(url: imageUrl) { image in
-                image.resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .frame(width: 50, height: 50)
-                    .cornerRadius(50)
-            } placeholder: {
-                ProgressView()
-            }
-            
             VStack(alignment: .leading) {
                 Text(name)
                     .font(.title).bold()
-                
-                Text("Online")
-                    .font(.caption)
-                    .foregroundColor(.black)
             }
-            .frame(maxWidth: .infinity, alignment: .leading)
+            .frame(maxWidth: .infinity, alignment: .center)
             
+            /*
             Image(systemName: "phone.fill")
                 .foregroundColor(.gray)
                 .padding(10)
                 .background(.white)
                 .cornerRadius(50)
+            */
         }
         .padding()
+        .background(Color.purple)
     }
+        
 }
 
-#Preview {
-    TitleRow()
-        .background(Color("Purple"))
+
+struct TitleRow_Previews: PreviewProvider {
+    static var previews: some View {
+        return TitleRow()
+    }
 }

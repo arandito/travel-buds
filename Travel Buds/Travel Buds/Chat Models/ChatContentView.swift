@@ -5,6 +5,8 @@
 //  Created by Yuya Taniguchi on 11/16/23.
 //
 
+
+/*
 import SwiftUI
 
 struct ChatContentView: View {
@@ -37,3 +39,4 @@ struct ChatContentView: View {
         }
     }
 }
+*/

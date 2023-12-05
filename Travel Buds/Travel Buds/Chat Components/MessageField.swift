@@ -5,6 +5,7 @@
 //  Created by Yuya Taniguchi on 11/16/23.
 //
 
+/*
 import SwiftUI
 
 struct MessageField: View {
@@ -37,6 +38,7 @@ struct MessageField: View {
     MessageField()
 }
 
+
 struct CustomTextField: View {
     var placeholder: Text
     @Binding var text: String
@@ -54,3 +56,4 @@ struct CustomTextField: View {
         }
     }
 }
+*/

@@ -9,61 +9,66 @@ import SwiftUI
 
 struct ChatMessageView: View {
     
-    @ObservedObject var cvm: ChatViewModel
     let message: Message
     
     var body: some View {
         VStack {
+            // if message.senderId == uvm.user?.uid {
             if message.senderId == FirebaseManager.shared.auth.currentUser?.uid {
-                SentMessageView(message: message)
+                SentMessageBubble(message: message)
             } else {
-                ReceivedMessageView(message: message)
+                ReceivedMessageBubble(message: message)
             }
         }
         .padding(.horizontal)
         .padding(.top, 8)
     }
     
-    
-    struct SentMessageView: View {
+    struct SentMessageBubble: View {
         
         let message: Message
         
         var body: some View {
             HStack {
                 Spacer()
+
                 HStack {
                     Text(message.text)
-                        .foregroundColor(.white)
+    
                 }
-                .padding()
+                .padding(10)
+                .foregroundColor(.white)
                 .background(Color.purple)
-                .cornerRadius(8)
+                .cornerRadius(15)
+                .shadow(radius: 2, x: 0, y: 2)
                 
                 Image(systemName: "person.fill")
             }
         }
     }
     
-    struct ReceivedMessageView: View {
+    struct ReceivedMessageBubble: View {
         
         let message: Message
         
         var body: some View {
             HStack {
                 Image(systemName: "person.fill")
-                
+        
                 HStack {
                     Text(message.text)
-                        .foregroundColor(.white)
                 }
-                .padding()
+                .padding(10)
+                .foregroundColor(.white)
                 .background(Color.gray)
-                .cornerRadius(8)
+                .cornerRadius(15)
+                .shadow(radius: 2, x: 0, y: 2)
+                
+                
+            
                 
                 Spacer()
             }
         }
     }
 }
-

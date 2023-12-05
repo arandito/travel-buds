@@ -15,17 +15,19 @@ struct ChatView: View {
     
     var body: some View {
         NavigationView {
-            VStack {
-                MessagesView(cvm: cvm)
+            VStack(spacing: 0) {
+                //TitleRow()
+                MessagesView()
             }
             .navigationTitle(cvm.groupId ?? "")
             .navigationBarTitleDisplayMode(.inline)
+            .environmentObject(cvm)
         }
     }
     
     
     struct MessagesView: View {
-        @ObservedObject var cvm: ChatViewModel
+        @EnvironmentObject private var cvm: ChatViewModel
         
         var body: some View {
             
@@ -33,7 +35,7 @@ struct ChatView: View {
                 ScrollViewReader { scrollViewProxy in
                     VStack {
                         ForEach(cvm.chatMessages) { message in
-                            ChatMessageView(cvm: cvm, message: message)
+                            ChatMessageView(message: message)
                         }
                         HStack { Spacer() }
                             .id("Empty")
@@ -45,7 +47,7 @@ struct ChatView: View {
                             }
                         }
                     }
-                    .onReceive(cvm.$count) { _ in
+                    .onChange(of: cvm.count) { _ in
                         withAnimation(.easeOut(duration: 0.5)) {
                             scrollViewProxy.scrollTo("Empty", anchor: .bottom)
                         }
@@ -54,7 +56,7 @@ struct ChatView: View {
             }
             .background(Color(.init(white: 0.95, alpha: 1)))
             .safeAreaInset(edge: .bottom) {
-                ChatBarView(cvm: cvm)
+                ChatBarView()
                     .background(Color(.systemBackground))
             }
         }
@@ -64,8 +66,7 @@ struct ChatView: View {
 #if DEBUG
 struct ChatView_Previews: PreviewProvider {
     static var previews: some View {
-        let groupId = "Group2"
-        let cvm = ChatViewModel(groupId: groupId)
+        let cvm = ChatViewModel(groupId: "Group2")
         ChatView(cvm: cvm)
     }
 }

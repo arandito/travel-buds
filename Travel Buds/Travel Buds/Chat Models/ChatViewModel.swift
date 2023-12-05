@@ -8,6 +8,41 @@
 import SwiftUI
 import Firebase
 
+struct RecentMessage: Identifiable, Hashable {
+    var id: String { documentId }
+    let documentId: String
+    let text: String
+    let senderId: String
+    let groupId: String
+    let timestamp: Firebase.Timestamp
+    var location = ""
+    var weekStartDate = ""
+    var title = ""
+    
+    
+    var timeAgo: String {
+        let formatter = RelativeDateTimeFormatter()
+        formatter.unitsStyle = .abbreviated
+        let timeAgoString = formatter.localizedString(for: timestamp.dateValue(), relativeTo: Date())
+        if timeAgoString == "in 0s" {
+            return "Just now"
+        }
+        return timeAgoString
+    }
+    
+    init(documentId: String, data: [String: Any]) {
+        self.documentId = documentId
+        self.timestamp = data["timestamp"] as? Timestamp ?? Timestamp(date: Date())
+        self.text = data["text"] as? String ?? ""
+        self.senderId = data["senderId"] as? String ?? ""
+        self.groupId = data["groupId"] as? String ?? ""
+    }
+    
+    func hash(into hasher: inout Hasher) {
+            hasher.combine(id)
+    }
+}
+
 class ChatViewModel: ObservableObject {
     
     @Published var chatText = ""
@@ -15,9 +50,12 @@ class ChatViewModel: ObservableObject {
     @Published var chatMessages = [Message]()
     @Published var userImageURLs = [String: String]()
     @Published var count = 0
+    @Published var recentMessages = [RecentMessage]()
+    var listener: ListenerRegistration?
+    var chatTextTemp = ""
     
     // let user: User?
-    let groupId: String?
+    var groupId: String?
     
     init(groupId: String?) {
         // self.user = user
@@ -25,14 +63,18 @@ class ChatViewModel: ObservableObject {
         fetchMessages()
     }
     
-    private func fetchMessages() {
+    func fetchMessages() {
+        
+        if let existingListener = listener {
+                existingListener.remove()
+            }
         
         guard let groupId = self.groupId else {
             print("Group ID invalid")
             return
         }
         
-        FirebaseManager.shared.firestore
+        listener = FirebaseManager.shared.firestore
             .collection("messages")
             .document(groupId)
             .collection(groupId)
@@ -77,6 +119,8 @@ class ChatViewModel: ObservableObject {
             .collection(groupId)
             .document()
         
+        self.chatTextTemp = self.chatText
+        
         let messageData: [String : Any] = ["senderId": senderId, "text": self.chatText, "timestamp": Timestamp()]
         
         document.setData(messageData) { error in
@@ -86,10 +130,61 @@ class ChatViewModel: ObservableObject {
                 return
             }
         }
-        
+        storeRecentMessage {
+            // This closure is called when the asynchronous operations are done// Now you can safely clear chatText
+            self.count += 1
+        }
         self.chatText = ""
-        self.count += 1
         
+    }
+    
+    func storeRecentMessage(completion: @escaping () -> Void) {
+        guard let uid = FirebaseManager.shared.auth.currentUser?.uid else { return }
+        guard let groupId = self.groupId else { return }
+        var memberList: [String] = []
+        
+        print(groupId)
+        FirebaseManager.shared.firestore
+            .collection("groups")
+            .document(groupId)
+            .getDocument { snapshot, error in
+                if let error = error {
+                    print(error.localizedDescription)
+                    return
+                }
+                
+                guard let data = snapshot?.data() else {
+                    print("No data found.")
+                    return
+                }
+                
+                memberList = data["members"] as! [String]
+                
+                for member in memberList {
+                    let document = FirebaseManager.shared.firestore
+                        .collection("recentMessages")
+                        .document(member)
+                        .collection("messages")
+                        .document(groupId)
+                    
+                    let data = [
+                        "timestamp": Timestamp(),
+                        "text": self.chatTextTemp,
+                        "senderId": uid,
+                        "groupId" : self.groupId ?? ""
+                    ] as [String: Any]
+                    
+                    document.setData(data) { error in
+                        if let error = error {
+                            print(error.localizedDescription)
+                            return
+                        }
+                    }
+                }
+            }
+    }
+    deinit {
+        listener?.remove()
     }
 }
     
