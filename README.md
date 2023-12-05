@@ -54,7 +54,7 @@ Every project is different, so consider which of these sections apply to yours. 
 
 ## Name
 Travel Buds
-YouTube Link: https://youtu.be/ilzrA0-awQM
+YouTube Link: https://youtu.be/n2IU5xi42dk
 
 ## Description
 Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
