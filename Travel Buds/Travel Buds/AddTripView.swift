@@ -54,7 +54,7 @@ struct AddTripView: View {
                 }
                 
                 NavigationLink(
-                    destination: tripConfirmedView(destination: selectedDestination),
+                    destination: tripConfirmedView(destination: selectedDestination, interest: selectedInterest),
                     isActive: $showTripConfirmed,
                     label: { EmptyView() }
                 )
@@ -236,6 +236,7 @@ struct AddTripView: View {
     struct tripConfirmedView: View{
         @State private var imageURL: String?
         var destination = String()
+        var interest = String()
         
         var body: some View{
             VStack{
@@ -254,15 +255,15 @@ struct AddTripView: View {
                 }
             }
             .onAppear {
-                getImage(destination: destination) { url in
+                getImage(destination: destination, interest: interest) { url in
                     if let url = url {
                         imageURL = url
                     }
                 }
             }
         }
-        func getImage(destination: String, completion: @escaping (String?) -> Void) {
-            FirebaseManager.shared.firestore.collection("cityImages").document(destination).getDocument { snapshot, error in
+        func getImage(destination: String, interest: String, completion: @escaping (String?) -> Void) {
+            FirebaseManager.shared.firestore.collection("tripImages").document(destination + "_" + interest).getDocument { snapshot, error in
                 if let error = error {
                     print("Error fetching city image URL for \(destination): \(error.localizedDescription)")
                     completion(nil)
