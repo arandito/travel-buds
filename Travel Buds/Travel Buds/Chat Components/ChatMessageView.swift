@@ -6,15 +6,19 @@
 //
 
 import SwiftUI
+import FirebaseAuth
+import SDWebImageSwiftUI
 
 struct ChatMessageView: View {
+    
+    @EnvironmentObject private var uvm: UserViewModel
     
     let message: Message
     
     var body: some View {
         VStack {
-            // if message.senderId == uvm.user?.uid {
-            if message.senderId == FirebaseManager.shared.auth.currentUser?.uid {
+            if message.senderId == uvm.user?.uid {
+            // if message.senderId == FirebaseManager.shared.auth.currentUser?.uid {
                 SentMessageBubble(message: message)
             } else {
                 ReceivedMessageBubble(message: message)
@@ -26,15 +30,14 @@ struct ChatMessageView: View {
     
     struct SentMessageBubble: View {
         
+        @EnvironmentObject private var uvm: UserViewModel
         let message: Message
         
         var body: some View {
             HStack {
                 Spacer()
-
                 HStack {
                     Text(message.text)
-    
                 }
                 .padding(10)
                 .foregroundColor(.white)
@@ -42,19 +45,29 @@ struct ChatMessageView: View {
                 .cornerRadius(15)
                 .shadow(radius: 2, x: 0, y: 2)
                 
-                Image(systemName: "person.fill")
+                WebImage(url:URL(string:uvm.user?.profileImageUrl ?? ""))
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: 30, height: 30)
+                    .clipped()
+                    .cornerRadius(44)
             }
         }
     }
     
     struct ReceivedMessageBubble: View {
         
+        @EnvironmentObject private var uvm: UserViewModel
         let message: Message
         
         var body: some View {
             HStack {
-                Image(systemName: "person.fill")
-        
+                WebImage(url:URL(string:uvm.user?.profileImageUrl ?? ""))
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: 30, height: 30)
+                    .clipped()
+                    .cornerRadius(44)
                 HStack {
                     Text(message.text)
                 }

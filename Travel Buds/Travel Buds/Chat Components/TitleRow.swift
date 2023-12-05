@@ -6,23 +6,32 @@
 //
 
 import SwiftUI
+import SDWebImageSwiftUI
 
 struct TitleRow: View {
     
     @EnvironmentObject private var cvm: ChatViewModel
+    @EnvironmentObject private var uvm: UserViewModel
     
     var body: some View {
-        
         let name = cvm.groupId ?? "Default Group ID"
-        HStack(spacing: 20) {
-            VStack(alignment: .leading) {
+        HStack {
+            WebImage(url:URL(string:uvm.user?.profileImageUrl ?? ""))
+                .resizable()
+                .scaledToFill()
+                .frame(width:50, height:50)
+                .clipped()
+                .cornerRadius(44)
+            VStack(alignment: .leading, spacing: 4) {
                 Text(name)
-                    .font(.title).bold()
+                    .font(.system(size: 24, weight: .bold))
+                    .foregroundColor(Color.black)
             }
-            .frame(maxWidth: .infinity, alignment: .center)
+            Spacer()
+            
         }
         .padding()
-        .background(Color.purple)
+        .background(Color.white)
     }
         
 }

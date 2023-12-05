@@ -7,26 +7,31 @@
 
 import SwiftUI
 import Firebase
+import SDWebImageSwiftUI
 
 
 struct ChatView: View {
     
     @ObservedObject var cvm: ChatViewModel
+    @ObservedObject var uvm: UserViewModel
     
     var body: some View {
-        NavigationView {
-            VStack(spacing: 0) {
-                TitleRow()
-                MessagesView()
-            }
-            .environmentObject(cvm)
+        //NavigationView {
+        VStack(spacing: 0) {
+            TitleRow()
+            MessagesView()
         }
+        .environmentObject(cvm)
+        .environmentObject(uvm)
+        //}
     }
+    
     
     
     struct MessagesView: View {
         
         @EnvironmentObject private var cvm: ChatViewModel
+        @EnvironmentObject private var uvm: UserViewModel
         
         var body: some View {
             
@@ -62,6 +67,7 @@ struct ChatView: View {
     }
 }
 
+/*
 #if DEBUG
 struct ChatView_Previews: PreviewProvider {
     static var previews: some View {
@@ -70,6 +76,7 @@ struct ChatView_Previews: PreviewProvider {
     }
 }
 #endif
+*/
 
 
 

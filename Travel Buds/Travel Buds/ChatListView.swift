@@ -31,7 +31,7 @@ struct ChatListView: View {
                 customNavBar
                 messagesView
                 NavigationLink("", isActive:$shouldNavigateToChatView){
-                    ChatView(cvm: chatViewModel)
+                    ChatView(cvm: chatViewModel, uvm: viewModel)
                 }
             }
             .navigationBarHidden(true)

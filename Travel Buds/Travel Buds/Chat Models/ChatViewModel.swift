@@ -49,7 +49,6 @@ class ChatViewModel: ObservableObject {
     @Published var errorMessage = ""
     @Published var chatMessages = [Message]()
     @Published var userImageURLs = [String: String]()
-    //@Published var count = 0
     
     @Published var recentMessages = [RecentMessage]()
     var listener: ListenerRegistration?
@@ -66,8 +65,8 @@ class ChatViewModel: ObservableObject {
     func fetchMessages() {
         
         if let existingListener = listener {
-                existingListener.remove()
-            }
+            existingListener.remove()
+        }
         
         guard let groupId = self.groupId else {
             print("Group ID invalid")
@@ -181,9 +180,10 @@ class ChatViewModel: ObservableObject {
     deinit {
         listener?.remove()
     }
-}
     
+
     /*
+    
     func fetchUserImageURLs(completion: @escaping () -> Void) {
         
         let usersCollection = FirebaseManager.shared.firestore.collection("users")
@@ -209,6 +209,6 @@ class ChatViewModel: ObservableObject {
         }
         completion()
     }
-     */
-
+    */
+}
 
