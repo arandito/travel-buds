@@ -24,7 +24,8 @@ struct LoginView: View {
     @State private var image: UIImage?
     @Environment(\.colorScheme) var colorScheme
     @State private var errorMessage: String?
-
+    
+    
    var textFieldBackgroundColor: Color {
        return colorScheme == .dark ? Color(.init(white: 0.17, alpha: 1.0)) : Color.white
    }
@@ -89,6 +90,8 @@ struct LoginView: View {
                     .padding(12)
                     .background(textFieldBackgroundColor)
                     .cornerRadius(8)
+    
+                
                 
                     Button {
                         handleAction()
@@ -229,12 +232,12 @@ struct LoginView: View {
 }
 
 
+
 struct LoginView_Previews: PreviewProvider {
     static var previews: some View {
-        LoginView(isLoginCompleted: {
-            
-        })
+        LoginView(isLoginCompleted: {})
             .preferredColorScheme(.light)
 
     }
 }
+

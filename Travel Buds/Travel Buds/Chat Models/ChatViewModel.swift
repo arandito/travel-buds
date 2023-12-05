@@ -14,13 +14,11 @@ class ChatViewModel: ObservableObject {
     @Published var errorMessage = ""
     @Published var chatMessages = [Message]()
     @Published var userImageURLs = [String: String]()
-    @Published var count = 0
-    
-    // let user: User?
+    // @Published var count = 0
+
     let groupId: String?
     
     init(groupId: String?) {
-        // self.user = user
         self.groupId = groupId
         fetchMessages()
     }
@@ -48,7 +46,6 @@ class ChatViewModel: ObservableObject {
                     if change.type == .added {
                         let data = change.document.data()
                         self.chatMessages.append(.init(documentId: change.document.documentID, data: data))
-                        
                     }
                 })
             }
@@ -88,7 +85,7 @@ class ChatViewModel: ObservableObject {
         }
         
         self.chatText = ""
-        self.count += 1
+        // self.count += 1
         
     }
 }
