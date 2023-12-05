@@ -240,7 +240,7 @@ struct AddTripView: View {
         var body: some View{
             VStack{
                 Text("Your Trip to \(destination) Has Been Confirmed!")
-                    .font(/*@START_MENU_TOKEN@*/.title/*@END_MENU_TOKEN@*/)
+                    .font(.title)
                     .bold()
                     .multilineTextAlignment(.center)
                 if let imageURL = imageURL {
