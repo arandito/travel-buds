@@ -10,7 +10,6 @@ import Firebase
 import FirebaseFirestore
 import SDWebImageSwiftUI
 
-
 struct ActivitiesView: View{
     @State private var selectedDestination = "New York"
     @State private var selectedInterest = "Nature"
@@ -39,6 +38,7 @@ struct ActivitiesView: View{
                         }
                         .listRowBackground(Color.purple.opacity(0.2))
                     }
+                    .padding(5)
                     NavigationLink(destination: selectOptionsView(selectedCity: $selectedDestination, selectedInterest: $selectedInterest)){
                         Text("Search")
                     }
@@ -168,13 +168,12 @@ struct ActivitiesView: View{
             }
             .padding(16)
             .background(Color.purple.opacity(0.1)) // Set the background color
-            .navigationTitle("User Preferences")
+            .navigationTitle("Activity Options")
             .navigationBarTitleDisplayMode(.inline)
         }
     }
+    
 }
-
-
 
 
 struct ActivitiesPreview: PreviewProvider {
