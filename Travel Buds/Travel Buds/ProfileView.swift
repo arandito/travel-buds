@@ -13,13 +13,12 @@ struct ProfileView: View {
     
     @State private var showImageSelector = false
     @State private var image: UIImage?
-    @State private var feedbackText = ""
-    @State private var showFeedbackAlert = false
     @ObservedObject private var viewModel = UserViewModel()
     
     var body: some View {
         NavigationView{
             VStack {
+                // User Image
                 WebImage(url: URL (string:viewModel.user?.profileImageUrl ?? ""))
                     .resizable()
                     .aspectRatio(contentMode: .fill)
@@ -66,41 +65,15 @@ struct ProfileView: View {
                     }
                 Spacer()
             }
+            .onAppear(){
+                viewModel.getCurrentUser()
+            }
             .navigationTitle("Profile")
-            .navigationBarItems(trailing:
-                Button(action: {
-                    showFeedbackAlert.toggle()
-                }) {
-                    Image(systemName: "envelope")
-                        .foregroundColor(.blue)
-                }
-                .alert("Enter your feedback", isPresented: $showFeedbackAlert) {
-                    TextField("Feedback", text: $feedbackText)
-                    HStack {
-                        Button("Submit", action: submitFeedback)
-                        Button("Cancel") {
-                            showFeedbackAlert = false
-                            feedbackText = ""
-                        }
-                    }
-                }
-            )
+                .padding()
         }
         .fullScreenCover(isPresented: $showImageSelector, onDismiss: nil){
             ImagePicker(image: $image)
         }
-    }
-    
-    func submitFeedback() {
-        var ref = FirebaseManager.shared.firestore.collection("feedbacks").addDocument(data: [
-            "feedback": feedbackText,
-            "uid": FirebaseManager.shared.auth.currentUser?.uid ?? ""
-        ]) { err in
-            if let err = err {
-                print("Error adding feedback: \(err)")
-            }
-        }
-        feedbackText = ""
     }
     
     func updateProfilePicture(){
