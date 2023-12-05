@@ -49,19 +49,14 @@ class ChatViewModel: ObservableObject {
     @Published var errorMessage = ""
     @Published var chatMessages = [Message]()
     @Published var userImageURLs = [String: String]()
-<<<<<<< HEAD
-    @Published var count = 0
+    //@Published var count = 0
+    
     @Published var recentMessages = [RecentMessage]()
     var listener: ListenerRegistration?
     var chatTextTemp = ""
     
     // let user: User?
     var groupId: String?
-=======
-    // @Published var count = 0
-
-    let groupId: String?
->>>>>>> a4eb3d487d806c9a11af1c9f39c82a2974d05e00
     
     init(groupId: String?) {
         self.groupId = groupId
@@ -134,19 +129,11 @@ class ChatViewModel: ObservableObject {
                 return
             }
         }
-        storeRecentMessage {
-            // This closure is called when the asynchronous operations are done// Now you can safely clear chatText
-            self.count += 1
-        }
+        storeRecentMessage()
         self.chatText = ""
-<<<<<<< HEAD
-=======
-        // self.count += 1
->>>>>>> a4eb3d487d806c9a11af1c9f39c82a2974d05e00
-        
     }
     
-    func storeRecentMessage(completion: @escaping () -> Void) {
+    func storeRecentMessage() {
         guard let uid = FirebaseManager.shared.auth.currentUser?.uid else { return }
         guard let groupId = self.groupId else { return }
         var memberList: [String] = []

@@ -20,6 +20,7 @@ struct TitleRow: View {
                     .font(.title).bold()
             }
             .frame(maxWidth: .infinity, alignment: .center)
+        }
         .padding()
         .background(Color.purple)
     }

@@ -16,27 +16,16 @@ struct ChatView: View {
     var body: some View {
         NavigationView {
             VStack(spacing: 0) {
-<<<<<<< HEAD
-                //TitleRow()
-                MessagesView()
-            }
-            .navigationTitle(cvm.groupId ?? "")
-            .navigationBarTitleDisplayMode(.inline)
-=======
                 TitleRow()
                 MessagesView()
             }
->>>>>>> a4eb3d487d806c9a11af1c9f39c82a2974d05e00
             .environmentObject(cvm)
         }
     }
     
     
     struct MessagesView: View {
-<<<<<<< HEAD
-=======
         
->>>>>>> a4eb3d487d806c9a11af1c9f39c82a2974d05e00
         @EnvironmentObject private var cvm: ChatViewModel
         
         var body: some View {
@@ -57,11 +46,7 @@ struct ChatView: View {
                             }
                         }
                     }
-<<<<<<< HEAD
-                    .onChange(of: cvm.count) { _ in
-=======
                     .onChange(of: cvm.chatMessages.count) { _ in
->>>>>>> a4eb3d487d806c9a11af1c9f39c82a2974d05e00
                         withAnimation(.easeOut(duration: 0.5)) {
                             scrollViewProxy.scrollTo("Empty", anchor: .bottom)
                         }
@@ -85,6 +70,7 @@ struct ChatView_Previews: PreviewProvider {
     }
 }
 #endif
+
 
 
 
