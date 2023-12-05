@@ -26,7 +26,8 @@ struct ChatView: View {
                 UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
             }
             .navigationBarHidden(true)
-        }
+            .navigationBarTitleDisplayMode(.inline)
+}
         .environmentObject(cvm)
         .environmentObject(uvm)
     }
