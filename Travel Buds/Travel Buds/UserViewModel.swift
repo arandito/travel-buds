@@ -47,6 +47,7 @@ class UserViewModel: ObservableObject {
             let email = data["email"] as? String ?? ""
             let profileImageUrl = data["profileImageUrl"] as? String ?? ""
             let groups = data["groups"] as? [String] ?? []
+            let pendingRequests = data["pendingRequests"] as? [String] ?? []
 
 
             var trips: [Trip] = []
@@ -63,7 +64,7 @@ class UserViewModel: ObservableObject {
                 }
             }
 
-            self.user = User(uid: uid, email: email, userName: userName, firstName: firstName, lastName: lastName, profileImageUrl: profileImageUrl, groups: groups, trips: trips)
+            self.user = User(uid: uid, email: email, userName: userName, firstName: firstName, lastName: lastName, profileImageUrl: profileImageUrl, groups: groups, pendingRequests: pendingRequests, trips: trips)
             self.loadFlags()
         }
     }

@@ -214,7 +214,7 @@ struct LoginView: View {
     func storeUserData(email: String, firstName: String, lastName: String, userName: String) {
         storeProfileImage {imageUrl in
             guard let userId = FirebaseManager.shared.auth.currentUser?.uid else { return }
-            var userData = ["email": email, "firstName": firstName, "lastName": lastName, "userName": userName]
+            var userData = ["email": email, "firstName": firstName, "lastName": lastName, "userName": userName, "pendingRequests": [], "groups":[]]
             if let imageUrl = imageUrl {
                 userData["profileImageUrl"] = imageUrl.absoluteString
             }

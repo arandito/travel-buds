@@ -14,6 +14,7 @@ struct User {
     let lastName: String
     var profileImageUrl: String
     var groups: [String]
+    var pendingRequests: [String]
     var trips: [Trip]
     var flags = Set<String>()
 }
