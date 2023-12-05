@@ -203,13 +203,15 @@ struct ChatListView: View {
                             .padding(.top, index == 0 ? 16 : 0)
                             
                         }
+                        
                         VStack{
                             Image("travelbudslogo")
                                 .resizable()
-                                .padding(.top, 80)
-                                .ignoresSafeArea()
+                                .aspectRatio(contentMode: .fit)
                         }
+                        .edgesIgnoringSafeArea(.all)
                         .padding(-15)
+                        .padding(.top, 40)
                     }
                     
                 }.padding(.top, -8)
