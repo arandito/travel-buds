@@ -64,9 +64,11 @@ class UserViewModel: ObservableObject {
                     return Trip(chatID: chatId, destination: destination, interest: interest, weekStartDate: weekStartDate, weekEndDate: weekEndDate)
                 }
             }
-
+            
+            
             self.user = User(uid: uid, email: email, userName: userName, firstName: firstName, lastName: lastName, profileImageUrl: profileImageUrl, groups: groups, pendingRequests: pendingRequests, trips: trips)
             self.loadFlags()
+            self.getRecentMessages()
         }
     }
     
@@ -74,6 +76,37 @@ class UserViewModel: ObservableObject {
         try? FirebaseManager.shared.auth.signOut()
         self.isLoggedOut.toggle()
         self.user = nil
+    }
+    
+    func removeUserFromChat(groupId: String){
+        guard let uid = FirebaseManager.shared.auth.currentUser?.uid else { return }
+        
+        let documentReference1 = FirebaseManager.shared.firestore
+            .collection("recentMessages")
+            .document(uid)
+            .collection("messages")
+            .document(groupId)
+
+        documentReference1.delete { error in
+            if let error = error {
+                print(error.localizedDescription)
+            } else {
+                print("Document successfully deleted")
+            }
+        }
+        
+        let documentReference2 = FirebaseManager.shared.firestore
+            .collection("groups")
+            .document(groupId)
+        
+        documentReference2.updateData(["members": FieldValue.arrayRemove([uid])]) { error in
+            if let error = error {
+                print("Error removing UID from members list: \(error)")
+            } else {
+                print("UID successfully removed from members list")
+            }
+        }
+
     }
     
     func getRecentMessages() {

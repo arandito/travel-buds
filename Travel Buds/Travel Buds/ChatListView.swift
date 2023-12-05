@@ -23,7 +23,7 @@ struct ChatListView: View {
     @State private var shouldNavigateToChatView = false
     @State private var shouldNavigateToAddTripView = false
     @Environment(\.colorScheme) var colorScheme
-    
+    @State private var isLoading = false
     @State var chatViewModel = ChatViewModel(groupId: nil)
     
     var textForegroundColor: Color {
@@ -32,42 +32,44 @@ struct ChatListView: View {
     
     var body: some View {
         NavigationView {
-            VStack {
-                navigationBar
-                
-                if !viewModel.isLoggedOut {
-                    VStack(alignment: .leading) {
-                        Text("Chats")
-                            .multilineTextAlignment(.leading)
-                            .font(.system(size: 30, weight: .bold))
-                            .foregroundColor(textForegroundColor)
+            ZStack{
+                VStack {
+                    navigationBar
+                    
+                    if !viewModel.isLoggedOut {
+                        VStack(alignment: .leading) {
+                            Text("Chats")
+                                .multilineTextAlignment(.leading)
+                                .font(.system(size: 30, weight: .bold))
+                                .foregroundColor(textForegroundColor)
+                        }
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.leading, 15)
+                        .padding(.bottom,11)
                     }
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(.leading, 15)
-                    .padding(.bottom, 2)
+                    
+                    listView
+                    
+                    NavigationLink("", isActive:$shouldNavigateToChatView){
+                        ChatView(cvm: chatViewModel, uvm: viewModel)
+                    }
+                    
+                    NavigationLink("", isActive:$shouldNavigateToAddTripView){
+                        AddTripView()
+                    }
+                    .navigationBarBackButtonHidden(true)
                 }
+                .navigationBarHidden(true)
                 
-                listView
-                
-                NavigationLink("", isActive:$shouldNavigateToChatView){
-                    ChatView(cvm: chatViewModel, uvm: viewModel)
+                .fullScreenCover(isPresented: $viewModel.isLoggedOut, onDismiss: nil) {
+                    LoginView(isLoginCompleted: {
+                        self.viewModel.isLoggedOut = false
+                        self.viewModel.getCurrentUser()
+                    })
                 }
+                .edgesIgnoringSafeArea(.bottom)
                 
-                NavigationLink("", isActive:$shouldNavigateToAddTripView){
-                    AddTripView()
-                }
-                .navigationBarBackButtonHidden(true)
             }
-            .navigationBarHidden(true)
-            
-            .fullScreenCover(isPresented: $viewModel.isLoggedOut, onDismiss: nil) {
-                LoginView(isLoginCompleted: {
-                    self.viewModel.isLoggedOut = false
-                    self.viewModel.getCurrentUser()
-                    self.viewModel.getRecentMessages()
-                })
-            }
-            .edgesIgnoringSafeArea(.bottom)
         }
         
     }
@@ -125,85 +127,11 @@ struct ChatListView: View {
         } else {
             return AnyView(
                 ScrollView {
-                    if viewModel.recentMessages.isEmpty {
-                        // Show a separate view for users with no chats
-                        VStack {
-                            Text("You currently have no group chats :(")
-                                .font(.system(size: 18, weight: .bold))
-                                .foregroundColor(textForegroundColor)
-                                .padding(.top, 30)
-                            Text("Add trips to meet fellow travelers!")
-                                .font(.system(size: 18, weight: .bold))
-                                .foregroundColor(textForegroundColor)
-                                .padding(.top, 0.4)
-
-
-                            Button(action: {
-                                self.shouldNavigateToAddTripView.toggle()
-                            }) {
-                                Text("Add Trip")
-                                    .font(.system(size: 16, weight: .bold))
-                                    .foregroundColor(.white)
-                                    .padding()
-                                    .background(Color.purple)
-                                    .cornerRadius(16)
-                            }
-                            .padding(.top, 10)
-                        }
-                        .padding(.horizontal)
-                        VStack{
-                            Image("travelbudslogo")
-                                .resizable()
-                                .padding(.top, 80)
-                                .ignoresSafeArea()
-                        }
-                        .padding(-15)
-                    } else {
+                    if !viewModel.recentMessages.isEmpty {
+                        Divider()
                         ForEach(Array(viewModel.recentMessages.enumerated()), id:\.1) { index, recentMessage in
-                            VStack {
-                                Button {
-                                    chatViewModel = ChatViewModel(groupId: recentMessage.groupId)
-                                    self.shouldNavigateToChatView.toggle()
-                                } label: {
-                                    HStack(spacing: 1.5) {
-                                        WebImage(url: URL(string: recentMessage.url))
-                                            .resizable()
-                                            .scaledToFill()
-                                            .frame(width: 64, height: 64)
-                                            .clipped()
-                                            .cornerRadius(64)
-                                            .overlay(RoundedRectangle(cornerRadius: 64)
-                                                .stroke(Color.purple, lineWidth: 3))
-                                            .shadow(radius: 3)
-                                        Spacer()
-                                        VStack(alignment: .leading, spacing: 3) {
-                                            Text(recentMessage.title)
-                                                .font(.system(size: 16, weight: .bold))
-                                                .foregroundColor(textForegroundColor)
-                                                .frame(maxWidth: .infinity, alignment: .leading)
-                                            
-                                            Text(recentMessage.text)
-                                                .font(.system(size: 14))
-                                                .multilineTextAlignment(.leading)
-                                                .foregroundColor(Color(.systemGray))
-                                                .frame(maxWidth: .infinity, alignment: .leading)
-                                                .lineLimit(2)
-                                        }
-                                        
-                                        Spacer()
-                                        
-                                        Text(recentMessage.timeAgo)
-                                            .font(.system(size: 14, weight: .semibold))
-                                    }
-                                    .padding(.vertical, 8)
-                                }
-                                Divider()
-                            }
-                            .padding(.horizontal)
-                            .padding(.top, index == 0 ? 16 : 0)
-                            
+                            messageCellView(index: index, recentMessage: recentMessage)
                         }
-                        
                         VStack{
                             Image("travelbudslogo")
                                 .resizable()
@@ -211,14 +139,124 @@ struct ChatListView: View {
                         }
                         .edgesIgnoringSafeArea(.all)
                         .padding(-15)
-                        .padding(.top, 40)
+                        .padding(.top, 50)
+                    } else {
+                        emptyChatsView
                     }
                     
                 }.padding(.top, -8)
             )
         }
     }
+    
+    private func messageCellView(index: Int, recentMessage: RecentMessage) -> some View {
+        return AnyView(
+            ScrollView {
+                VStack {
+                    Button {
+                        chatViewModel = ChatViewModel(groupId: recentMessage.groupId)
+                        self.shouldNavigateToChatView.toggle()
+                    } label: {
+                        HStack(spacing: 1.5) {
+                            WebImage(url: URL(string: recentMessage.url))
+                                .resizable()
+                                .scaledToFill()
+                                .frame(width: 64, height: 64)
+                                .clipped()
+                                .cornerRadius(64)
+                                .overlay(RoundedRectangle(cornerRadius: 64)
+                                    .stroke(Color.purple, lineWidth: 3))
+                                .shadow(radius: 3)
+                            Spacer()
+                            VStack(alignment: .leading, spacing: 3) {
+                                Text(recentMessage.title)
+                                    .font(.system(size: 16, weight: .bold))
+                                    .foregroundColor(textForegroundColor)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                
+                                Text(recentMessage.text)
+                                    .font(.system(size: 14))
+                                    .multilineTextAlignment(.leading)
+                                    .foregroundColor(Color(.systemGray))
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                    .lineLimit(2)
+                            }
+                            
+                            Spacer()
+                            
+                            Text(recentMessage.timeAgo)
+                                .font(.system(size: 14, weight: .semibold))
+                        }
+                        .padding(.vertical, 8)
+                        .contextMenu {
+                            Button(action: {
+                                viewModel.recentMessages.remove(at: index)
+                            }) {
+                                Text("Delete Chat from Feed")
+                                Image(systemName: "trash")
+                            }
+                            Button(action: {
+                                viewModel.recentMessages.remove(at: index)
+                                
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                                    viewModel.removeUserFromChat(groupId: recentMessage.groupId)
+                                }
+                                
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                                    viewModel.getRecentMessages()
+                                }
+                            }) {
+                                Text("Leave Chat")
+                                Image(systemName: "xmark.circle")
+                            }
+                        }
+                    }
+                    Divider()
+                }
+                .padding(.horizontal)
+                .padding(.top, 0)
+            }
+        )
+    }
+    
+    private var emptyChatsView: some View {
+        return AnyView(
+            ScrollView{
+                VStack {
+                    Text("You currently have no group chats :(")
+                        .font(.system(size: 18, weight: .bold))
+                        .foregroundColor(textForegroundColor)
+                        .padding(.top, 30)
+                    Text("Add trips to meet fellow travelers!")
+                        .font(.system(size: 18, weight: .bold))
+                        .foregroundColor(textForegroundColor)
+                        .padding(.top, 0.4)
+                    
+                    
+                    Button(action: {
+                        self.shouldNavigateToAddTripView.toggle()
+                    }) {
+                        Text("Add Trip")
+                            .font(.system(size: 16, weight: .bold))
+                            .foregroundColor(.white)
+                            .padding()
+                            .background(Color.purple)
+                            .cornerRadius(16)
+                    }
+                    .padding(.top, 10)
+                }
+                .padding(.horizontal)
+                VStack{
+                    Image("travelbudslogo")
+                        .resizable()
+                        .padding(.top, 80)
+                        .ignoresSafeArea()
+                }.padding(-15)
+            }
+        )
+    }
 }
+
 
 
  struct GroupChatsView_Previews: PreviewProvider {
