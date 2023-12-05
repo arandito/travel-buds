@@ -23,7 +23,8 @@ struct ChatListView: View {
     @State private var shouldNavigateToChatView = false
     @State private var shouldNavigateToAddTripView = false
     @Environment(\.colorScheme) var colorScheme
-    @State var chatViewModel = ChatViewModel(groupId:nil)
+    
+    @State var chatViewModel = ChatViewModel(groupId: nil)
     
     var textForegroundColor: Color {
         return colorScheme == .dark ? Color.white : Color.black
@@ -49,7 +50,7 @@ struct ChatListView: View {
                 listView
                 
                 NavigationLink("", isActive:$shouldNavigateToChatView){
-                    ChatView(cvm: chatViewModel)
+                    ChatView(cvm: chatViewModel, uvm: viewModel)
                 }
                 
                 NavigationLink("", isActive:$shouldNavigateToAddTripView){
@@ -217,9 +218,11 @@ struct ChatListView: View {
     }
 }
 
-struct GroupChatsView_Previews: PreviewProvider {
-    static var previews: some View {
-        ChatListView()
-            .preferredColorScheme(.light)
-        }
-}
+
+ struct GroupChatsView_Previews: PreviewProvider {
+ static var previews: some View {
+ ChatListView()
+ .preferredColorScheme(.light)
+ }
+ }
+ 
