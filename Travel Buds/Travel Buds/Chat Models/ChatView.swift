@@ -25,6 +25,7 @@ struct ChatView: View {
             .onTapGesture {
                 UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
             }
+            .navigationBarHidden(true)
         }
         .environmentObject(cvm)
         .environmentObject(uvm)

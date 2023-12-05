@@ -15,9 +15,8 @@ struct RecentMessage: Identifiable, Hashable {
     let senderId: String
     let groupId: String
     let timestamp: Firebase.Timestamp
-    var location = ""
-    var weekStartDate = ""
-    var title = ""
+    let title: String
+    let url: String
     
     
     var timeAgo: String {
@@ -36,6 +35,8 @@ struct RecentMessage: Identifiable, Hashable {
         self.text = data["text"] as? String ?? ""
         self.senderId = data["senderId"] as? String ?? ""
         self.groupId = data["groupId"] as? String ?? ""
+        self.title = data["title"] as? String ?? ""
+        self.url = data["url"] as? String ?? ""
     }
     
     func hash(into hasher: inout Hasher) {
@@ -174,7 +175,7 @@ class ChatViewModel: ObservableObject {
                         "groupId" : self.groupId ?? ""
                     ] as [String: Any]
                     
-                    document.setData(data) { error in
+                    document.setData(data, merge: true) { error in
                         if let error = error {
                             print(error.localizedDescription)
                             return

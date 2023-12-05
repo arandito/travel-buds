@@ -21,54 +21,80 @@ struct ChatListView: View {
     @ObservedObject private var viewModel = UserViewModel()
     @State private var isProfileImageLoaded = false
     @State private var shouldNavigateToChatView = false
-    
+    @State private var shouldNavigateToAddTripView = false
+    @Environment(\.colorScheme) var colorScheme
+    @State private var isLoading = false
     @State var chatViewModel = ChatViewModel(groupId: nil)
-    // @State var chatViewModel: ChatViewModel
+    
+    var textForegroundColor: Color {
+        return colorScheme == .dark ? Color.white : Color.black
+    }
     
     var body: some View {
         NavigationView {
-            
-            VStack {
-                customNavBar
-                messagesView
-                NavigationLink("", isActive:$shouldNavigateToChatView){
-                    ChatView(cvm: chatViewModel, uvm: viewModel)
+            ZStack{
+                VStack {
+                    navigationBar
+                    
+                    if !viewModel.isLoggedOut {
+                        VStack(alignment: .leading) {
+                            Text("Chats")
+                                .multilineTextAlignment(.leading)
+                                .font(.system(size: 30, weight: .bold))
+                                .foregroundColor(textForegroundColor)
+                        }
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.leading, 15)
+                        .padding(.bottom,11)
+                    }
+                    
+                    listView
+                    
+                    NavigationLink("", isActive:$shouldNavigateToChatView){
+                        ChatView(cvm: chatViewModel, uvm: viewModel)
+                    }
+                    
+                    NavigationLink("", isActive:$shouldNavigateToAddTripView){
+                        AddTripView()
+                    }
+                    .navigationBarBackButtonHidden(true)
                 }
-            }
-            .navigationBarHidden(true)
-            .fullScreenCover(isPresented: $viewModel.isLoggedOut, onDismiss: nil) {
-                LoginView(isLoginCompleted: {
-                    self.viewModel.isLoggedOut = false
-                    self.viewModel.getCurrentUser()
-                    self.viewModel.getRecentMessages()
-                })
+                .navigationBarHidden(true)
+                
+                .fullScreenCover(isPresented: $viewModel.isLoggedOut, onDismiss: nil) {
+                    LoginView(isLoginCompleted: {
+                        self.viewModel.isLoggedOut = false
+                        self.viewModel.getCurrentUser()
+                    })
+                }
+                .edgesIgnoringSafeArea(.bottom)
+                
             }
         }
         
     }
     
-    private var customNavBar: some View {
+    private var navigationBar: some View {
         HStack(spacing: 16) {
             if !viewModel.isLoggedOut {
                 WebImage(url:URL(string:viewModel.user?.profileImageUrl ?? ""))
                     .resizable()
                     .scaledToFill()
-                    .frame(width:50, height:50)
+                    .frame(width:56, height:56)
                     .clipped()
                     .cornerRadius(44)
-                VStack(alignment: .leading, spacing: 4) {
+                    .overlay(RoundedRectangle(cornerRadius: 64)
+                        .stroke(Color.white, lineWidth: 2))
+                    .shadow(radius: 3)
+                
+                VStack(alignment: .leading, spacing: 2) {
                     Text("\(viewModel.user?.firstName ?? "") \(viewModel.user?.lastName ?? "")")
                         .font(.system(size: 24, weight: .bold))
                         .foregroundColor(Color.white)
-                    HStack {
-                        Circle()
-                            .foregroundColor(.green)
-                            .frame(width: 14, height: 14)
-                            .padding(.trailing, -5)
-                        Text("online")
-                            .font(.system(size: 15))
-                            .foregroundColor(Color.white)
-                    }
+                    
+                    Text("\(viewModel.user?.userName ?? "")")
+                        .font(.system(size: 17))
+                        .foregroundColor(Color.white)
                 }
                 Spacer()
                 Button {
@@ -95,51 +121,142 @@ struct ChatListView: View {
         .background(viewModel.isLoggedOut ? Color.white : Color.purple)
     }
     
-    private var messagesView: some View {
+    private var listView: some View {
         if viewModel.isLoggedOut {
             return AnyView(Color.white.edgesIgnoringSafeArea(.all))
         } else {
             return AnyView(
                 ScrollView {
-                    ForEach(Array(viewModel.recentMessages.enumerated()), id:\.1) { index, recentMessage in
-                        VStack {
-                            Button {
-                                chatViewModel = ChatViewModel(groupId: recentMessage.groupId)
-                                self.shouldNavigateToChatView.toggle()
-                            } label: {
-                                HStack(spacing: 16) {
-                                    Image(systemName: "person.fill")
-                                        .font(.system(size: 32))
-                                        .padding(8)
-                                        .overlay(RoundedRectangle(cornerRadius: 44)
-                                            .stroke(Color(.label), lineWidth: 1)
-                                        )
-                                    VStack(alignment: .leading) {
-                                        Text(recentMessage.title)
-                                            .font(.system(size: 16, weight: .bold))
-                                        Text(recentMessage.text)
-                                            .font(.system(size: 14))
-                                            .multilineTextAlignment(/*@START_MENU_TOKEN@*/.leading/*@END_MENU_TOKEN@*/)
-                                            .foregroundColor(Color(.lightGray))
-                                    }
-                                    Spacer()
-                                    Text(recentMessage.timeAgo)
-                                        .font(.system(size: 14, weight: .semibold))
-                                }
-                                Divider()
-                                    .padding(.vertical, 8)
-                            }
+                    if !viewModel.recentMessages.isEmpty {
+                        Divider()
+                        ForEach(Array(viewModel.recentMessages.enumerated()), id:\.1) { index, recentMessage in
+                            messageCellView(index: index, recentMessage: recentMessage)
                         }
-                        .padding(.horizontal)
-                        .padding(.top, index == 0 ? 16 : 0)
-                        
+                        VStack{
+                            Image("travelbudslogo")
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                        }
+                        .edgesIgnoringSafeArea(.all)
+                        .padding(-15)
+                        .padding(.top, 50)
+                    } else {
+                        emptyChatsView
                     }
                     
                 }.padding(.top, -8)
             )
         }
     }
+    
+    private func messageCellView(index: Int, recentMessage: RecentMessage) -> some View {
+        return AnyView(
+            ScrollView {
+                VStack {
+                    Button {
+                        chatViewModel = ChatViewModel(groupId: recentMessage.groupId)
+                        self.shouldNavigateToChatView.toggle()
+                    } label: {
+                        HStack(spacing: 1.5) {
+                            WebImage(url: URL(string: recentMessage.url))
+                                .resizable()
+                                .scaledToFill()
+                                .frame(width: 64, height: 64)
+                                .clipped()
+                                .cornerRadius(64)
+                                .overlay(RoundedRectangle(cornerRadius: 64)
+                                    .stroke(Color.purple, lineWidth: 3))
+                                .shadow(radius: 3)
+                            Spacer()
+                            VStack(alignment: .leading, spacing: 3) {
+                                Text(recentMessage.title)
+                                    .font(.system(size: 16, weight: .bold))
+                                    .foregroundColor(textForegroundColor)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                
+                                Text(recentMessage.text)
+                                    .font(.system(size: 14))
+                                    .multilineTextAlignment(.leading)
+                                    .foregroundColor(Color(.systemGray))
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                    .lineLimit(2)
+                            }
+                            
+                            Spacer()
+                            
+                            Text(recentMessage.timeAgo)
+                                .font(.system(size: 14, weight: .semibold))
+                        }
+                        .padding(.vertical, 8)
+                        .contextMenu {
+                            Button(action: {
+                                viewModel.recentMessages.remove(at: index)
+                            }) {
+                                Text("Delete Chat from Feed")
+                                Image(systemName: "trash")
+                            }
+                            Button(action: {
+                                viewModel.recentMessages.remove(at: index)
+                                
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                                    viewModel.removeUserFromChat(groupId: recentMessage.groupId)
+                                }
+                                
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                                    viewModel.getRecentMessages()
+                                }
+                            }) {
+                                Text("Leave Chat")
+                                Image(systemName: "xmark.circle")
+                            }
+                        }
+                    }
+                    Divider()
+                }
+                .padding(.horizontal)
+                .padding(.top, 0)
+            }
+        )
+    }
+    
+    private var emptyChatsView: some View {
+        return AnyView(
+            ScrollView{
+                VStack {
+                    Text("You currently have no group chats :(")
+                        .font(.system(size: 18, weight: .bold))
+                        .foregroundColor(textForegroundColor)
+                        .padding(.top, 30)
+                    Text("Add trips to meet fellow travelers!")
+                        .font(.system(size: 18, weight: .bold))
+                        .foregroundColor(textForegroundColor)
+                        .padding(.top, 0.4)
+                    
+                    
+                    Button(action: {
+                        self.shouldNavigateToAddTripView.toggle()
+                    }) {
+                        Text("Add Trip")
+                            .font(.system(size: 16, weight: .bold))
+                            .foregroundColor(.white)
+                            .padding()
+                            .background(Color.purple)
+                            .cornerRadius(16)
+                    }
+                    .padding(.top, 10)
+                }
+                .padding(.horizontal)
+                VStack{
+                    Image("travelbudslogo")
+                        .resizable()
+                        .padding(.top, 80)
+                        .ignoresSafeArea()
+                }.padding(-15)
+            }
+        )
+    }
 }
+
 
 
  struct GroupChatsView_Previews: PreviewProvider {

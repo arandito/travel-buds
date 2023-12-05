@@ -54,7 +54,7 @@ struct AddTripView: View {
                 }
                 
                 NavigationLink(
-                    destination: tripConfirmedView(destination: selectedDestination),
+                    destination: tripConfirmedView(destination: selectedDestination, interest: selectedInterest),
                     isActive: $showTripConfirmed,
                     label: { EmptyView() }
                 )
@@ -201,7 +201,7 @@ struct AddTripView: View {
                 .pickerStyle(MenuPickerStyle())
                 .padding()
             }
-            .background(Color.blue.opacity(0.2))
+            .background(Color.purple.opacity(0.2))
             .cornerRadius(10)
             .padding(5)
         }
@@ -227,30 +227,60 @@ struct AddTripView: View {
                     }
                     .padding()
             }
-            .background(Color.blue.opacity(0.2))
+            .background(Color.purple.opacity(0.2))
             .cornerRadius(10)
             .padding(5)
         }
     }
     
     struct tripConfirmedView: View{
+        @State private var imageURL: String?
         var destination = String()
+        var interest = String()
         
         var body: some View{
             VStack{
                 Text("Your Trip to \(destination) Has Been Confirmed!")
-                    .font(/*@START_MENU_TOKEN@*/.title/*@END_MENU_TOKEN@*/)
+                    .font(.title)
                     .bold()
                     .multilineTextAlignment(.center)
+                if let imageURL = imageURL {
+                    WebImage(url: URL(string: imageURL))
+                        .resizable()
+                        .scaledToFit()
+                } else {
+                    Image("travelbudslogo")
+                        .resizable()
+                        .scaledToFit()
+                }
+            }
+            .onAppear {
+                getImage(destination: destination, interest: interest) { url in
+                    if let url = url {
+                        imageURL = url
+                    }
+                }
+            }
+        }
+        func getImage(destination: String, interest: String, completion: @escaping (String?) -> Void) {
+            FirebaseManager.shared.firestore.collection("tripImages").document(destination + "_" + interest).getDocument { snapshot, error in
+                if let error = error {
+                    print("Error fetching city image URL for \(destination): \(error.localizedDescription)")
+                    completion(nil)
+                    return
+                }
                 
-                Image("travelbudslogo")
-                    .resizable()
-                    .scaledToFit()
+                if let data = snapshot?.data(), let Url = data["URL"] as? String {
+                    completion(Url)
+                } else {
+                    completion(nil)
+                }
             }
         }
     }
-    
 }
+
+
 
 
 

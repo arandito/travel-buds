@@ -32,109 +32,132 @@ struct LoginView: View {
 
     var body: some View {
         NavigationView {
-            ScrollView {
-                VStack(spacing: 16) {
-                    Picker(selection: $isLoginMode, label: Text("Picker")) {
-                        Text("Log in").tag(true)
-                        Text("Create Account").tag(false)
-                    }.pickerStyle(SegmentedPickerStyle())
-                        .padding()
+            ZStack {
+                VStack {
+                    Spacer()
                     
-                    if !isLoginMode {
-                        Button {
-                            showImageSelector.toggle()
-                        } label: {
-                            VStack {
-                                if let image = self.image {
-                                    Image(uiImage:image)
-                                        .resizable()
-                                        .scaledToFill()
-                                        .frame(width:128, height:128)
-                                        .cornerRadius(64)
-                                } else {
-                                    Image(systemName: "person.fill")
-                                        .font(.system(size: 96))
-                                        .padding()
-                                        .foregroundColor(.purple)
+                    if self.isLoginMode {
+                        Image("travelbudslogo")
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .opacity(0.8)
+                    } else {
+                        Image("travelbudslogo")
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .opacity(0.2)
+                    }
+                }.edgesIgnoringSafeArea(.all)
+                
+                ScrollView {
+                    VStack(spacing: 16) {
+                        Picker(selection: $isLoginMode, label: Text("Picker")) {
+                            Text("Log in").tag(true)
+                            Text("Create Account").tag(false)
+                        }.pickerStyle(SegmentedPickerStyle())
+                            .padding()
+                        
+                        if !isLoginMode {
+                            Button {
+                                showImageSelector.toggle()
+                            } label: {
+                                VStack {
+                                    if let image = self.image {
+                                        Image(uiImage:image)
+                                            .resizable()
+                                            .scaledToFill()
+                                            .clipped()
+                                            .frame(width:120, height:120)
+                                            .cornerRadius(64)
+                                            .overlay(RoundedRectangle(cornerRadius: 64)
+                                                .stroke(Color.purple, lineWidth: 3))
+                                            .shadow(radius: 4)
+                                        
+                                    } else {
+                                        Image(systemName: "person.crop.circle.fill")
+                                            .font(.system(size: 100))
+                                            .foregroundColor(.purple)
+                                            .opacity(0.9)
+                                        
+                                        Text("Choose profile picture")
+                                            .font(.system(size: 15))
+                                            .padding(.top, -15)
+                                            .foregroundColor(.purple)
+                                    }
                                 }
                             }
                         }
+                        
+                        Group {
+                            if !isLoginMode {
+                                TextField("First Name", text: $firstName)
+                                    .disableAutocorrection(true)
+                                TextField("Last Name", text: $lastName)
+                                    .disableAutocorrection(true)
+                                TextField("Username", text: $userName)
+                                    .disableAutocorrection(true)
+                                    .autocapitalization(.none)
+                                    .foregroundStyle(Color.primary)
+                                TextField("Email", text: $signUpEmail)
+                                    .keyboardType(.emailAddress)
+                                    .autocapitalization(.none)
+                                    .foregroundStyle(Color.primary)
+                                SecureField("Password", text: $signUpPassword)
+                                    .autocapitalization(.none)
+                                    .foregroundStyle(Color.primary)
+                            } else {
+                                TextField("Email", text: $logInEmail)
+                                    .keyboardType(.emailAddress)
+                                    .autocapitalization(.none)
+                                    .textFieldStyle(DefaultTextFieldStyle())
+                                SecureField("Password", text: $logInPassword)
+                                    .autocapitalization(.none)
+                            }
+                        }
+                        .padding(12)
+                        .background(textFieldBackgroundColor)
+                        .cornerRadius(8)
+                        
+                        
+                        
+                        Button {
+                            handleAction()
+                        } label: {
+                            HStack {
+                                Spacer()
+                                Text(isLoginMode ? "Log in" : "Create Account")
+                                    .foregroundColor(.white)
+                                    .padding(.vertical, 15)
+                                    .font(.system(size: 20, weight: .semibold))
+                                Spacer()
+                            }
+                            .background(Color.purple)
+                            .cornerRadius(8)
+                        }
+                    }.padding()
+                    
+                    
+                    if let errorMessage = errorMessage {
+                        Text(errorMessage)
+                            .foregroundColor(.red)
+                            .padding(.top, 6)
                     }
                     
-                    Group {
-                        if !isLoginMode {
-                            TextField("First Name", text: $firstName)
-                                .disableAutocorrection(true)
-                            TextField("Last Name", text: $lastName)
-                                .disableAutocorrection(true)
-                            TextField("Username", text: $userName)
-                                .disableAutocorrection(true)
-                                .autocapitalization(.none)
-                                .foregroundStyle(Color.primary)
-                            TextField("Email", text: $signUpEmail)
-                                .keyboardType(.emailAddress)
-                                .autocapitalization(.none)
-                                .foregroundStyle(Color.primary)
-                            SecureField("Password", text: $signUpPassword)
-                                .autocapitalization(.none)
-                                .foregroundStyle(Color.primary)
-                        } else {
-                            TextField("Email", text: $logInEmail)
-                                .keyboardType(.emailAddress)
-                                .autocapitalization(.none)
-                                .textFieldStyle(DefaultTextFieldStyle())
-                            SecureField("Password", text: $logInPassword)
-                                .autocapitalization(.none)
-                        }
-                    }
-                    .padding(12)
-                    .background(textFieldBackgroundColor)
-                    .cornerRadius(8)
-    
-                
-                
-                    Button {
-                        handleAction()
-                    } label: {
-                        HStack {
-                            Spacer()
-                            Text(isLoginMode ? "Log in" : "Create Account")
-                                .foregroundColor(.white)
-                                .padding(.vertical, 15)
-                                .font(.system(size: 20, weight: .semibold))
-                            Spacer()
-                        }
-                        .background(Color.purple)
-                        .cornerRadius(8)
-                    }
-                }.padding()
-                
-                if let errorMessage = errorMessage {
-                    Text(errorMessage)
-                        .foregroundColor(.red)
-                        .padding(.top, 8)
                 }
-                
             }
             .navigationTitle(isLoginMode ? "Log in" : "Create Account")
             .background(Color(.init(white: 0, alpha: 0.05)).ignoresSafeArea())
             .onChange(of: isLoginMode) { newIsLoginMode, _ in
                 errorMessage = nil
             }
-            .navigationBarItems(
-                trailing:
-                    HStack {
-                        Image("travelbudslogo")
-                            .resizable()
-                            .frame(width: 70, height: 70)
-                            .padding(.top, 80)
-                    }
-            )
+        
         }
         .navigationViewStyle(StackNavigationViewStyle())
         .fullScreenCover(isPresented: $showImageSelector, onDismiss: nil){
             ImagePicker(image: $image)
+                .edgesIgnoringSafeArea(.all)
         }
+
     }
     
     private func handleAction() {
@@ -152,6 +175,10 @@ struct LoginView: View {
             }
         } else {
             print("Register a new account.")
+            if image == nil {
+                errorMessage = "Please choose a profile picture."
+                return
+            }
             if firstName == "" {
                 errorMessage = "Please include your first name."
                 return

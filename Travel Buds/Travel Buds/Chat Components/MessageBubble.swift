@@ -5,7 +5,7 @@
 //  Created by Yuya Taniguchi on 11/16/23.
 //
 
-import SwiftUI
+/*import SwiftUI
 
 struct MessageBubble: View {
     var message: Message
@@ -130,3 +130,4 @@ struct MessageBubble_Previews: PreviewProvider {
         MessageBubble(message: message)
     }
 }
+*/
