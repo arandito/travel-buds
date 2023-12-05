@@ -17,6 +17,7 @@ struct AddTripView: View {
     
     @State private var showBadRequest = false
     @State private var showTripConfirmed = false
+        
     
     let destinationOptions = ["New York", "Barcelona", "Budapest", "Rome", "Paris"]
     let interestOptions = ["Night Life", "Museums", "Food", "Nature", "Shopping"]
@@ -29,48 +30,92 @@ struct AddTripView: View {
         let group_id, pending_id : String
     }
 
+    
     var body: some View {
         NavigationView{
-            VStack(spacing: 20) {
-                CardView(selectedOption: $selectedDestination, options: destinationOptions, optionTitle: "Select a Destination")
-                    .frame(maxWidth: .infinity)
-                
-                CardView(selectedOption: $selectedInterest, options: interestOptions, optionTitle: "Select an Interest")
-                    .frame(maxWidth: .infinity)
-                
-                dateCardView(startDate: $weekStartDate, endDate: $weekEndDate)
-                
-                Divider()
-                HStack{
-                    Text("Trip Week")
-                        .bold()
-                    
-                    Spacer()
-                    
-                    Text("\(weekStartDate.formatted(date: .abbreviated, time: .omitted)) to \(weekEndDate.formatted(date: .abbreviated, time: .omitted))")
+            Form{
+                Section{
+                    VStack{
+                        Picker("Select Destination", selection: $selectedDestination) {
+                            ForEach(destinationOptions, id: \.self) {
+                                Text($0)
+                            }
+                        }
+                        .pickerStyle(MenuPickerStyle())
+                        .padding()
+                        Divider()
+                        
+                        Picker("Select Interest", selection: $selectedInterest) {
+                            ForEach(interestOptions, id: \.self) {
+                                Text($0)
+                            }
+                        }
+                        .pickerStyle(MenuPickerStyle())
+                        .padding()
+
+                        
+                        Divider()
+                        
+                        DatePicker("Select Week", selection: $weekStartDate, in: Date()..., displayedComponents: .date)
+                            .onChange(of: weekStartDate) { newDate in
+                                weekStartDate = findNextMonday(from: newDate); weekEndDate = addWeek(to: weekStartDate)!
+                            }
+                            .padding()
+                    }
                 }
-                Button("Add Trip") {
-                    addTrip()
+                header: {
+                    Text("Trip Details")
                 }
+                .listRowBackground(Color.purple.opacity(0.1))
                 
-                NavigationLink(
-                    destination: tripConfirmedView(destination: selectedDestination, interest: selectedInterest),
-                    isActive: $showTripConfirmed,
-                    label: { EmptyView() }
-                )
-                .hidden()
+                Section{
+                    VStack{
+                        Spacer()
+                        HStack{
+                            Spacer()
+                            Text("\(selectedInterest) in \(selectedDestination) from \(weekStartDate.formatted(date: .abbreviated, time: .omitted)) to \(weekEndDate.formatted(date: .abbreviated, time: .omitted))")
+                                .multilineTextAlignment(.center)
+                                .font(.title3)
+                            Spacer()
+                        }
+                        Spacer()
+                        
+                        Divider()
+                        
+                        VStack{
+                            Spacer()
+                            Button("Add Trip") {
+                                addTrip()
+                            }
+                            .bold()
+                            .frame(maxWidth: .infinity, alignment: .center)
+                            .cornerRadius(100)
+                            NavigationLink(
+                                destination: tripConfirmedView(destination: selectedDestination),
+                                isActive: $showTripConfirmed,
+                                label: { EmptyView() }
+                                )
+                            .hidden()
+                        }
+                    }
+                }
+                header: {
+                    Text("Confirm Trip")
+                }
+                .listRowBackground(Color.purple.opacity(0.1))
+                
             }
             .alert(isPresented: $showBadRequest) {
                         Alert(
                             title: Text("That Didn't Seem Right..."),
                             message: Text("You may have entered overlapping dates. Please try again!"),
                             dismissButton: .default(Text("OK")) {
-                                // Handle the OK button tap if needed
-                                // You can put additional logic here
                             }
                         )
             }
             .navigationTitle("Add Trip")
+            .background(Color.purple.opacity(0.3))
+            .accentColor(.blue)
         }
     }
         
@@ -158,16 +203,13 @@ struct AddTripView: View {
                             "weekStartDate": weekStartDate,
                             "chatId": "",
                             "destination": destination,
-                            "weekEndDate": weekEndDate 
+                            "weekEndDate": weekEndDate
                         ]
 
                         ref.updateData([
                             "trips": FieldValue.arrayUnion([tripData])
                         ])
-                        
                         print(responseData)
-                        
-                        //add trip to trips
                     } catch {
                         DispatchQueue.main.async {
                             showBadRequest.toggle()
@@ -179,110 +221,24 @@ struct AddTripView: View {
         task.resume()
     }
     
-    //this is where i'll handle UI stuff
-    struct CardView: View {
-        @Binding var selectedOption: String
-        var options : [String] = []
-        var optionTitle: String
-        
-        var body: some View {
-            HStack(spacing: 40) {
-                Text(optionTitle)
-                    .font(.title2)
-                    .bold()
-                    .frame(alignment: .leading)
-                    .padding()
-                
-                Picker(optionTitle, selection: $selectedOption) {
-                    ForEach(options, id: \.self) {
-                        Text($0)
-                    }
-                }
-                .pickerStyle(MenuPickerStyle())
-                .padding()
-            }
-            .background(Color.purple.opacity(0.2))
-            .cornerRadius(10)
-            .padding(5)
-        }
-    }
-    
-    struct dateCardView: View {
-        @Binding var startDate: Date
-        @Binding var endDate: Date
-        
-        var body: some View{
-            HStack(spacing: 40){
-                Text("Select the Week")
-                    .font(.title2)
-                    .bold()
-                    .padding()
-                
-                Spacer()
-                
-                DatePicker("Select a Monday", selection: $startDate, in: Date()..., displayedComponents: .date)
-                    .labelsHidden()
-                    .onChange(of: startDate) { newDate in
-                        startDate = AddTripView().findNextMonday(from: newDate); endDate = AddTripView().addWeek(to: startDate)!
-                    }
-                    .padding()
-            }
-            .background(Color.purple.opacity(0.2))
-            .cornerRadius(10)
-            .padding(5)
-        }
-    }
-    
     struct tripConfirmedView: View{
-        @State private var imageURL: String?
         var destination = String()
-        var interest = String()
         
         var body: some View{
             VStack{
                 Text("Your Trip to \(destination) Has Been Confirmed!")
-                    .font(.title)
+                    .font(/*@START_MENU_TOKEN@*/.title/*@END_MENU_TOKEN@*/)
                     .bold()
                     .multilineTextAlignment(.center)
-                if let imageURL = imageURL {
-                    WebImage(url: URL(string: imageURL))
-                        .resizable()
-                        .scaledToFit()
-                } else {
-                    Image("travelbudslogo")
-                        .resizable()
-                        .scaledToFit()
-                }
-            }
-            .onAppear {
-                getImage(destination: destination, interest: interest) { url in
-                    if let url = url {
-                        imageURL = url
-                    }
-                }
-            }
-        }
-        func getImage(destination: String, interest: String, completion: @escaping (String?) -> Void) {
-            FirebaseManager.shared.firestore.collection("tripImages").document(destination + "_" + interest).getDocument { snapshot, error in
-                if let error = error {
-                    print("Error fetching city image URL for \(destination): \(error.localizedDescription)")
-                    completion(nil)
-                    return
-                }
                 
-                if let data = snapshot?.data(), let Url = data["URL"] as? String {
-                    completion(Url)
-                } else {
-                    completion(nil)
-                }
+                Image("travelbudslogo")
+                    .resizable()
+                    .scaledToFit()
             }
         }
     }
+    
 }
-
-
-
-
 
 struct AddTripPreview: PreviewProvider {
     static var previews: some View {

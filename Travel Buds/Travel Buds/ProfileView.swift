@@ -41,13 +41,41 @@ struct ProfileView: View {
                 
                 
                 //Additional Info
-                VStack(spacing: 20){
-                    Divider()
-                    ProfileInfoRow(title: "Email", value: viewModel.user?.email ?? "")
-                    Divider()
-                    ProfileInfoRow(title: "Username", value: viewModel.user?.userName ?? "")
-                    Divider()
+                
+                Spacer()
+                
+                Form{
+                    Section{
+                        VStack(spacing: 20){
+                            ProfileInfoRow(title: "Email", value: viewModel.user?.email ?? "")
+                                .padding(10)
+                            Divider()
+                            ProfileInfoRow(title: "Username", value: viewModel.user?.userName ?? "")
+                                .padding(10)
+                        }
+                    }
+                    header: {
+                            Text("Info")
+                    }
+                    .listRowBackground(Color.purple.opacity(0.1))
+                    
+                    
+                    let tripsList : [Trip] = viewModel.user?.trips ?? []
+                    
+                    Section{
+                        ForEach(tripsList, id:\.weekStartDate){ newTrip in
+                            Text("\(newTrip.interest) @ \(newTrip.destination)")
+                                .multilineTextAlignment(.leading)
+                                .bold()
+                        }
+                    }
+                    header: {
+                        Text("Trips")
+                    }
+                    .listRowBackground(Color.purple.opacity(0.1))
                 }
+                Spacer()
+                
                 Text("You've been to:")
                     .font(.title)
                 ScrollView {
@@ -72,7 +100,7 @@ struct ProfileView: View {
                     showFeedbackAlert.toggle()
                 }) {
                     Image(systemName: "envelope")
-                        .foregroundColor(.purple.opacity(0.7))
+                        .foregroundColor(.blue)
                 }
                 .alert("Enter your feedback", isPresented: $showFeedbackAlert) {
                     TextField("Feedback", text: $feedbackText)
@@ -141,6 +169,13 @@ struct ProfileView: View {
     
 }
 
+
+struct ProfileViewPreview: PreviewProvider{
+    static var previews: some View{
+        ProfileView()
+    }
+}
+
 //Struct to allow for extra user data to be displayed
 struct ProfileInfoRow: View {
     var title: String
@@ -150,11 +185,9 @@ struct ProfileInfoRow: View {
         HStack {
             Text(title)
                 .font(.headline)
-                .foregroundColor(.black)
             Spacer()
             Text(value)
                 .font(.body)
-                .foregroundColor(.black)
         }
     }
 }
