@@ -43,7 +43,8 @@ class UserViewModel: ObservableObject {
             let userName = data["userName"] as? String ?? ""
             let firstName = data["firstName"] as? String ?? ""
             let lastName = data["lastName"] as? String ?? ""
-            let uid = data["uid"] as? String ?? ""
+            // let uid = data["uid"] as? String ?? ""
+            let uid = uid
             let email = data["email"] as? String ?? ""
             let profileImageUrl = data["profileImageUrl"] as? String ?? ""
             let groups = data["groups"] as? [String] ?? []

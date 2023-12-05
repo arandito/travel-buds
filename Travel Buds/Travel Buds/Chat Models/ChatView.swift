@@ -7,11 +7,13 @@
 
 import SwiftUI
 import Firebase
+import SDWebImageSwiftUI
 
 
 struct ChatView: View {
     
     @ObservedObject var cvm: ChatViewModel
+    @ObservedObject var uvm: UserViewModel
     
     var body: some View {
         NavigationView {
@@ -24,12 +26,25 @@ struct ChatView: View {
                 UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
             }
         }
+        .environmentObject(cvm)
+        .environmentObject(uvm)
+        /*
+        .onAppear {
+            cvm.fetchUserImageURLs(groupId: cvm.groupId) { userImageURLs in
+                print("User Image URLs")
+                print(userImageURLs)
+            }
+        }
+        */
+        //}
     }
+    
     
     
     struct MessagesView: View {
         
         @EnvironmentObject private var cvm: ChatViewModel
+        @EnvironmentObject private var uvm: UserViewModel
         
         var body: some View {
             
@@ -44,9 +59,9 @@ struct ChatView: View {
                     }
                     .onAppear {
                         DispatchQueue.main.async {
-                            withAnimation(.easeOut(duration: 0.5)) {
-                                scrollViewProxy.scrollTo("Empty", anchor: .bottom)
-                            }
+                            //withAnimation(.easeOut(duration: 0.5)) {
+                            scrollViewProxy.scrollTo("Empty", anchor: .bottom)
+                            //}
                         }
                     }
                     .onChange(of: cvm.chatMessages.count) { _ in
@@ -65,14 +80,17 @@ struct ChatView: View {
     }
 }
 
+
 #if DEBUG
 struct ChatView_Previews: PreviewProvider {
     static var previews: some View {
         let cvm = ChatViewModel(groupId: "Group2")
-        ChatView(cvm: cvm)
+        let uvm = UserViewModel()
+        ChatView(cvm: cvm, uvm: uvm)
     }
 }
 #endif
+
 
 
 

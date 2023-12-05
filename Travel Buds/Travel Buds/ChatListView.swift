@@ -22,7 +22,8 @@ struct ChatListView: View {
     @State private var isProfileImageLoaded = false
     @State private var shouldNavigateToChatView = false
     
-    @State var chatViewModel = ChatViewModel(groupId:nil)
+    @State var chatViewModel = ChatViewModel(groupId: nil)
+    // @State var chatViewModel: ChatViewModel
     
     var body: some View {
         NavigationView {
@@ -31,7 +32,7 @@ struct ChatListView: View {
                 customNavBar
                 messagesView
                 NavigationLink("", isActive:$shouldNavigateToChatView){
-                    ChatView(cvm: chatViewModel)
+                    ChatView(cvm: chatViewModel, uvm: viewModel)
                 }
             }
             .navigationBarHidden(true)
@@ -140,9 +141,11 @@ struct ChatListView: View {
     }
 }
 
-struct GroupChatsView_Previews: PreviewProvider {
-    static var previews: some View {
-        ChatListView()
-            .preferredColorScheme(.light)
-        }
-}
+
+ struct GroupChatsView_Previews: PreviewProvider {
+ static var previews: some View {
+ ChatListView()
+ .preferredColorScheme(.light)
+ }
+ }
+ 
