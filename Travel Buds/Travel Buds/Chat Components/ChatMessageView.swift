@@ -47,12 +47,30 @@ struct ChatMessageView: View {
                 .cornerRadius(15)
                 .shadow(radius: 2, x: 0, y: 2)
                 
+                if let profileImageUrl = uvm.user?.profileImageUrl, !profileImageUrl.isEmpty {
+                    WebImage(url: URL(string: profileImageUrl))
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: 30, height: 30)
+                        .clipped()
+                        .cornerRadius(44)
+                } else {
+                    Image(systemName: "person.fill")
+                        .resizable()
+                        .frame(width: 30, height: 30)
+                        .clipped()
+                        .cornerRadius(44)
+                }
+                
+                /*
                 WebImage(url:URL(string:uvm.user?.profileImageUrl ?? ""))
                     .resizable()
                     .scaledToFill()
                     .frame(width: 30, height: 30)
                     .clipped()
                     .cornerRadius(44)
+                */
+                
             }
         }
     }
@@ -75,9 +93,8 @@ struct ChatMessageView: View {
                         .clipped()
                         .cornerRadius(44)
                 } else {
-                    Image("person.fill")
+                    Image(systemName: "person.fill")
                         .resizable()
-                        .scaledToFill()
                         .frame(width: 30, height: 30)
                         .clipped()
                         .cornerRadius(44)

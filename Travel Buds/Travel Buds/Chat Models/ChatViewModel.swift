@@ -60,10 +60,11 @@ class ChatViewModel: ObservableObject {
     init(groupId: String?) {
         self.groupId = groupId
         fetchMessages()
-        fetchUserImageURLs(groupId: self.groupId) { userImageURLs in
-            self.userImageURLs = userImageURLs
+        if self.groupId != nil {
+            fetchUserImageURLs(groupId: self.groupId) { userImageURLs in
+                self.userImageURLs = userImageURLs
+            }
         }
-        
 
     }
     

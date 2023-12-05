@@ -23,6 +23,7 @@ struct ChatListView: View {
     @State private var shouldNavigateToChatView = false
     
     @State var chatViewModel = ChatViewModel(groupId: nil)
+    // @State var chatViewModel: ChatViewModel
     
     var body: some View {
         NavigationView {
@@ -140,9 +141,11 @@ struct ChatListView: View {
     }
 }
 
-struct GroupChatsView_Previews: PreviewProvider {
-    static var previews: some View {
-        ChatListView()
-            .preferredColorScheme(.light)
-        }
-}
+
+ struct GroupChatsView_Previews: PreviewProvider {
+ static var previews: some View {
+ ChatListView()
+ .preferredColorScheme(.light)
+ }
+ }
+ 
