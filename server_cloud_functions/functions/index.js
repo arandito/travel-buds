@@ -2,12 +2,13 @@
 const {logger} = require("firebase-functions");
 const {setGlobalOptions} = require("firebase-functions/v2/options");
 const {onRequest} = require("firebase-functions/v2/https");
-// const {onDocumentWritten} = require("firebase-functions/v2/firestore");
+const {onDocumentCreated} = require("firebase-functions/v2/firestore");
 
 // The Firebase Admin SDK to access Firestore. Also for document field
 // array operations and batch writes.
 const {initializeApp} = require("firebase-admin/app");
-const {getFirestore, FieldValue} = require("firebase-admin/firestore");
+const {getFirestore, FieldValue, Timestamp} =
+    require("firebase-admin/firestore");
 
 // Request body-parser.
 const jsonParser = require("body-parser").json();
@@ -16,10 +17,10 @@ const jsonParser = require("body-parser").json();
 // const {onSchedule} = require{"firebase-functions/v2/scheduler"};
 
 initializeApp();
-setGlobalOptions({maxInstances: 10, region: "us-east1"});
+setGlobalOptions({maxInstances: 10, region: "us-east1", timeoutSeconds: 3});
 const db = getFirestore();
 
-exports.helloWorld = onRequest({timeoutSeconds: 1, cors: true}, (req, res) => {
+exports.helloWorld = onRequest({cors: true}, (req, res) => {
   logger.info("Hello logs!", {structuredData: true});
   return res.send("Hello from Firebase!");
 });
@@ -28,7 +29,7 @@ exports.helloWorld = onRequest({timeoutSeconds: 1, cors: true}, (req, res) => {
 // of same trip. This is easy if they are in a group for trip already.
 // Might need to track pending as well?
 exports.makeGroup =
-onRequest({timeoutSeconds: 5, cors: true}, async (req, res) => {
+onRequest({cors: true}, async (req, res) => {
   // if (req.auth != true) {
   //   res.status(401).send("Unauthorized:" +
   //       "Client failed to authenticate with the server.");
@@ -151,4 +152,68 @@ onRequest({timeoutSeconds: 5, cors: true}, async (req, res) => {
     group_id: `${myGroupDoc.id}`,
     pending_id: "",
   });
+});
+
+// Update/Create userDocs in recentMessages with new group Doc
+// with init message from travelBuddies
+// Add 1 something to messages.
+exports.sendInitialGroupMessage =
+onDocumentCreated("groups/{groupId}", async (event) => {
+  const snapshot = event.data;
+  if (!snapshot) {
+    console.error("No data/snapshot associated with created group.");
+    return;
+  }
+
+  const groupId = snapshot.id;
+  const fields = snapshot.data();
+  const members = fields.members;
+  const destination = fields.destination;
+  const interest = fields.interest;
+  const weekStartDate = fields.weekStartDate;
+  const weekEndDate = fields.weekEndDate;
+  const text = "Hi everyone! Say hello to your new Travel Buddies! " +
+      "Note, while we've matched you " +
+      "with people that would be in " + destination + " somewhere " +
+      "between " + weekStartDate + " and " + weekEndDate + ", you may be " +
+      "arriving and/or departing at slightly different times! This group " +
+      "chat will NOT EXPIRE over time. However, you may manually leave " +
+      "the group chat at any time. The Travel Buddies team hopes you " +
+      "have fun in " + destination + " with " + interest + "!" +
+      "\n- The Travel Buddies Team";
+
+  const batch = db.batch();
+  const timestamp = Timestamp.now();
+  members.forEach((memberId) => {
+    const groupRecentMessageDoc = db
+        .collection("recentMessages")
+        .doc(memberId)
+        .collection("messages")
+        .doc(groupId);
+
+    batch.set(groupRecentMessageDoc, {
+      groupId: groupId,
+      senderId: "travelBuddies",
+      text: text,
+      timestamp: timestamp,
+    });
+  });
+
+  const messageDoc = db
+      .collection("messages")
+      .doc(groupId)
+      .collection(groupId)
+      .doc();
+  batch.set(messageDoc, {
+    senderId: "travelBuddies",
+    text: text,
+    timestamp: timestamp,
+  });
+
+  try {
+    await batch.commit();
+  } catch (error) {
+    logger.log("Error, no changes to Firestore were made.");
+  }
+  return;
 });
