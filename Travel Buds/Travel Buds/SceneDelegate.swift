@@ -14,9 +14,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
             if let windowScene = scene as? UIWindowScene {
                 let window = UIWindow(windowScene: windowScene)
-                window.rootViewController = UIHostingController(rootView: TabBarView()) // Use your initial SwiftUI view here
-                // let cvm = ChatViewModel(groupId: "Group2")
-                // window.rootViewController = UIHostingController(rootView: ChatView(cvm: cvm))
+                window.rootViewController = UIHostingController(rootView: LoginView(isLoginCompleted: {})) // Use your initial SwiftUI view here
                 self.window = window
                 window.makeKeyAndVisible()
             }

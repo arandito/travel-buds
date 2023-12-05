@@ -28,15 +28,6 @@ struct ChatView: View {
         }
         .environmentObject(cvm)
         .environmentObject(uvm)
-        /*
-        .onAppear {
-            cvm.fetchUserImageURLs(groupId: cvm.groupId) { userImageURLs in
-                print("User Image URLs")
-                print(userImageURLs)
-            }
-        }
-        */
-        //}
     }
     
     
