@@ -53,6 +53,7 @@ struct ChatListView: View {
                     NavigationLink("", isActive:$shouldNavigateToChatView){
                         ChatView(cvm: chatViewModel, uvm: viewModel)
                     }
+                    .navigationBarHidden(true)
                     
                     NavigationLink("", isActive:$shouldNavigateToAddTripView){
                         AddTripView()
