@@ -48,7 +48,7 @@ class ChatViewModel: ObservableObject {
     @Published var chatText = ""
     @Published var errorMessage = ""
     @Published var chatMessages = [Message]()
-    @Published var userImageURLs = [String: String]()
+    @Published var userImageURLs = [String : String]()
     
     @Published var recentMessages = [RecentMessage]()
     var listener: ListenerRegistration?
@@ -60,6 +60,11 @@ class ChatViewModel: ObservableObject {
     init(groupId: String?) {
         self.groupId = groupId
         fetchMessages()
+        fetchUserImageURLs(groupId: self.groupId) { userImageURLs in
+            self.userImageURLs = userImageURLs
+        }
+        
+
     }
     
     func fetchMessages() {
@@ -69,7 +74,7 @@ class ChatViewModel: ObservableObject {
         }
         
         guard let groupId = self.groupId else {
-            print("Group ID invalid")
+            // print("Group ID invalid")
             return
         }
         
@@ -106,8 +111,8 @@ class ChatViewModel: ObservableObject {
             return
         }
         
+        
         guard let groupId = self.groupId else {
-            print("Group ID invalid")
             return
         }
         
@@ -182,33 +187,57 @@ class ChatViewModel: ObservableObject {
     }
     
 
-    /*
     
-    func fetchUserImageURLs(completion: @escaping () -> Void) {
+    
+    func fetchUserImageURLs(groupId: String?, completion: @escaping ([String: String]) -> Void) {
         
+        var memberIdAndPictureDict = [String : String]()
+        let groupsCollection = FirebaseManager.shared.firestore.collection("groups")
         let usersCollection = FirebaseManager.shared.firestore.collection("users")
         
-        usersCollection.getDocuments { snapshot, error in
+        groupsCollection.document(groupId!).getDocument { snapshot, error in
             if let error = error {
-                print("Error fetching user image URLs: \(error)")
-                completion()
+                print(error.localizedDescription)
                 return
             }
             
-            guard let documents = snapshot?.documents else {
-                completion()
+            guard let data = snapshot?.data() else {
+                print("No data found.")
                 return
             }
             
-            for document in documents {
-                if let userId = document.data()["userId"] as? String,
-                   let imageURL = document.data()["profileImageUrl"] as? String {
-                    self.userImageURLs[userId] = imageURL
+            let groupMembers = data["members"] as? [String] ?? []
+            
+            let dispatchGroup = DispatchGroup()
+            
+            for memberId in groupMembers {
+                dispatchGroup.enter()
+                
+                usersCollection.document(memberId).getDocument { snapshot, error in
+                    defer {
+                        dispatchGroup.leave()
+                    }
+                    
+                    if let error = error {
+                        print(error.localizedDescription)
+                        return
+                    }
+                    
+                    guard let data = snapshot?.data() else {
+                        print("No data found.")
+                        return
+                    }
+                    
+                    let profileImageUrl = data["profileImageUrl"] as? String ?? ""
+                    
+                    memberIdAndPictureDict[memberId] = profileImageUrl
                 }
             }
+            dispatchGroup.notify(queue: .main) {
+                completion(memberIdAndPictureDict)
+            }
         }
-        completion()
+        
     }
-    */
 }
 

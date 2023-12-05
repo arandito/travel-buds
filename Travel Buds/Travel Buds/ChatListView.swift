@@ -22,7 +22,7 @@ struct ChatListView: View {
     @State private var isProfileImageLoaded = false
     @State private var shouldNavigateToChatView = false
     
-    @State var chatViewModel = ChatViewModel(groupId:nil)
+    @State var chatViewModel = ChatViewModel(groupId: nil)
     
     var body: some View {
         NavigationView {

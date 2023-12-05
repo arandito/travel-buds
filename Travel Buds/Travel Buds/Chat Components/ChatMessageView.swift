@@ -30,7 +30,9 @@ struct ChatMessageView: View {
     
     struct SentMessageBubble: View {
         
+        @EnvironmentObject private var cvm: ChatViewModel
         @EnvironmentObject private var uvm: UserViewModel
+        
         let message: Message
         
         var body: some View {
@@ -57,17 +59,30 @@ struct ChatMessageView: View {
     
     struct ReceivedMessageBubble: View {
         
+        @EnvironmentObject private var cvm: ChatViewModel
         @EnvironmentObject private var uvm: UserViewModel
+        
         let message: Message
         
         var body: some View {
             HStack {
-                WebImage(url:URL(string:uvm.user?.profileImageUrl ?? ""))
-                    .resizable()
-                    .scaledToFill()
-                    .frame(width: 30, height: 30)
-                    .clipped()
-                    .cornerRadius(44)
+                
+                if let profileImageUrl = cvm.userImageURLs[message.senderId], !profileImageUrl.isEmpty {
+                    WebImage(url: URL(string: profileImageUrl))
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: 30, height: 30)
+                        .clipped()
+                        .cornerRadius(44)
+                } else {
+                    Image("person.fill")
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: 30, height: 30)
+                        .clipped()
+                        .cornerRadius(44)
+                }
+                
                 HStack {
                     Text(message.text)
                 }
