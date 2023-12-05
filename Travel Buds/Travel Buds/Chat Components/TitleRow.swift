@@ -20,15 +20,13 @@ struct TitleRow: View {
                     .font(.title).bold()
             }
             .frame(maxWidth: .infinity, alignment: .center)
-
         }
         .padding()
         .background(Color.purple)
     }
         
 }
-
-
+    
 /*
 struct TitleRow_Previews: PreviewProvider {
     static var previews: some View {

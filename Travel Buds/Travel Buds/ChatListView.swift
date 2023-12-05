@@ -20,6 +20,9 @@ struct ChatListView: View {
     @State var shouldShowLogOutOptions = false
     @ObservedObject private var viewModel = UserViewModel()
     @State private var isProfileImageLoaded = false
+    @State private var shouldNavigateToChatView = false
+    
+    @State var chatViewModel = ChatViewModel(groupId:nil)
     
     var body: some View {
         NavigationView {
@@ -27,9 +30,20 @@ struct ChatListView: View {
             VStack {
                 customNavBar
                 messagesView
+                NavigationLink("", isActive:$shouldNavigateToChatView){
+                    ChatView(cvm: chatViewModel)
+                }
             }
             .navigationBarHidden(true)
+            .fullScreenCover(isPresented: $viewModel.isLoggedOut, onDismiss: nil) {
+                LoginView(isLoginCompleted: {
+                    self.viewModel.isLoggedOut = false
+                    self.viewModel.getCurrentUser()
+                    self.viewModel.getRecentMessages()
+                })
+            }
         }
+        
     }
     
     private var customNavBar: some View {
@@ -77,12 +91,6 @@ struct ChatListView: View {
         .onAppear {
             viewModel.getCurrentUser()
         }
-        .fullScreenCover(isPresented: $viewModel.isLoggedOut, onDismiss: nil) {
-            LoginView(isLoginCompleted: {
-                self.viewModel.isLoggedOut = false
-                self.viewModel.getCurrentUser()
-            })
-        }
         .background(viewModel.isLoggedOut ? Color.white : Color.purple)
     }
     
@@ -92,32 +100,37 @@ struct ChatListView: View {
         } else {
             return AnyView(
                 ScrollView {
-                    ForEach(0..<10, id: \.self) { num in
+                    ForEach(Array(viewModel.recentMessages.enumerated()), id:\.1) { index, recentMessage in
                         VStack {
-                            HStack(spacing: 16) {
-                                Image(systemName: "person.fill")
-                                    .font(.system(size: 32))
-                                    .padding(8)
-                                    .overlay(RoundedRectangle(cornerRadius: 44)
-                                        .stroke(Color(.label), lineWidth: 1)
-                                    )
-                                VStack(alignment: .leading) {
-                                    Text("Username")
-                                        .font(.system(size: 16, weight: .bold))
-                                    Text("Message sent to user")
-                                        .font(.system(size: 14))
-                                        .foregroundColor(Color(.lightGray))
+                            Button {
+                                chatViewModel = ChatViewModel(groupId: recentMessage.groupId)
+                                self.shouldNavigateToChatView.toggle()
+                            } label: {
+                                HStack(spacing: 16) {
+                                    Image(systemName: "person.fill")
+                                        .font(.system(size: 32))
+                                        .padding(8)
+                                        .overlay(RoundedRectangle(cornerRadius: 44)
+                                            .stroke(Color(.label), lineWidth: 1)
+                                        )
+                                    VStack(alignment: .leading) {
+                                        Text(recentMessage.title)
+                                            .font(.system(size: 16, weight: .bold))
+                                        Text(recentMessage.text)
+                                            .font(.system(size: 14))
+                                            .multilineTextAlignment(/*@START_MENU_TOKEN@*/.leading/*@END_MENU_TOKEN@*/)
+                                            .foregroundColor(Color(.lightGray))
+                                    }
+                                    Spacer()
+                                    Text(recentMessage.timeAgo)
+                                        .font(.system(size: 14, weight: .semibold))
                                 }
-                                Spacer()
-                                
-                                Text("1d")
-                                    .font(.system(size: 14, weight: .semibold))
+                                Divider()
+                                    .padding(.vertical, 8)
                             }
-                            Divider()
-                                .padding(.vertical, 8)
                         }
                         .padding(.horizontal)
-                        .padding(.top, num == 0 ? 16 : 0)
+                        .padding(.top, index == 0 ? 16 : 0)
                         
                     }
                     
