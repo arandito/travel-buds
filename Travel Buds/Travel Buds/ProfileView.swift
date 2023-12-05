@@ -72,7 +72,7 @@ struct ProfileView: View {
                     showFeedbackAlert.toggle()
                 }) {
                     Image(systemName: "envelope")
-                        .foregroundColor(.purple.opacity(0.2))
+                        .foregroundColor(.purple.opacity(0.7))
                 }
                 .alert("Enter your feedback", isPresented: $showFeedbackAlert) {
                     TextField("Feedback", text: $feedbackText)
