@@ -1,14 +1,18 @@
 // The Cloud Functions for Firebase SDK to create Cloud Functions and triggers.
-const {logger} = require("firebase-functions");
-const {setGlobalOptions} = require("firebase-functions/v2/options");
-const {onRequest} = require("firebase-functions/v2/https");
-const {onDocumentCreated} = require("firebase-functions/v2/firestore");
+const { logger } = require("firebase-functions");
+const { setGlobalOptions } = require("firebase-functions/v2/options");
+const { onRequest } = require("firebase-functions/v2/https");
+const { onDocumentCreated } = require("firebase-functions/v2/firestore");
 
 // The Firebase Admin SDK to access Firestore. Also for document field
 // array operations and batch writes.
-const {initializeApp} = require("firebase-admin/app");
-const {getFirestore, FieldValue, Timestamp, FieldPath} =
-    require("firebase-admin/firestore");
+const { initializeApp } = require("firebase-admin/app");
+const {
+  getFirestore,
+  FieldValue,
+  Timestamp,
+  FieldPath,
+} = require("firebase-admin/firestore");
 
 // Request body-parser.
 const jsonParser = require("body-parser").json();
@@ -17,19 +21,18 @@ const jsonParser = require("body-parser").json();
 // const {onSchedule} = require{"firebase-functions/v2/scheduler"};
 
 initializeApp();
-setGlobalOptions({maxInstances: 10, region: "us-east1", timeoutSeconds: 3});
+setGlobalOptions({ maxInstances: 10, region: "us-east1", timeoutSeconds: 3 });
 const db = getFirestore();
 
-exports.helloWorld = onRequest({cors: true}, (req, res) => {
-  logger.info("Hello logs!", {structuredData: true});
+exports.helloWorld = onRequest({ cors: true }, (req, res) => {
+  logger.info("Hello logs!", { structuredData: true });
   return res.send("Hello from Firebase!");
 });
 
 // Add functionality where user can not make multiple
 // of same trip. This is easy if they are in a group for trip already.
 // Might need to track pending as well?
-exports.makeGroup =
-onRequest({cors: true}, async (req, res) => {
+exports.makeGroup = onRequest({ cors: true }, async (req, res) => {
   // if (req.auth != true) {
   //   res.status(401).send("Unauthorized:" +
   //       "Client failed to authenticate with the server.");
@@ -67,31 +70,43 @@ onRequest({cors: true}, async (req, res) => {
 
   if (pendingRequests.length != 0) {
     const pendingRequestsSnapshot = await db
-        .collection("pending")
-        .where(FieldPath.documentId(), "in", pendingRequests)
-        .get();
+      .collection("pending")
+      .where(FieldPath.documentId(), "in", pendingRequests)
+      .get();
 
     pendingRequestsSnapshot.forEach((pendingDoc) => {
       const pendingData = pendingDoc.data();
-      if (pendingData.weekStartDate == myWeekStartDate &&
-      pendingData.destination == myDest) {
-        return res.status(400).send("Cannot create group that conflicts " +
-        "with pending trip dest and date.");
+      if (
+        pendingData.weekStartDate == myWeekStartDate &&
+        pendingData.destination == myDest
+      ) {
+        return res
+          .status(400)
+          .send(
+            "Cannot create group that conflicts " +
+              "with pending trip dest and date.",
+          );
       }
     });
   }
   if (groups.length != 0) {
     const groupsSnapshot = await db
-        .collection("groups")
-        .where(FieldPath.documentId(), "in", groups)
-        .get();
+      .collection("groups")
+      .where(FieldPath.documentId(), "in", groups)
+      .get();
 
     groupsSnapshot.forEach((groupDoc) => {
       const groupData = groupDoc.data();
-      if (groupData.weekStartDate == myWeekStartDate &&
-      groupData.destination == myDest) {
-        return res.status(400).send("Cannot create group that conflicts " +
-        "with existing group dest and date.");
+      if (
+        groupData.weekStartDate == myWeekStartDate &&
+        groupData.destination == myDest
+      ) {
+        return res
+          .status(400)
+          .send(
+            "Cannot create group that conflicts " +
+              "with existing group dest and date.",
+          );
       }
     });
   }
@@ -100,12 +115,12 @@ onRequest({cors: true}, async (req, res) => {
 
   // Insert no conflicting + duplicate trips from same user check.
   const pendingsSnapshot = await db
-      .collection("pending")
-      .where("weekStartDate", "==", myWeekStartDate)
-      .where("destination", "==", myDest)
-      .where("interest", "==", myInterest)
-      .limit(4)
-      .get();
+    .collection("pending")
+    .where("weekStartDate", "==", myWeekStartDate)
+    .where("destination", "==", myDest)
+    .where("interest", "==", myInterest)
+    .limit(4)
+    .get();
 
   // If not enough matches to form a group, add pending info to
   // appropriate tables in datastore.
@@ -193,75 +208,91 @@ onRequest({cors: true}, async (req, res) => {
 // Update/Create userDocs in recentMessages with new group Doc
 // with init message from travelBuddies
 // Add 1 something to messages.
-exports.sendInitialGroupMessage =
-onDocumentCreated("groups/{groupId}", async (event) => {
-  const snapshot = event.data;
-  if (!snapshot) {
-    console.error("No data/snapshot associated with created group.");
-    return;
-  }
+exports.sendInitialGroupMessage = onDocumentCreated(
+  "groups/{groupId}",
+  async (event) => {
+    const snapshot = event.data;
+    if (!snapshot) {
+      console.error("No data/snapshot associated with created group.");
+      return;
+    }
 
-  const groupId = snapshot.id;
-  const fields = snapshot.data();
-  const members = fields.members;
-  const destination = fields.destination;
-  const interest = fields.interest;
-  const weekStartDate = fields.weekStartDate;
-  const weekEndDate = fields.weekEndDate;
-  const text = "Hi everyone! Say hello to your new Travel Buddies! " +
+    const groupId = snapshot.id;
+    const fields = snapshot.data();
+    const members = fields.members;
+    const destination = fields.destination;
+    const interest = fields.interest;
+    const weekStartDate = fields.weekStartDate;
+    const weekEndDate = fields.weekEndDate;
+    const text =
+      "Hi everyone! Say hello to your new Travel Buddies! " +
       "Note, while we've matched you " +
-      "with people that would be in " + destination + " somewhere " +
-      "between " + weekStartDate + " and " + weekEndDate + ", you may be " +
+      "with people that would be in " +
+      destination +
+      " somewhere " +
+      "between " +
+      weekStartDate +
+      " and " +
+      weekEndDate +
+      ", you may be " +
       "arriving and/or departing at slightly different times! This group " +
       "chat will NOT EXPIRE over time. However, you may manually leave " +
       "the group chat at any time. The Travel Buddies team hopes you " +
-      "have fun in " + destination + " with " + interest + "!" +
+      "have fun in " +
+      destination +
+      " with " +
+      interest +
+      "!" +
       "\n- The Travel Buddies Team";
-  const formattedStartDate = new Date(weekStartDate)
-      .toLocaleDateString("en-US", {
+    const formattedStartDate = new Date(weekStartDate).toLocaleDateString(
+      "en-US",
+      {
         month: "numeric",
         day: "numeric",
-      });
-  const title = `${destination} ${formattedStartDate}`;
-  const cityImageSnapshot = await db.collection("cityImages")
-      .doc(destination).get();
-  const imageUrl = cityImageSnapshot.data().URL;
+      },
+    );
+    const title = `${destination} ${formattedStartDate}`;
+    const cityImageSnapshot = await db
+      .collection("cityImages")
+      .doc(destination)
+      .get();
+    const imageUrl = cityImageSnapshot.data().URL;
 
-
-  const batch = db.batch();
-  const timestamp = Timestamp.now();
-  members.forEach((memberId) => {
-    const groupRecentMessageDoc = db
+    const batch = db.batch();
+    const timestamp = Timestamp.now();
+    members.forEach((memberId) => {
+      const groupRecentMessageDoc = db
         .collection("recentMessages")
         .doc(memberId)
         .collection("messages")
         .doc(groupId);
 
-    batch.set(groupRecentMessageDoc, {
-      groupId: groupId,
-      senderId: "travelBuddies",
-      text: text,
-      timestamp: timestamp,
-      title: title,
-      url: imageUrl,
+      batch.set(groupRecentMessageDoc, {
+        groupId: groupId,
+        senderId: "travelBuddies",
+        text: text,
+        timestamp: timestamp,
+        title: title,
+        url: imageUrl,
+      });
     });
-  });
 
-  const messageDoc = db
+    const messageDoc = db
       .collection("messages")
       .doc(groupId)
       .collection(groupId)
       .doc();
-  batch.set(messageDoc, {
-    senderId: "travelBuddies",
-    text: text,
-    timestamp: timestamp,
-  });
+    batch.set(messageDoc, {
+      senderId: "travelBuddies",
+      text: text,
+      timestamp: timestamp,
+    });
 
-  try {
-    await batch.commit();
-  } catch (error) {
-    logger.log("Error, no changes to Firestore were made.");
-  }
-  return;
-});
+    try {
+      await batch.commit();
+    } catch (error) {
+      logger.log("Error, no changes to Firestore were made.");
+    }
+    return;
+  },
+);
