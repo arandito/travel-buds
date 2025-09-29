@@ -1,9 +1,9 @@
-# Travel Buds <img src="https://antonioaranda.dev/images/travel-buds/icon.png" width="30" alt="App Icon">
+# Travel Buds <img src="https://antoara.com/images/travel-buds/icon.png" width="30" alt="App Icon">
 
 Travel Buds is an iOS chat app that matches travellers with others based on location, activity interests, and trip dates.
 
 <div align="center">
-  <img src="https://antonioaranda.dev/images/travel-buds/ui.png" width="90%" alt="App Icon">
+  <img src="https://antoara.com/images/travel-buds/ui.png" width="90%" alt="App Icon">
 </div>
 
 ## Features
@@ -23,7 +23,7 @@ Travel Buds is an iOS chat app that matches travellers with others based on loca
 
 ## Architecture
 
-![App Screenshot](https://antonioaranda.dev/images/travel-buds/arch.png)
+![App Screenshot](https://antoara.com/images/travel-buds/arch.png)
 
 ## Future Enhancements
 
